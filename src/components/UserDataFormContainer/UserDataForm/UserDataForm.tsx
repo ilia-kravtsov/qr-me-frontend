@@ -6,6 +6,7 @@ import {
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
+import InputMask from 'react-input-mask';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
@@ -81,18 +82,62 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     this.setState({ newFieldLabel: e.target.value })
   }
 
+  // renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
+  //   fields.map(({ id, label, type = 'text', value, required = false, placeholder = ''}) => (
+  //     <div key={id} className={fieldType === 'additionalFields' ? s.additionalField : s.field}>
+  //       <label htmlFor={id}>{label}:</label>
+  //       <input
+  //         id={id}
+  //         type={type}
+  //         value={value}
+  //         placeholder={placeholder}
+  //         required={required}
+  //         onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
+  //       />
+  //       {fieldType === 'additionalFields' && (
+  //         <button
+  //           type="button"
+  //           className={s.removeButton}
+  //           onClick={() => this.handleRemoveField(id)}
+  //         >
+  //           Удалить
+  //         </button>
+  //       )}
+  //     </div>
+  //   ));
+
   renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
-    fields.map(({ id, label, type = 'text', value, required = false, placeholder = ''}) => (
+    fields.map(({ id, label, type = 'text', value, required = false, placeholder = '' }) => (
       <div key={id} className={fieldType === 'additionalFields' ? s.additionalField : s.field}>
         <label htmlFor={id}>{label}:</label>
-        <input
-          id={id}
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          required={required}
-          onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
-        />
+        {type === 'tel' ? (
+          <InputMask
+            mask="+7 (999) 999-99-99"
+            value={value}
+            onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
+          >
+            {(inputProps) => (
+              <input
+                {...inputProps}
+                id={id}
+                type="tel"
+                placeholder={placeholder}
+                required={required}
+                className={s.input}
+              />
+            )}
+          </InputMask>
+        ) : (
+          <input
+            id={id}
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            required={required}
+            onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
+            className={s.input}
+          />
+        )}
         {fieldType === 'additionalFields' && (
           <button
             type="button"

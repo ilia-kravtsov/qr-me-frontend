@@ -1,4 +1,4 @@
-import {FormReducerType, FormState} from "../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes";
+import {FormReducerType} from "../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes";
 import { v1 } from "uuid";
 import {SaveFormDataAction, SubmitFormErrorAction, SubmitFormStartAction} from "../../actions/formActions/formActionsTypes";
 import {FormActionTypes} from "../../actions/formActions/formActions";
