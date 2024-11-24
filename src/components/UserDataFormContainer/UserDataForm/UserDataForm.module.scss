@@ -1,0 +1,40 @@
+.userDataForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 25vw;
+
+  .predefinedFields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .additionalFields {
+    display: flex;
+    flex-direction: column;
+
+    .addFieldContainer {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 0 0 0;
+    }
+
+    .additionalField {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 0 0 0;
+    }
+
+    .removeButton {
+      width: 80px;
+    }
+  }
+}

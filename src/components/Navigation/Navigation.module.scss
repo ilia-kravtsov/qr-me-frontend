@@ -1,0 +1,22 @@
+.navigationContainer {
+  width: 100%;
+
+  .navigationLinksList {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
+    .link {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .link:visited {
+      color: #fff;
+    }
+
+    .link:hover {
+      color: lightgray;
+    }
+  }
+}
