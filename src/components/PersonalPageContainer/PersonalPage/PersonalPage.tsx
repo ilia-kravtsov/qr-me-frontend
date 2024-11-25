@@ -7,7 +7,7 @@ export class PersonalPage extends Component<FormState> {
 		const {predefinedFields, additionalFields} = this.props
 		return (
 			<div className={s.container}>
-				<h2>predefinedFields</h2>
+				<h2>Привет! Это моя визитка!</h2>
 				<ul className={s.fieldList}>
 					{predefinedFields.map((field) => (
 						<li key={field.id} className={s.fieldItem}>
@@ -16,7 +16,6 @@ export class PersonalPage extends Component<FormState> {
 					))}
 				</ul>
 
-				<h2>additionalFields</h2>
 				<ul className={s.fieldList}>
 					{additionalFields.map((field) => (
 						<li key={field.id} className={s.fieldItem}>

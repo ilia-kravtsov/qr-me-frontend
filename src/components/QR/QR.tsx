@@ -1,14 +1,14 @@
 // import { Component } from 'react'
 // import { QRCodeCanvas } from 'qrcode.react'
-
+//
 // type QRProps = {
 //   value: string
 // }
-
+//
 // export class QR extends Component<QRProps> {
 //   render() {
 //     const { value } = this.props
-
+//
 //     return (
 //       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '40px'}}>
 //         <h1>Генерация QR-кода</h1>
@@ -17,19 +17,19 @@
 //             level="H"
 //             value={value}
 //             size={256}
-//             fgColor="#fff"   
-//             bgColor="#000" 
+//             fgColor="#fff"
+//             bgColor="#000"
 //             style={{borderRadius: "10%",  boxShadow: '0 0 40px #39FF14'}}
 //           />
 //           <img
-//             src="/favicon.ico" 
+//             src="/favicon.ico"
 //             alt="Logo"
 //             style={{
 //               position: 'absolute',
 //               top: '50%',
 //               left: '50%',
 //               transform: 'translate(-50%, -50%)',
-//               width: '50px', 
+//               width: '50px',
 //               height: '50px',
 //             }}
 //           />
@@ -38,6 +38,7 @@
 //     )
 //   }
 // }
+
 
 import React, { Component, createRef } from 'react'
 import { AwesomeQR } from 'awesome-qr'
@@ -74,13 +75,14 @@ export class QR extends Component<QRProps> {
     const { value } = this.props
     const canvas = this.canvasRef.current
     if (canvas) {
+      const logoImage = `${process.env.PUBLIC_URL}/favicon.ico` // Динамическое определение пути
       const config: AwesomeQRConfig = {
         text: value,
         size: 256,
         colorDark: '#000', // Цвет QR-кода
         colorLight: '#fff', // Цвет фона
         logoScale: 0.3, // Размер логотипа относительно QR-кода
-        logoImage: '/favicon.ico', // Путь к логотипу
+        logoImage, // Динамический путь к логотипу
         borderRadius: 10, // Радиус углов QR-кода
         logoRadius: 10, // Радиус логотипа
       }
@@ -112,10 +114,8 @@ export class QR extends Component<QRProps> {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
         <h1>Генерация QR-кода</h1>
-        <canvas ref={this.canvasRef} width="256" height="256" style={{boxShadow: '0 0 40px #39FF14', borderRadius: '10px'}}/>
+        <canvas ref={this.canvasRef} width="256" height="256" style={{boxShadow: '0 0 40px #61dafb', borderRadius: '10px'}}/>
       </div>
     )
   }
 }
-
-
