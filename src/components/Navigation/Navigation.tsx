@@ -10,7 +10,10 @@ export class Navigation extends Component {
 					<Link to="/" className={s.link}>Home</Link>
 				</li>
 				<li>
-					<Link to="/form" className={s.link}>Получить QR</Link>
+					<Link to="/qr" className={s.link}>Генерация QR</Link>
+				</li>
+				<li>
+					<Link to="/form" className={s.link}>Форма</Link>
 				</li>
 				<li>
 					<Link to="/personal-page" className={s.link}>Персональная страница</Link>

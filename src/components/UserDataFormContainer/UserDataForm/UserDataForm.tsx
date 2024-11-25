@@ -82,30 +82,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     this.setState({ newFieldLabel: e.target.value })
   }
 
-  // renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
-  //   fields.map(({ id, label, type = 'text', value, required = false, placeholder = ''}) => (
-  //     <div key={id} className={fieldType === 'additionalFields' ? s.additionalField : s.field}>
-  //       <label htmlFor={id}>{label}:</label>
-  //       <input
-  //         id={id}
-  //         type={type}
-  //         value={value}
-  //         placeholder={placeholder}
-  //         required={required}
-  //         onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
-  //       />
-  //       {fieldType === 'additionalFields' && (
-  //         <button
-  //           type="button"
-  //           className={s.removeButton}
-  //           onClick={() => this.handleRemoveField(id)}
-  //         >
-  //           Удалить
-  //         </button>
-  //       )}
-  //     </div>
-  //   ));
-
   renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
     fields.map(({ id, label, type = 'text', value, required = false, placeholder = '' }) => (
       <div key={id} className={fieldType === 'additionalFields' ? s.additionalField : s.field}>
