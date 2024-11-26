@@ -33,10 +33,8 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
   switch (action.type) {
     case FormActionTypes.SUBMIT_FORM:
       return { ...state, isSubmitting: true, submitError: null };
-    case FormActionTypes.SAVE_FORM_DATA:
-      return { ...state, isSubmitting: false, submitError: null, ...action.payload };
     case FormActionTypes.SUBMIT_FORM_ERROR:
-      return { ...state, isSubmitting: false, submitError: action.payload };
+      // return { ...state, isSubmitting: false, submitError: action.payload };
     default:
       return state;
   }

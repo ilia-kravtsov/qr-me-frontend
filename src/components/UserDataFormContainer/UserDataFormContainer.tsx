@@ -9,6 +9,8 @@ import {
 } from "./UserDataForm/UserDataFormTypes";
 import UserDataForm from "./UserDataForm/UserDataForm";
 import {submitFormData} from "../../redux/actions/formActions/formActions";
+import { QR } from '../QR/QR';
+import s from './UserDataFormContainer.module.scss'
 
 class UserDataFormContainer extends Component<UserDataFormProps> {
 
@@ -18,12 +20,17 @@ class UserDataFormContainer extends Component<UserDataFormProps> {
 	};
 
 	render() {
-
+		const { isSubmitting } = this.props;
 		return (
-			<UserDataForm
-				{...this.props}
-				onSubmit={this.handleSubmit}
-			/>
+			<div className={s.container}>
+				<UserDataForm
+					{...this.props}
+					onSubmit={this.handleSubmit}
+				/>
+				{isSubmitting && (
+					<QR value={'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'} />
+				)}
+			</div>
 		);
 	}
 }

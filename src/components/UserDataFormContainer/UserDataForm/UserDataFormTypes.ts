@@ -20,6 +20,7 @@ export type FormMethods = {
 export type FormState = {
 	predefinedFields: Field[]
 	additionalFields: Field[]
+	isSubmitting?: boolean
 }
 
 export type UserDataFormProps = FormMethods & FormState

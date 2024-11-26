@@ -113,7 +113,6 @@ export class QR extends Component<QRProps> {
   render() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
-        <h1>Генерация QR-кода</h1>
         <canvas ref={this.canvasRef} width="256" height="256" style={{boxShadow: '0 0 40px #61dafb', borderRadius: '10px'}}/>
       </div>
     )
