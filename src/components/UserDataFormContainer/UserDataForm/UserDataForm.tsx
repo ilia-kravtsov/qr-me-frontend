@@ -83,30 +83,74 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     this.setState({ newFieldLabel: e.target.value })
   }
 
-  handleValidation = (e: FormEvent<HTMLInputElement>, type: InputsType) => {
+  handleValidation = (e: FormEvent<HTMLInputElement>, label: string) => {
     const input = e.target as HTMLInputElement;
     const fieldId = input.id;
     let errorMessage = '';
     let processedValue = input.value;
 
-    switch (type) {
-      case 'text':
-        const textPattern = /[^A-Za-zА-Яа-яЁё\s]/g
+    switch (label) {
+      case 'Имя':
+      case 'Фамилия':
+      case 'Отчество': {
+        const textPattern = /[^A-Za-zА-Яа-яЁё\s]/g;
         const invalidCharacters = processedValue.match(textPattern);
         processedValue = processedValue.replace(textPattern, '');
         if (invalidCharacters) {
-          errorMessage = 'Вводите только латинские или кириллические буквы';
+          errorMessage = 'Вводите только латинские или кириллические буквы.';
         }
         break;
+      }
 
-      case 'tel':
+      case 'Адрес': {
+        const addressAndCompanyPattern = /[^A-Za-zА-Яа-яЁё0-9\s./№,-]/g;
+        const invalidCharacters = processedValue.match(addressAndCompanyPattern);
+        processedValue = processedValue.replace(addressAndCompanyPattern, '');
+        if (invalidCharacters) {
+          errorMessage = 'Вводите только буквы, цифры, пробелы, точки, дефисы, слэши или "№".';
+        }
+        break;
+      }
+
+      case 'Должность': {
+        const textPattern = /[^A-Za-zА-Яа-яЁё\-\s]/g;
+        const invalidCharacters = processedValue.match(textPattern);
+        processedValue = processedValue.replace(textPattern, '');
+        if (invalidCharacters) {
+          errorMessage = 'Вводите только латинские или кириллические буквы и дефисы';
+        }
+        break;
+      }
+
+      case 'Компания': {
+        const addressAndCompanyPattern = /[^A-Za-zА-Яа-яЁё0-9\s./№"'«»@&\-]/g;
+        const invalidCharacters = processedValue.match(addressAndCompanyPattern);
+        processedValue = processedValue.replace(addressAndCompanyPattern, '');
+        if (invalidCharacters) {
+          errorMessage = 'Вводите только буквы, цифры, пробелы, точки, дефисы, слэши, кавычки или "№".';
+        }
+        break;
+      }
+
+      case 'Телефон': {
         const phonePattern = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
         if (!phonePattern.test(processedValue)) {
           errorMessage = 'Формат: +7 (999) 999-99-99.';
         }
         break;
+      }
 
-      case 'url':
+      case 'Электронная почта': {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (processedValue.length && processedValue.length > 6 && !processedValue.includes('@')) {
+          if (!emailPattern.test(processedValue)) {
+            errorMessage = 'Формат почты example@mail.ru.';
+          }
+        }
+        break;
+      }
+
+      case 'Telegram': {
         const urlPattern = /^(https?:\/\/)/;
         const telegramPattern = /^@([A-Za-z0-9_]{5,})$/;
 
@@ -121,24 +165,106 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           !urlPattern.test(processedValue) &&
           !telegramPattern.test(processedValue)
         ) {
-          errorMessage = 'Формат URL: http://, https://, или @ivanov';
+          errorMessage = 'Формат URL: http://, https://, или @username.';
         }
         break;
+      }
+
+      case 'Whatsapp': {
+        const urlPattern = /^(https?:\/\/)/;
+
+        if (
+          processedValue.startsWith('http://') ||
+          processedValue.startsWith('https://')
+        ) {
+          errorMessage = '';
+        } else if (
+          processedValue.length > 6 &&
+          !urlPattern.test(processedValue)
+        ) {
+          errorMessage = 'Формат URL: http://, https://';
+        }
+        break;
+      }
+
 
       default:
         break;
     }
 
-    input.value = input.value.replace(/[^A-Za-zА-Яа-яЁё]/g, '');
-
     input.value = processedValue;
+
     this.setState((prevState) => ({
       fieldsErrors: {
         ...prevState.fieldsErrors,
         [fieldId]: errorMessage,
       },
     }));
-  }
+  };
+
+  handleBlurValidation = (e: FormEvent<HTMLInputElement>, label: string) => {
+    const input = e.target as HTMLInputElement;
+    let errorMessage = '';
+    let processedValue = input.value;
+
+    switch (label) {
+      case 'Электронная почта': {
+        if (processedValue.length) {
+          if (processedValue.includes('@')) {
+            const atIndex = processedValue.indexOf('@');
+            const afterAt = processedValue.slice(atIndex + 1);
+
+            if (afterAt.length < 3 || !afterAt.includes('.')) {
+              errorMessage = 'После "@" должно быть хотя бы 2 символа и точка.';
+            }
+          } else {
+            errorMessage = 'Введите корректный email с символом "@"';
+          }
+          break;
+        }
+        break;
+      }
+
+      case 'Telegram': {
+        const telegramPattern = /^@([A-Za-z0-9_]{5,})$/;
+        if (processedValue.length) {
+          if (
+            processedValue.startsWith('http://') ||
+            processedValue.startsWith('https://') ||
+            telegramPattern.test(processedValue)
+          ) {
+            errorMessage = '';
+          } else {
+            errorMessage = 'Формат ссылки: http://, https:// или @ivanov';
+          }
+          break;
+          }
+        break;
+      }
+
+      case 'Адрес': {
+        const addressPattern = /\d/;
+        if (processedValue.length) {
+          if (!addressPattern.test(processedValue)) {
+            errorMessage = 'Адрес должен содержать хотя бы одну цифру.';
+          }
+          break;
+        }
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    const fieldId = input.id;
+    this.setState((prevState) => ({
+      fieldsErrors: {
+        ...prevState.fieldsErrors,
+        [fieldId]: errorMessage,
+      },
+    }));
+  };
 
   renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
     fields.map(({ id, label, type = 'text', value, required = false, placeholder = '', minLength = 2, pattern, title }) => {
@@ -173,7 +299,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
               minLength={minLength}
               pattern={pattern}
               title={title}
-              onInput={(e) => this.handleValidation(e, type)}
+              onBlur={(e) => this.handleBlurValidation(e, label)}
+              onInput={(e) => this.handleValidation(e, label)}
               onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
               className={inputClassName}
             />
