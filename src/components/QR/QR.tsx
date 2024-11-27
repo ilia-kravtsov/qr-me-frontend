@@ -24,12 +24,6 @@ export class QR extends Component<QRProps> {
     this.generateQRCode();
   }
 
-  componentDidUpdate(prevProps: QRProps) {
-    if (prevProps.value !== this.props.value) {
-      this.generateQRCode();
-    }
-  }
-
   async generateQRCode() {
     const { value } = this.props;
     const canvas = this.canvasRef.current;

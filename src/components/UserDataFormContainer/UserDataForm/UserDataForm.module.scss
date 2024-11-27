@@ -13,6 +13,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+
+      .errorMessage {
+        color: brown;
+        font-size: 12px;
+        position: absolute;
+        top: 24px;
+        right: 0;
+      }
+
+      .inputError {
+        outline: 3px solid brown;
+      }
     }
   }
 
@@ -31,6 +44,19 @@
       justify-content: space-between;
       gap: 20px;
       padding: 20px 0 0 0;
+      position: relative;
+
+      .errorMessage {
+        color: brown;
+        font-size: 12px;
+        position: absolute;
+        top: 45px;
+        right: 0;
+      }
+
+      .inputError {
+        outline: 3px solid brown;
+      }
     }
 
     .removeButton {

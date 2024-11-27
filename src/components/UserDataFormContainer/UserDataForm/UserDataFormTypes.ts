@@ -1,16 +1,26 @@
+export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
+
+type fieldError = {
+	[key: string]: string
+}
+
 export type UserDataFormState = {
 	newFieldLabel: string
 	additionalFields: Field[]
 	predefinedFields: Field[]
+	fieldsErrors: fieldError
 };
 
 export type Field = {
 	id: string
 	label: string
 	value: string
-	type?: string
+	type?: InputsType
 	required?: boolean
 	placeholder?: string
+	minLength?: number
+	pattern?: string
+	title?: string
 }
 
 export type FormMethods = {
