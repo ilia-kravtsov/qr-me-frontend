@@ -15,6 +15,12 @@ export class Navigation extends Component {
 				<li>
 					<Link to="/personal-page" className={s.link}>Персональная страница</Link>
 				</li>
+				<li>
+					<Link to="/loader" className={s.link}>Loader</Link>
+				</li>
+				<li>
+					<Link to="/error-page" className={s.link}>Error Page</Link>
+				</li>
 			</ul>
 		</nav>
 	}
