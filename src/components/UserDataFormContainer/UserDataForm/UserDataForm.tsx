@@ -2,11 +2,12 @@ import { ChangeEvent, Component, FormEvent, KeyboardEvent } from 'react';
 import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
-  Field, InputsType,
+  Field, FieldType, InputsType,
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
 import InputMask from 'react-input-mask';
+import { AddField } from '../AddField/AddField';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
@@ -14,9 +15,12 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     super(props);
 
     this.state = {
-      newFieldLabel: '',
-      additionalFields: this.props.additionalFields,
       predefinedFields: this.props.predefinedFields,
+      phones: this.props.phones,
+      emails: this.props.emails,
+      socials: this.props.socials,
+      websites: this.props.websites,
+      newFieldLabel: '',
       fieldsErrors: {}
     };
   }
@@ -34,8 +38,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }
 
     this.setState((prevState) => ({
-      additionalFields: [
-        ...prevState.additionalFields,
+      socials: [
+        ...prevState.socials,
         newField,
       ],
       newFieldLabel: '',
@@ -51,11 +55,11 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
   handleRemoveField = (id: string) => {
     this.setState((prevState) => ({
-      additionalFields: prevState.additionalFields.filter((field) => field.id !== id),
+      socials: prevState.socials.filter((field) => field.id !== id),
     }));
   };
 
-  handleChangeFieldValue = (fieldType: 'predefinedFields' | 'additionalFields', id: string, value: string) => {
+  handleChangeFieldValue = (fieldType: FieldType, id: string, value: string) => {
     this.setState((prevState) => ({
         [fieldType]: prevState[fieldType].map((field) => field.id === id ? { ...field, value } : field),
       } as Pick<UserDataFormState, typeof fieldType>
@@ -67,14 +71,17 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
     const allFields = {
       predefinedFields: this.state.predefinedFields,
-      additionalFields: this.state.additionalFields,
+      phones: this.state.phones,
+      emails: this.state.emails,
+      websites: this.state.websites,
+      socials: this.state.socials,
     };
 
     this.props.onSubmit(allFields);
 
     this.setState({
       newFieldLabel: '',
-      additionalFields: [...this.props.additionalFields],
+      socials: [...this.props.socials],
       predefinedFields: this.props.predefinedFields.map(field => ({...field, value: ''})),
     });
   };
@@ -83,7 +90,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     this.setState({ newFieldLabel: e.target.value })
   }
 
-  handleValidation = (e: FormEvent<HTMLInputElement>, label: string) => {
+  handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
     const input = e.target as HTMLInputElement;
     const fieldId = input.id;
     let errorMessage = '';
@@ -202,7 +209,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }));
   };
 
-  handleBlurValidation = (e: FormEvent<HTMLInputElement>, label: string) => {
+  handleBlurValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
     const input = e.target as HTMLInputElement;
     let errorMessage = '';
     let processedValue = input.value;
@@ -266,13 +273,37 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }));
   };
 
-  renderFields = (fields: Field[], fieldType: 'predefinedFields' | 'additionalFields') =>
-    fields.map(({ id, label, type = 'text', value, required = false, placeholder = '', minLength = 2, pattern, title }) => {
+  renderFields = (fields: Field[], fieldType: FieldType) =>
+    fields.map(({ id,
+                  label,
+                  type = 'text',
+                  value,
+                  required = false,
+                  placeholder = '',
+                  minLength = 2,
+                  pattern,
+                  title }) => {
+
       const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
+
       return (
-        <div key={id} className={fieldType === 'additionalFields' ? s.additionalField : s.field}>
+        <div key={id} className={fieldType === 'socials' ? s.socials : s.field}>
           <label htmlFor={id}>{label}:</label>
-          {type === 'tel' ? (
+          {label === 'Описание' ? (
+            <textarea
+              id={id}
+              value={value}
+              placeholder={placeholder}
+              required={required}
+              minLength={minLength}
+              maxLength={200}
+              title={title}
+              onBlur={(e) => this.handleBlurValidation(e, label)}
+              onInput={(e) => this.handleValidation(e, label)}
+              onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
+              className={inputClassName}
+            />
+          ) : type === 'tel' ? (
             <InputMask
               mask="+7 (999) 999-99-99"
               value={value}
@@ -308,7 +339,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           {this.state.fieldsErrors[id] && (
             <div className={s.errorMessage}>{this.state.fieldsErrors[id]}</div>
           )}
-          {fieldType === 'additionalFields' && (
+          {fieldType === 'socials' && (
             <button
               type="button"
               className={s.removeButton}
@@ -323,29 +354,31 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     )
 
   render() {
-    const { predefinedFields, additionalFields, newFieldLabel } = this.state;
+    const { predefinedFields, phones, emails, websites, socials, newFieldLabel } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
+        <fieldset className={s.predefinedFields}>{this.renderFields(predefinedFields, 'predefinedFields')}</fieldset>
+
         <fieldset className={s.predefinedFields}>
-          {this.renderFields(predefinedFields, "predefinedFields")}
+          <legend>Телефон:</legend>
+          {this.renderFields(phones, 'phones')}
+        </fieldset>
+
+        <fieldset className={s.predefinedFields}>
+          <legend>Электронная почта:</legend>
+          {this.renderFields(emails, 'emails')}
+        </fieldset>
+
+        <fieldset className={s.predefinedFields}>
+          <legend>Сайты:</legend>
+          {this.renderFields(websites, 'websites')}
         </fieldset>
 
         <fieldset className={s.additionalFields}>
           <legend>Социальные сети</legend>
-          <div className={s.addFieldContainer}>
-            <input
-              type="text"
-              placeholder="Название социальной сети"
-              value={newFieldLabel}
-              onChange={this.handleAdditionalFieldLabelCreator}
-              onKeyDown={this.handleKeyDownAddField}
-            />
-            <button type="button" onClick={this.handleAddField}>
-              Добавить
-            </button>
-          </div>
-          {this.renderFields(additionalFields, "additionalFields")}
+          <AddField />
+          {this.renderFields(socials, 'socials')}
         </fieldset>
 
         <button type="submit">Получить QR</button>

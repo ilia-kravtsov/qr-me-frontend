@@ -15,15 +15,23 @@ const initialState: FormReducerType = {
     { id: v1(), label: 'Имя', value: '', required: true, placeholder: 'Имя', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
     { id: v1(), label: 'Фамилия', value: '', required: true, placeholder: 'Фамилия', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
     { id: v1(), label: 'Отчество', value: '', required: false, placeholder: 'Отчество', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
-    { id: v1(), label: 'Телефон', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
-    { id: v1(), label: 'Электронная почта', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
+    { id: v1(), label: 'Описание', value: '', required: false, placeholder: 'Описание' },
     { id: v1(), label: 'Компания', value: '', required: false, placeholder: 'OOO "Google"' },
     { id: v1(), label: 'Должность', value: '', required: false, placeholder: 'менеджер' },
     { id: v1(), label: 'Адрес', value: '', required: false, placeholder: 'ул. Красноармейская, дом 4' },
   ],
-  additionalFields: [
+  phones: [
+    { id: v1(), label: 'Телефон', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
+  ],
+  emails: [
+    { id: v1(), label: 'Электронная почта', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
+  ],
+  socials: [
     { id: v1(), label: 'Telegram', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
     { id: v1(), label: 'Whatsapp', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
+  ],
+  websites: [
+    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
   ],
   isSubmitting: false,
   submitError: null,

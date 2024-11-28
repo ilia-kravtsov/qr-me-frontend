@@ -37,7 +37,10 @@ class UserDataFormContainer extends Component<UserDataFormProps> {
 
 const mapStateToProps = (state: RootState): FormReducerType => ({
   predefinedFields: state.form.predefinedFields,
-	additionalFields: state.form.additionalFields,
+	phones: state.form.phones,
+	emails: state.form.emails,
+	socials: state.form.socials,
+	websites: state.form.websites,
 	isSubmitting: state.form.isSubmitting,
 	submitError: state.form.submitError,
 });

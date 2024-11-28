@@ -4,7 +4,7 @@ import {FormState} from "../../UserDataFormContainer/UserDataForm/UserDataFormTy
 
 export class PersonalPage extends Component<FormState> {
 	render() {
-		const {predefinedFields, additionalFields} = this.props
+		const {predefinedFields, socials} = this.props
 		return (
 			<div className={s.container}>
 				<h2>Привет! Это моя визитка!</h2>
@@ -17,7 +17,7 @@ export class PersonalPage extends Component<FormState> {
 				</ul>
 
 				<ul className={s.fieldList}>
-					{additionalFields.map((field) => (
+					{socials.map((field) => (
 						<li key={field.id} className={s.fieldItem}>
 							<strong>{field.label}:</strong> {field.value}
 						</li>

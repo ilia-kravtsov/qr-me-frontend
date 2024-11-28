@@ -1,4 +1,5 @@
 export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
+export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'socials' | 'websites';
 
 type fieldError = {
 	[key: string]: string
@@ -6,10 +7,8 @@ type fieldError = {
 
 export type UserDataFormState = {
 	newFieldLabel: string
-	additionalFields: Field[]
-	predefinedFields: Field[]
 	fieldsErrors: fieldError
-};
+} & FormState
 
 export type Field = {
 	id: string
@@ -29,13 +28,17 @@ export type FormMethods = {
 
 export type FormState = {
 	predefinedFields: Field[]
-	additionalFields: Field[]
-	isSubmitting?: boolean
+	phones: Field[]
+	emails: Field[]
+	websites: Field[]
+	socials: Field[]
 }
 
-export type UserDataFormProps = FormMethods & FormState
+export type UserDataFormProps = FormMethods & FormState & FormStatus
 
-export type FormReducerType = {
+export type FormReducerType = FormStatus & FormState
+
+export type FormStatus = {
 	isSubmitting: boolean
 	submitError: null | string
-} & FormState
+}

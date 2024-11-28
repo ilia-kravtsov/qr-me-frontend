@@ -8,15 +8,18 @@ import {RootState} from "../../redux/store";
 class PersonalPageContainer extends Component<FormState> {
 	render() {
 		return (
-			<PersonalPage predefinedFields={this.props.predefinedFields}
-										additionalFields={this.props.additionalFields}/>
+			<PersonalPage {...this.props}/>
 		)
 	}
 }
 
 const mapStateToProps = (state: RootState) => ({
 	predefinedFields: state.personalPage.predefinedFields,
-	additionalFields: state.personalPage.additionalFields,
+	phones: state.personalPage.phones,
+	emails: state.personalPage.emails,
+	websites: state.personalPage.websites,
+	socials: state.personalPage.socials,
+	additionalFields: state.personalPage.socials,
 });
 
 const mapDispatchToProps = {
