@@ -1,12 +1,7 @@
 import {FormReducerType} from "../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes";
 import { v1 } from "uuid";
-import {SaveFormDataAction, SubmitFormErrorAction, SubmitFormStartAction} from "../../actions/formActions/formActionsTypes";
-import {FormActionTypes} from "../../actions/formActions/formActions";
-
-export type FormActions =
-  | SubmitFormStartAction
-  | SaveFormDataAction
-  | SubmitFormErrorAction;
+import { FormActionTypes } from '../../actions/formActions/formActions';
+import { FormActions } from '../../actions/formActions/formActionsTypes';
 
 type ActionsType = FormActions;
 
@@ -21,10 +16,12 @@ const initialState: FormReducerType = {
     { id: v1(), label: 'Адрес', value: '', required: false, placeholder: 'ул. Красноармейская, дом 4' },
   ],
   phones: [
-    { id: v1(), label: 'Телефон', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
+    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
+    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
   ],
   emails: [
-    { id: v1(), label: 'Электронная почта', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
+    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
+    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
   ],
   socials: [
     { id: v1(), label: 'Telegram', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
@@ -32,8 +29,10 @@ const initialState: FormReducerType = {
   ],
   websites: [
     { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
+    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'ваша ссылка' },
   ],
   isSubmitting: false,
+  isSubmitSuccessful: false,
   submitError: null,
 };
 
@@ -41,6 +40,8 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
   switch (action.type) {
     case FormActionTypes.SUBMIT_FORM:
       return { ...state, isSubmitting: true, submitError: null };
+    case FormActionTypes.SUBMIT_FORM_SUCCESS:
+      return { ...state, isSubmitting: false, isSubmitSuccessful: true };
     case FormActionTypes.SUBMIT_FORM_ERROR:
       return { ...state, isSubmitting: false, submitError: action.payload };
     default:

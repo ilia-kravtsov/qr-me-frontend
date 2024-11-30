@@ -2,7 +2,7 @@ import { ChangeEvent, Component, FormEvent, KeyboardEvent } from 'react';
 import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
-  Field, FieldType, InputsType,
+  Field, FieldType,
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
@@ -38,8 +38,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }
 
     this.setState((prevState) => ({
-      socials: [
-        ...prevState.socials,
+      websites: [
+        ...prevState.websites,
         newField,
       ],
       newFieldLabel: '',
@@ -283,7 +283,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                   minLength = 2,
                   pattern,
                   title }) => {
-
+      if (!fields || fields.length === 0) {
+        return null;
+      }
       const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
 
       return (
@@ -339,7 +341,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           {this.state.fieldsErrors[id] && (
             <div className={s.errorMessage}>{this.state.fieldsErrors[id]}</div>
           )}
-          {fieldType === 'socials' && (
+          {fieldType === 'websites' && (
             <button
               type="button"
               className={s.removeButton}
@@ -358,7 +360,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
-        <fieldset className={s.predefinedFields}>{this.renderFields(predefinedFields, 'predefinedFields')}</fieldset>
+        <fieldset className={s.predefinedFields}>
+          {this.renderFields(predefinedFields, 'predefinedFields')}
+        </fieldset>
 
         <fieldset className={s.predefinedFields}>
           <legend>Телефон:</legend>
@@ -372,16 +376,20 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
         <fieldset className={s.predefinedFields}>
           <legend>Сайты:</legend>
+          <AddField handleAddField={this.handleAddField}
+                    handleAdditionalFieldLabelCreator={this.handleAdditionalFieldLabelCreator}
+                    handleKeyDownAddField={this.handleKeyDownAddField}
+                    newFieldLabel={newFieldLabel}
+          />
           {this.renderFields(websites, 'websites')}
         </fieldset>
 
         <fieldset className={s.additionalFields}>
           <legend>Социальные сети</legend>
-          <AddField />
           {this.renderFields(socials, 'socials')}
         </fieldset>
 
-        <button type="submit">Получить QR</button>
+        <button type="submit">{this.props.isSubmitting ? 'Loader' : 'Получить QR код и ссылку'}</button>
       </form>
     );
   }

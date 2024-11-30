@@ -1,3 +1,6 @@
+import { SendFormDataToServer } from '../../../redux/actions/formActions/formActionsTypes';
+import { submitFormData } from '../../../redux/actions/formActions/formActions';
+
 export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'socials' | 'websites';
 
@@ -22,10 +25,6 @@ export type Field = {
 	title?: string
 }
 
-export type FormMethods = {
-	onSubmit: (data: FormState) => void;
-};
-
 export type FormState = {
 	predefinedFields: Field[]
 	phones: Field[]
@@ -34,11 +33,20 @@ export type FormState = {
 	socials: Field[]
 }
 
-export type UserDataFormProps = FormMethods & FormState & FormStatus
+export type UserDataFormProps = FormState & FormStatus & {
+	onSubmit: (data: FormState) => void;
+}
+
+export type FormMethods = {
+	submitFormData: (data: SendFormDataToServer) => void;
+};
+
+export type UserDataFormContainerProps = FormMethods & FormState & FormStatus
 
 export type FormReducerType = FormStatus & FormState
 
 export type FormStatus = {
-	isSubmitting: boolean
-	submitError: null | string
+	isSubmitting?: boolean
+	isSubmitSuccessful?: boolean
+	submitError?: null | string
 }
