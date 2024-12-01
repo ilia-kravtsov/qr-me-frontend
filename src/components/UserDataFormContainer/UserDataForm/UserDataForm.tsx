@@ -2,7 +2,7 @@ import { ChangeEvent, Component, FormEvent, KeyboardEvent } from 'react';
 import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
-  Field, FieldType,
+  Field, FieldType, socialsIcons, socialsLinks,
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
@@ -18,10 +18,11 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       predefinedFields: this.props.predefinedFields,
       phones: this.props.phones,
       emails: this.props.emails,
-      socials: this.props.socials,
       websites: this.props.websites,
+      socialsIcons: this.props.socialsIcons,
+      socialsLinks: [],
       newFieldLabel: '',
-      fieldsErrors: {}
+      fieldsErrors: {},
     };
   }
 
@@ -55,16 +56,36 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
   handleRemoveField = (id: string) => {
     this.setState((prevState) => ({
-      socials: prevState.socials.filter((field) => field.id !== id),
+      websites: prevState.websites.filter((field) => field.id !== id),
     }));
   };
 
   handleChangeFieldValue = (fieldType: FieldType, id: string, value: string) => {
-    this.setState((prevState) => ({
-        [fieldType]: prevState[fieldType].map((field) => field.id === id ? { ...field, value } : field),
-      } as Pick<UserDataFormState, typeof fieldType>
-    ));
+    this.setState((prevState) => {
+      const fields = prevState[fieldType] as Field[];
+
+      const updatedFields = fields.map((field) =>
+        field.id === id ? { ...field, value } : field
+      );
+
+      return { ...prevState, [fieldType]: updatedFields };
+    });
   };
+
+  handleChangeSocialsFields = (socialId: number, e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    this.setState((prevState) => {
+      const updatedSocialsLinks = prevState.socialsLinks.map(link => {
+        if (link.id === socialId) {
+          return { ...link, social_url: value };
+        }
+        return link;
+      });
+
+      return { socialsLinks: updatedSocialsLinks };
+    });
+  }
 
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,20 +95,41 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       phones: this.state.phones,
       emails: this.state.emails,
       websites: this.state.websites,
-      socials: this.state.socials,
+      socials: this.state.socialsLinks,
     };
 
     this.props.onSubmit(allFields);
 
     this.setState({
+      predefinedFields: this.props.predefinedFields,
+      phones: this.props.phones,
+      emails: this.props.emails,
+      websites: this.props.websites,
+      socialsIcons: this.props.socialsIcons,
+      socialsLinks: [],
       newFieldLabel: '',
-      socials: [...this.props.socials],
-      predefinedFields: this.props.predefinedFields.map(field => ({...field, value: ''})),
+      fieldsErrors: {},
     });
   };
 
   handleAdditionalFieldLabelCreator = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ newFieldLabel: e.target.value })
+  }
+
+  handleSocialIconClick = (socialId: number) => {
+    this.setState((prevState) => {
+      const isSocialExists = prevState.socialsLinks.some(link => link.id === socialId);
+
+      if (isSocialExists) {
+        return {
+          socialsLinks: prevState.socialsLinks.filter(link => link.id !== socialId)
+        };
+      } else {
+        return {
+          socialsLinks: [...prevState.socialsLinks, { id: socialId, social_url: '' }]
+        };
+      }
+    });
   }
 
   handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
@@ -99,8 +141,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     switch (label) {
       case 'Имя':
       case 'Фамилия':
-      case 'Отчество': {
-        const textPattern = /[^A-Za-zА-Яа-яЁё\s]/g;
+      case 'Отчество':
+      case 'Должность': {
+        const textPattern = /[^A-Za-zА-Яа-яЁё\-]/g;
         const invalidCharacters = processedValue.match(textPattern);
         processedValue = processedValue.replace(textPattern, '');
         if (invalidCharacters) {
@@ -115,16 +158,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         processedValue = processedValue.replace(addressAndCompanyPattern, '');
         if (invalidCharacters) {
           errorMessage = 'Вводите только буквы, цифры, пробелы, точки, дефисы, слэши или "№".';
-        }
-        break;
-      }
-
-      case 'Должность': {
-        const textPattern = /[^A-Za-zА-Яа-яЁё\-\s]/g;
-        const invalidCharacters = processedValue.match(textPattern);
-        processedValue = processedValue.replace(textPattern, '');
-        if (invalidCharacters) {
-          errorMessage = 'Вводите только латинские или кириллические буквы и дефисы';
         }
         break;
       }
@@ -147,7 +180,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
-      case 'Электронная почта': {
+      case 'Email': {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (processedValue.length && processedValue.length > 6 && !processedValue.includes('@')) {
           if (!emailPattern.test(processedValue)) {
@@ -177,7 +210,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
-      case 'Whatsapp': {
+      case 'Website': {
         const urlPattern = /^(https?:\/\/)/;
 
         if (
@@ -249,6 +282,21 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
+      case 'Website': {
+        if (processedValue.length) {
+          if (
+            processedValue.startsWith('http://') ||
+            processedValue.startsWith('https://')
+          ) {
+            errorMessage = '';
+          } else {
+            errorMessage = 'Формат ссылки: http://, https://';
+          }
+          break;
+        }
+        break;
+      }
+
       case 'Адрес': {
         const addressPattern = /\d/;
         if (processedValue.length) {
@@ -289,7 +337,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
 
       return (
-        <div key={id} className={fieldType === 'socials' ? s.socials : s.field}>
+        <div key={id} className={s.field}>
           <label htmlFor={id}>{label}:</label>
           {label === 'Описание' ? (
             <textarea
@@ -355,8 +403,28 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       }
     )
 
+  renderSocialsIcons = (fields: socialsIcons[]) => {
+    return fields.map(({ id, name, icon_link }) => (
+        <li key={id}>
+          <img src={icon_link}
+               alt={name}
+               style={{width: '60px', borderRadius: '10px', cursor: 'pointer'}}
+               onClick={() => this.handleSocialIconClick(id)}
+          />
+        </li>
+    ))
+  }
+
+  renderSocialsFields = (socialsLinks: socialsLinks[]) => {
+      return socialsLinks.map(socialLink => (
+          <li key={socialLink.id}>
+            <input type="url" onChange={(e) => this.handleChangeSocialsFields(socialLink.id, e)}/>
+          </li>
+      ))
+  }
+
   render() {
-    const { predefinedFields, phones, emails, websites, socials, newFieldLabel } = this.state;
+    const { predefinedFields, phones, emails, websites, socialsIcons, newFieldLabel, socialsLinks } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
@@ -386,10 +454,17 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
         <fieldset className={s.additionalFields}>
           <legend>Социальные сети</legend>
-          {this.renderFields(socials, 'socials')}
+          <div>
+            <ul className={s.socials}>
+              {this.renderSocialsIcons(socialsIcons)}
+            </ul>
+            <ul>
+              {this.renderSocialsFields(socialsLinks)}
+            </ul>
+          </div>
         </fieldset>
 
-        <button type="submit">{this.props.isSubmitting ? 'Loader' : 'Получить QR код и ссылку'}</button>
+        <button type="submit">{this.props.submitStatus === 'loading' ? 'Loader' : 'Получить QR код и ссылку'}</button>
       </form>
     );
   }

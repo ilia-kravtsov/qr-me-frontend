@@ -1,11 +1,11 @@
 import {Component} from "react";
 import {PersonalPage} from "./PersonalPage/PersonalPage";
 import {connect} from "react-redux";
-import {FormState} from "../UserDataFormContainer/UserDataForm/UserDataFormTypes";
+import { FormDataToServer, FormState } from '../UserDataFormContainer/UserDataForm/UserDataFormTypes';
 import {getUserDataAC} from "../../redux/actions/personalPageActions/personalPageActions";
 import {RootState} from "../../redux/store";
 
-class PersonalPageContainer extends Component<FormState> {
+class PersonalPageContainer extends Component<FormDataToServer> {
 	render() {
 		return (
 			<PersonalPage {...this.props}/>
@@ -19,7 +19,6 @@ const mapStateToProps = (state: RootState) => ({
 	emails: state.personalPage.emails,
 	websites: state.personalPage.websites,
 	socials: state.personalPage.socials,
-	additionalFields: state.personalPage.socials,
 });
 
 const mapDispatchToProps = {

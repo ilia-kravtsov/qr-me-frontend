@@ -1,9 +1,13 @@
-import {FormActionTypes} from "./formActions";
+import { FormActionTypes, SocialsActionTypes } from './formActions';
+import { socialsIcons } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 
 export type FormActions =
 	| SubmitFormStartAction
 	| SubmitFormSuccessAction
-	| SubmitFormErrorAction;
+	| SubmitFormErrorAction
+	| GetFormDataSuccess
+	| GetFormDataAttempt
+	| GetFormDataError
 
 export type SubmitFormStartAction = {
 	type: FormActionTypes.SUBMIT_FORM;
@@ -18,7 +22,7 @@ export type SubmitFormSuccessAction = {
 	type: FormActionTypes.SUBMIT_FORM_SUCCESS;
 }
 
-type SocialsServer = {
+export type SocialsServer = {
 	social_id: number
 	social_url: string
 }
@@ -36,4 +40,18 @@ export type SendFormDataToServer = {
 	emails?: string[] | null
 	websites?: string[] | null
 	socials?: SocialsServer[] | null
+}
+
+export type GetFormDataSuccess = {
+	type: SocialsActionTypes.GET_FORM_DATA_SUCCESS;
+	payload: socialsIcons[];
+}
+
+export type GetFormDataAttempt = {
+	type: SocialsActionTypes.GET_FORM_DATA;
+}
+
+export type GetFormDataError = {
+	type: SocialsActionTypes.GET_FORM_DATA_ERROR;
+	payload: string
 }
