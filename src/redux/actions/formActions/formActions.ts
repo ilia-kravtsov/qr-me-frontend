@@ -2,7 +2,7 @@ import { getSocialsData, sendFormData } from '../../../api/api';
 import { Dispatch } from 'redux';
 import {
 	GetFormDataAttempt, GetFormDataSuccess,
-	SendFormDataToServer,
+	ServerDataType,
 	SubmitFormErrorAction,
 	SubmitFormStartAction,
 	SubmitFormSuccessAction,
@@ -34,7 +34,7 @@ export const submitFormError = (errorMessage: string): SubmitFormErrorAction => 
   payload: errorMessage,
 });
 
-export const submitFormData = (formData: SendFormDataToServer) => async (dispatch: Dispatch) => {
+export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
   dispatch(submitFormAttempt());
   try {
     const response = await sendFormData(formData);

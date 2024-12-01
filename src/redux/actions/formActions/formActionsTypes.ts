@@ -27,7 +27,7 @@ export type SocialsServer = {
 	social_url: string
 }
 
-export type SendFormDataToServer = {
+export type ServerDataType = {
 	photo?: string | null
 	first_name: string
 	last_name: string

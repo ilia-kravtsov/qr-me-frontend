@@ -297,6 +297,16 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
+      case 'Email': {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (processedValue.length && !processedValue.includes('@')) {
+          if (!emailPattern.test(processedValue)) {
+            errorMessage = 'Формат почты example@mail.ru.';
+          }
+        }
+        break;
+      }
+
       case 'Адрес': {
         const addressPattern = /\d/;
         if (processedValue.length) {
@@ -423,6 +433,13 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       ))
   }
 
+  isFormValid = () => {
+    const { fieldsErrors, predefinedFields, phones, emails, websites, socialsLinks } = this.state;
+    const hasErrors = !Object.values(fieldsErrors).some(error => error !== '');
+    const hasEmptyRequiredFields = this.state.predefinedFields.some(field => field.required && !field.value?.trim());
+    return hasErrors && hasEmptyRequiredFields;
+  };
+
   render() {
     const { predefinedFields, phones, emails, websites, socialsIcons, newFieldLabel, socialsLinks } = this.state;
 
@@ -464,7 +481,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           </div>
         </fieldset>
 
-        <button type="submit">{this.props.submitStatus === 'loading' ? 'Loader' : 'Получить QR код и ссылку'}</button>
+        <button type="submit" disabled={!this.isFormValid()}>
+          {this.props.submitStatus === 'loading' ? 'Loader' : 'Получить QR код и ссылку'}
+        </button>
       </form>
     );
   }
