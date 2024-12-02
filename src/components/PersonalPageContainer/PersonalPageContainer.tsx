@@ -1,63 +1,26 @@
-import { Component } from 'react';
-import { PersonalPage } from './PersonalPage/PersonalPage';
-import { connect } from 'react-redux';
-import { getUserDataTC } from '../../redux/actions/personalPageActions/personalPageActions';
-import { RootState } from '../../redux/store';
-import { PersonalPageMethods, PersonalPageProps } from './PersonalPage/PersonalPageTypes';
-import { Dispatch } from 'redux';
-import { useParams } from 'react-router-dom';
+import {Component} from "react";
+import {PersonalPage} from "./PersonalPage/PersonalPage";
+import {connect} from "react-redux";
+import {FormState} from "../UserDataFormContainer/UserDataForm/UserDataFormTypes";
+import {getUserDataAC} from "../../redux/actions/personalPageActions/personalPageActions";
+import {RootState} from "../../redux/store";
 
-type RouteParams = {
-  user_id: string;
+class PersonalPageContainer extends Component<FormState> {
+	render() {
+		return (
+			<PersonalPage predefinedFields={this.props.predefinedFields}
+										additionalFields={this.props.additionalFields}/>
+		)
+	}
 }
 
-type Props = PersonalPageProps & RouteParams;
-
-class PersonalPageContainer extends Component<Props> {
-  componentDidMount() {
-    const { user_id } = this.props;
-    if (user_id) {
-      this.props.getUserDataTC(user_id);
-    } else {
-      console.error('User ID not found in URL!');
-    }
-  }
-
-  render() {
-    return <PersonalPage {...this.props} />;
-  }
-}
-
-const mapStateToProps = ({ personalPage }: RootState) => ({ ...personalPage });
-
-const mapDispatchToProps = (dispatch: Dispatch): PersonalPageMethods => ({
-  getUserDataTC: (userId: string) => getUserDataTC(userId)(dispatch),
+const mapStateToProps = (state: RootState) => ({
+	predefinedFields: state.personalPage.predefinedFields,
+	additionalFields: state.personalPage.additionalFields,
 });
 
-const ConnectedPersonalPageContainer = connect(mapStateToProps, mapDispatchToProps)(PersonalPageContainer);
-
-const PersonalPageContainerWithParams = () => {
-  const { user_id } = useParams<RouteParams>();
-  return <ConnectedPersonalPageContainer user_id={user_id || ''} />;
+const mapDispatchToProps = {
+	getUserData: getUserDataAC,
 };
 
-export default PersonalPageContainerWithParams;
-
-/*
-const mapStateToProps = (state: RootState) => ({
-  photo: state.personalPage.photo,
-  first_name: state.personalPage.first_name,
-  last_name: state.personalPage.last_name,
-  middle_name: state.personalPage.middle_name,
-  about: state.personalPage.about,
-  company: state.personalPage.company,
-  position: state.personalPage.position,
-  address: state.personalPage.address,
-  phones: state.personalPage.phones,
-  emails: state.personalPage.emails,
-  websites: state.personalPage.websites,
-  socials: state.personalPage.socials,
-  getUserDataStatus: state.personalPage.getUserDataStatus,
-  getUserDataError: state.personalPage.getUserDataError
-});
- */
+export default connect(mapStateToProps, mapDispatchToProps)(PersonalPageContainer);

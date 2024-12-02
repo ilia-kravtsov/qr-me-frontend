@@ -3,74 +3,31 @@ import { connect } from 'react-redux';
 import {Dispatch} from 'redux';
 import { RootState } from '../../redux/store';
 import {
-	FormServerData,
 	FormMethods, FormReducerType,
 	FormState,
-	UserDataFormContainerProps,
-} from './UserDataForm/UserDataFormTypes';
+	UserDataFormProps
+} from "./UserDataForm/UserDataFormTypes";
 import UserDataForm from "./UserDataForm/UserDataForm";
-import { getSocials, submitFormData } from '../../redux/actions/formActions/formActions';
+import {submitFormData} from "../../redux/actions/formActions/formActions";
 import { QR } from '../QR/QR';
 import s from './UserDataFormContainer.module.scss'
-import { ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
-import { getSocialsData } from '../../api/api';
 
-class UserDataFormContainer extends Component<UserDataFormContainerProps> {
+class UserDataFormContainer extends Component<UserDataFormProps> {
 
-	componentDidMount() {
-		this.props.getSocialsData();
-	}
-
-	handleSubmit = (data: FormServerData) => {
-		const prepareDataToServer: ServerDataType = {
-			first_name: '',
-			last_name: '',
-			phones: data.phones.length > 0 ? data.phones.map(field => field.value) : null,
-			emails: data.emails.length > 0 ? data.emails.map(field => field.value) : null,
-			websites: data.websites.length > 0 ? data.websites.map(field => field.value) : null,
-			socials: data.socials.length > 0 ? data.socials.map(field => ({social_id: field.id, social_url: field.social_url })) : null,
-		}
-
-		data.predefinedFields.forEach((field) => {
-			switch (field.label) {
-				case 'Имя *':
-					prepareDataToServer.first_name = field.value;
-					break;
-				case 'Фамилия *':
-					prepareDataToServer.last_name = field.value;
-					break;
-				case 'Отчество':
-					prepareDataToServer.middle_name = field.value;
-					break;
-				case 'Компания':
-					prepareDataToServer.company = field.value;
-					break;
-				case 'Должность':
-					prepareDataToServer.position = field.value;
-					break;
-				case 'Адрес':
-					prepareDataToServer.address = field.value;
-					break;
-				case 'Описание':
-					prepareDataToServer.about = field.value;
-					break;
-				default:
-					break;
-			}
-		});
-		console.log('Prepared data for server:', prepareDataToServer);
-		this.props.submitFormData(prepareDataToServer);
+	handleSubmit = (data: FormState) => {
+		this.props.onSubmit(data);
+		console.log(data)
 	};
 
 	render() {
-		const { submitStatus } = this.props;
+		const { isSubmitting } = this.props;
 		return (
 			<div className={s.container}>
 				<UserDataForm
 					{...this.props}
 					onSubmit={this.handleSubmit}
 				/>
-				{submitStatus === 'success' && (
+				{isSubmitting && (
 					<QR value={'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'} />
 				)}
 			</div>
@@ -78,11 +35,15 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 	}
 }
 
-const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
+const mapStateToProps = (state: RootState): FormReducerType => ({
+  predefinedFields: state.form.predefinedFields,
+	additionalFields: state.form.additionalFields,
+	isSubmitting: state.form.isSubmitting,
+	submitError: state.form.submitError,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
-	submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
-	getSocialsData: () => getSocials()(dispatch)
+	onSubmit: (data: FormState) => submitFormData(data)(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDataFormContainer);

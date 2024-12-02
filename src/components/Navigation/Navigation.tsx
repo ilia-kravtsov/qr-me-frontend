@@ -13,7 +13,7 @@ export class Navigation extends Component {
 					<Link to="/form" className={s.link}>Форма</Link>
 				</li>
 				<li>
-					<Link to="/users/123123" className={s.link}>Персональная страница</Link>
+					<Link to="/personal-page" className={s.link}>Персональная страница</Link>
 				</li>
 			</ul>
 		</nav>
