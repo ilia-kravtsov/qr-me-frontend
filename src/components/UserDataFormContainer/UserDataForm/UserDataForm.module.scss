@@ -41,7 +41,6 @@
 
     .socials {
       display: flex;
-      justify-content: space-between;
       gap: 20px;
       padding: 20px 0 0 0;
       position: relative;
@@ -63,4 +62,17 @@
       width: 80px;
     }
   }
+
+  .submitButton {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .submitButton:disabled {
+    cursor: not-allowed;
+  }
 }
+
+

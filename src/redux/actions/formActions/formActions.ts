@@ -2,7 +2,7 @@ import { getSocialsData, sendFormData } from '../../../api/api';
 import { Dispatch } from 'redux';
 import {
 	GetFormDataAttempt, GetFormDataSuccess,
-	SendFormDataToServer,
+	ServerDataType,
 	SubmitFormErrorAction,
 	SubmitFormStartAction,
 	SubmitFormSuccessAction,
@@ -34,17 +34,35 @@ export const submitFormError = (errorMessage: string): SubmitFormErrorAction => 
   payload: errorMessage,
 });
 
-export const submitFormData = (formData: SendFormDataToServer) => async (dispatch: Dispatch) => {
-  dispatch(submitFormAttempt());
-  try {
-    const response = await sendFormData(formData);
-    dispatch(submitFormSuccess());
-    console.log('Form submitted successfully:', response);
-  } catch (error: any) {
-    dispatch(submitFormError(error.message));
-    console.error('Failed to submit form:', error);
-  }
+// Имитирую запрос на сервер
+export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
+	dispatch(submitFormAttempt());
+	try {
+		await new Promise((resolve) =>
+			setTimeout(() => {
+				console.log('Mock request - success');
+				resolve('Success');
+			}, 1000)
+		);
+		dispatch(submitFormSuccess());
+		console.log('Form submitted successfully:', formData);
+	} catch (error: any) {
+		dispatch(submitFormError(error.message));
+		console.error('Failed to submit form:', error);
+	}
 };
+
+// export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
+//   dispatch(submitFormAttempt());
+//   try {
+//     const response = await sendFormData(formData);
+//     dispatch(submitFormSuccess());
+//     console.log('Form submitted successfully:', response);
+//   } catch (error: any) {
+//     dispatch(submitFormError(error.message));
+//     console.error('Failed to submit form:', error);
+//   }
+// };
 
 const getFormData = ():GetFormDataAttempt => ({
   type: SocialsActionTypes.GET_FORM_DATA

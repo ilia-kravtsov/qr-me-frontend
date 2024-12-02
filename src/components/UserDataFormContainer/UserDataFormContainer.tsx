@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Dispatch} from 'redux';
 import { RootState } from '../../redux/store';
 import {
-	FormDataToServer,
+	FormServerData,
 	FormMethods, FormReducerType,
 	FormState,
 	UserDataFormContainerProps,
@@ -12,7 +12,7 @@ import UserDataForm from "./UserDataForm/UserDataForm";
 import { getSocials, submitFormData } from '../../redux/actions/formActions/formActions';
 import { QR } from '../QR/QR';
 import s from './UserDataFormContainer.module.scss'
-import { SendFormDataToServer } from '../../redux/actions/formActions/formActionsTypes';
+import { ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
 import { getSocialsData } from '../../api/api';
 
 class UserDataFormContainer extends Component<UserDataFormContainerProps> {
@@ -21,8 +21,8 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 		this.props.getSocialsData();
 	}
 
-	handleSubmit = (data: FormDataToServer) => {
-		const prepareDataToServer: SendFormDataToServer = {
+	handleSubmit = (data: FormServerData) => {
+		const prepareDataToServer: ServerDataType = {
 			first_name: '',
 			last_name: '',
 			phones: data.phones.length > 0 ? data.phones.map(field => field.value) : null,
@@ -78,20 +78,10 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 	}
 }
 
-const mapStateToProps = (state: RootState): FormReducerType => ({
-  predefinedFields: state.form.predefinedFields,
-	phones: state.form.phones,
-	emails: state.form.emails,
-	socialsIcons: state.form.socialsIcons,
-	websites: state.form.websites,
-	submitStatus: state.form.submitStatus,
-	submitError: state.form.submitError,
-	socialsStatus: state.form.socialsStatus,
-	getDataError: state.form.getDataError
-});
+const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
-	submitFormData: (data: SendFormDataToServer) => submitFormData(data)(dispatch),
+	submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
 	getSocialsData: () => getSocials()(dispatch)
 });
 

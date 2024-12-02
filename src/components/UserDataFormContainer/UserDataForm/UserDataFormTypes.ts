@@ -1,8 +1,8 @@
-import { SendFormDataToServer } from '../../../redux/actions/formActions/formActionsTypes';
+import { ServerDataType } from '../../../redux/actions/formActions/formActionsTypes';
 
 export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'websites';
-type LoadingStatus = 'idle' | 'loading' | 'success' | 'error'
+export type LoadingStatus = 'idle' | 'loading' | 'success' | 'error'
 
 type fieldError = {
 	[key: string]: string
@@ -50,16 +50,16 @@ export type FormState = {
 	socialsIcons: socialsIcons[]
 }
 
-export type FormDataToServer = Omit<FormState, 'socialsIcons'> & {
+export type FormServerData = Omit<FormState, 'socialsIcons'> & {
 	socials: socialsLinks[];
 };
 
 export type UserDataFormProps = FormState & FormStatus & {
-	onSubmit: (data: FormDataToServer) => void;
+	onSubmit: (data: FormServerData) => void;
 }
 
 export type FormMethods = {
-	submitFormData: (data: SendFormDataToServer) => void;
+	submitFormData: (data: ServerDataType) => void;
 	getSocialsData: () => void
 };
 
@@ -73,6 +73,7 @@ export type FormStatus = {
 	socialsStatus: LoadingStatus
 	getDataError?: null | string
 }
+
 
 
 
