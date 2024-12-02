@@ -2,7 +2,6 @@
   "name": "1-lesson",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ilia-kravtsov.github.io/qr-me-frontend",
   "dependencies": {
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
