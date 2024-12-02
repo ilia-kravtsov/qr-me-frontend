@@ -1,5 +1,7 @@
 @import '../../styles/global/normalize.module';
 @import '../../styles/global/variables.module';
+@import '../../styles/fonts/stylesheet.module.css';
+@import '../../styles/fonts/stylesheetSecondaryFont.module.css';
 
 .container {
   min-block-size: 100dvh;

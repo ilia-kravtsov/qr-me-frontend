@@ -13,6 +13,66 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+
+      .fieldLabel {
+
+      }
+
+      .description {
+        inline-size: 165px;
+        resize: none;
+      }
+
+      .description:focus {
+        outline: none;
+      }
+
+      .errorMessage {
+        color: brown;
+        font-size: 12px;
+        position: absolute;
+        top: 24px;
+        right: 0;
+      }
+
+      .inputError {
+        outline: 3px solid brown;
+      }
+    }
+
+    .renderFieldsContainer {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      gap: 20px;
+    }
+
+    .addFieldButton {
+      inline-size: 50px;
+      block-size: 50px;
+      border-radius: 50%;
+      color: #38AB9E;
+      outline: 3px solid #38AB9E;
+      background: transparent;
+      cursor: pointer;
+      margin-top: 20px;
+      align-self: flex-start;
+      position: absolute;
+      top: 0;
+      right: -100px;
+    }
+
+    .removeFieldButton {
+      inline-size: 50px;
+      block-size: 50px;
+      border-radius: 50%;
+      color: #38AB9E;
+      outline: 3px solid #38AB9E;
+      background: transparent;
+      cursor: pointer;
+      margin-top: 20px;
+      align-self: flex-start;
     }
   }
 
@@ -26,15 +86,61 @@
       padding: 20px 0 0 0;
     }
 
-    .additionalField {
+    .socialsContainer {
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .socialsIcons {
+      display: flex;
       gap: 20px;
       padding: 20px 0 0 0;
+      position: relative;
+
+      .errorMessage {
+        color: brown;
+        font-size: 12px;
+        position: absolute;
+        top: 45px;
+        right: 0;
+      }
+
+      .inputError {
+        outline: 3px solid brown;
+      }
+    }
+
+    .sodcialsFields {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .socialIcon {
+      block-size: 60px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .highlighted {
+      outline: 3px solid #38AB9E;
     }
 
     .removeButton {
       width: 80px;
     }
   }
+
+  .submitButton {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .submitButton:disabled {
+    cursor: not-allowed;
+  }
 }
+
