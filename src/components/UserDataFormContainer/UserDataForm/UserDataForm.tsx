@@ -8,6 +8,8 @@ import {
 } from './UserDataFormTypes';
 import InputMask from 'react-input-mask';
 import { AddField } from '../AddField/AddField';
+import { log } from 'node:util';
+import { Loader } from '../../Loader/Loader';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
@@ -87,6 +89,47 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     });
   }
 
+  checkForDuplicateValues = (allFields: Record<string, Field[] | socialsLinks[]>) => {
+    const valueMap: Record<string, string[]> = {};
+    let hasDuplicates = false;
+
+    Object.entries(allFields).forEach(([key, fields]) => {
+      fields.forEach((field) => {
+        let value: string | undefined;
+        if ('value' in field) {
+          value = field.value?.trim();
+        } else if ('social_url' in field) {
+          value = field.social_url?.trim();
+        }
+        if (value) {
+          if (!valueMap[value]) {
+            valueMap[value] = [];
+          }
+          valueMap[value].push(key);
+        }
+      });
+    });
+
+    const duplicateErrors: Record<string, string> = {};
+    Object.entries(valueMap).forEach(([value, keys]) => {
+      if (keys.length > 1) {
+        hasDuplicates = true;
+        keys.forEach((key) => {
+          duplicateErrors[key] = `Значение "${value}" не уникально`;
+        });
+      }
+    });
+    console.log(this.state.fieldsErrors);
+    this.setState((prevState) => ({
+      fieldsErrors: {
+        ...prevState.fieldsErrors,
+        ...duplicateErrors,
+      },
+    }));
+
+    return hasDuplicates;
+  };
+
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -97,6 +140,10 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       websites: this.state.websites,
       socials: this.state.socialsLinks,
     };
+
+    if (!this.isFormValid()) {
+      return;
+    }
 
     this.props.onSubmit(allFields);
 
@@ -132,7 +179,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     });
   }
 
-  handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
+  handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string, socialId?: number) => {
     const input = e.target as HTMLInputElement;
     const fieldId = input.id;
     let errorMessage = '';
@@ -219,14 +266,13 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         ) {
           errorMessage = '';
         } else if (
-          processedValue.length > 6 &&
+          processedValue.length > 7 &&
           !urlPattern.test(processedValue)
         ) {
           errorMessage = 'Формат URL: http://, https://';
         }
         break;
       }
-
 
       default:
         break;
@@ -242,7 +288,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }));
   };
 
-  handleBlurValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
+  handleBlurValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string, socialId?: number) => {
     const input = e.target as HTMLInputElement;
     let errorMessage = '';
     let processedValue = input.value;
@@ -327,6 +373,50 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       fieldsErrors: {
         ...prevState.fieldsErrors,
         [fieldId]: errorMessage,
+      },
+    }));
+  };
+
+  handleValidationSocials = (e: FormEvent<HTMLInputElement>, socialId: number) => {
+    const input = e.target as HTMLInputElement;
+    const value = input.value;
+
+    const urlPattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
+    const telegramPattern = /^@([A-Za-z0-9_]{5,})$/;
+
+    let errorMessage = '';
+    if (value.length > 15 && !urlPattern.test(value) && !telegramPattern.test(value)) {
+      errorMessage = 'Формат: https://some.ru http:// @username';
+    }
+
+    const errorKey = `social_${socialId}`;
+    this.setState((prevState) => ({
+      fieldsErrors: {
+        ...prevState.fieldsErrors,
+        [errorKey]: errorMessage,
+      },
+    }));
+  };
+
+  handleBlurValidationSocials = (e: FormEvent<HTMLInputElement>, socialId: number) => {
+    const input = e.target as HTMLInputElement;
+    const value = input.value.trim();
+
+    const urlPattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
+    const telegramPattern = /^@([A-Za-z0-9_]{5,})$/;
+
+    let errorMessage = '';
+    if (value.length > 0) {
+      if (!urlPattern.test(value) && !telegramPattern.test(value)) {
+        errorMessage = 'Формат: https://some.ru http:// @username';
+      }
+    }
+
+    const errorKey = `social_${socialId}`;
+    this.setState((prevState) => ({
+      fieldsErrors: {
+        ...prevState.fieldsErrors,
+        [errorKey]: errorMessage,
       },
     }));
   };
@@ -426,18 +516,33 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
   }
 
   renderSocialsFields = (socialsLinks: socialsLinks[]) => {
-      return socialsLinks.map(socialLink => (
-          <li key={socialLink.id}>
-            <input type="url" onChange={(e) => this.handleChangeSocialsFields(socialLink.id, e)}/>
-          </li>
-      ))
-  }
+    const { fieldsErrors } = this.state;
+
+    return socialsLinks.map(({ id }) => {
+      const errorKey = `social_${id}`;
+      const errorMessage = fieldsErrors[errorKey];
+
+      return (
+        <li key={id}>
+          <input
+            type="url"
+            onChange={(e) => this.handleChangeSocialsFields(id, e)}
+            onBlur={(e) => this.handleBlurValidationSocials(e, id)}
+            onInput={(e) => this.handleValidationSocials(e, id)}
+            placeholder="https://some.ru"
+            className={`${s.input} ${errorMessage ? s.inputError : ''}`}
+          />
+          {errorMessage && <div className={s.errorMessage}>{errorMessage}</div>}
+        </li>
+      );
+    });
+  };
 
   isFormValid = () => {
-    const { fieldsErrors, predefinedFields, phones, emails, websites, socialsLinks } = this.state;
-    const hasErrors = !Object.values(fieldsErrors).some(error => error !== '');
-    const hasEmptyRequiredFields = this.state.predefinedFields.some(field => field.required && !field.value?.trim());
-    return hasErrors && hasEmptyRequiredFields;
+    const { fieldsErrors } = this.state;
+    const hasNoErrors = Object.values(fieldsErrors).every(error => error === '');
+    const hasNoEmptyRequiredFields = this.state.predefinedFields.every(field => !field.required || field.value?.trim());
+    return hasNoErrors && hasNoEmptyRequiredFields;
   };
 
   render() {
@@ -481,9 +586,16 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           </div>
         </fieldset>
 
-        <button type="submit" disabled={!this.isFormValid()}>
-          {this.props.submitStatus === 'loading' ? 'Loader' : 'Получить QR код и ссылку'}
+        <button type="submit" disabled={!this.isFormValid()} className={s.submitButton}>
+          {this.props.submitStatus === 'loading' ? <Loader/> : 'Получить QR код и ссылку'}
         </button>
+
+        {Object.values(this.state.fieldsErrors).some((error) => error.includes('не уникально')) && (
+          <div className={s.formError}>
+            Пожалуйста, убедитесь, что все значения уникальны.
+          </div>
+        )}
+
       </form>
     );
   }
