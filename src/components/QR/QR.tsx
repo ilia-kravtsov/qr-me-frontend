@@ -24,11 +24,17 @@ export class QR extends Component<QRProps> {
     this.generateQRCode();
   }
 
+  componentDidUpdate(prevProps: QRProps) {
+    if (prevProps.value !== this.props.value) {
+      this.generateQRCode();
+    }
+  }
+
   async generateQRCode() {
     const { value } = this.props;
     const canvas = this.canvasRef.current;
     if (canvas) {
-      const logoImage = `${process.env.PUBLIC_URL}/logo_misis_2.svg`;
+      const logoImage = `${process.env.PUBLIC_URL}/favicon.ico`; // Динамическое определение пути
       const config: AwesomeQRConfig = {
         text: value,
         size: 256,
@@ -76,18 +82,6 @@ export class QR extends Component<QRProps> {
     }
   };
 
-  handleCopyToClipboard = () => {
-    const { value } = this.props;
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        alert('Ссылка скопирована в буфер обмена!');
-      })
-      .catch((error) => {
-        console.error('Не удалось скопировать ссылку:', error);
-      });
-  };
-
   render() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
@@ -105,8 +99,8 @@ export class QR extends Component<QRProps> {
           style={{
             padding: '10px 20px',
             fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
+            backgroundColor: '#fff',
+            color: '#000',
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
@@ -116,37 +110,6 @@ export class QR extends Component<QRProps> {
         </button>
         <a ref={this.downloadLinkRef} style={{ display: 'none' }}>
           Скачать
-        </a>
-        <button
-          onClick={this.handleCopyToClipboard}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Скопировать ссылку
-        </button>
-        <a
-          href={this.props.value}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
-            textDecoration: 'none',
-            borderRadius: '5px',
-            textAlign: 'center',
-            display: 'block',
-          }}
-        >
-          Перейти по ссылке
         </a>
       </div>
     );
