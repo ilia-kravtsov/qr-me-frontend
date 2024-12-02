@@ -6,7 +6,6 @@ import UserDataFormContainer from "../UserDataFormContainer/UserDataFormContaine
 import {Home} from "../Home/Home";
 import PersonalPageContainer from "../PersonalPageContainer/PersonalPageContainer";
 import { ErrorPage } from '../ErrorPage/ErrorPage';
-import { Loader } from '../Loader/Loader';
 
 class App extends Component {
 
@@ -17,9 +16,8 @@ class App extends Component {
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/form" element={<UserDataFormContainer/>}/>
-            <Route path="/personal-page" element={<PersonalPageContainer/>}/>
-            <Route path="/loader" element={<Loader/>}/>
-            <Route path="/error-page" element={<ErrorPage/>}/>
+            <Route path="/users/:user_id" element={<PersonalPageContainer/>}/>
+            <Route path="*" element={<ErrorPage/>}/>
           </Routes>
         </div>
     );
