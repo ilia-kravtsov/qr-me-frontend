@@ -7,25 +7,25 @@ type ActionsType = FormActions;
 
 const initialState: FormReducerType = {
   predefinedFields: [
-    { id: v1(), label: 'Имя', value: '', required: true, placeholder: 'Имя', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
-    { id: v1(), label: 'Фамилия', value: '', required: true, placeholder: 'Фамилия', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
+    { id: v1(), label: 'Имя *', value: '', required: true, placeholder: 'Имя', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
+    { id: v1(), label: 'Фамилия *', value: '', required: true, placeholder: 'Фамилия', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
     { id: v1(), label: 'Отчество', value: '', required: false, placeholder: 'Отчество', pattern: '[A-Za-zА-Яа-яЁё]+', title: 'Вводите только латинские или кириллические буквы' },
-    { id: v1(), label: 'Компания', value: '', required: false, placeholder: 'OOO "Google"' },
-    { id: v1(), label: 'Должность', value: '', required: false, placeholder: 'менеджер' },
-    { id: v1(), label: 'Адрес', value: '', required: false, placeholder: 'ул. Красноармейская, дом 4' },
-    { id: v1(), label: 'Описание', value: '', required: false, placeholder: 'Описание' },
+    { id: v1(), label: 'Компания', value: '', required: false, placeholder: 'OOO "Гугл"', title: 'Вводите только буквы, цифры, пробелы, точки, дефисы, слэши, кавычки или "№".' },
+    { id: v1(), label: 'Должность', value: '', required: false, placeholder: 'менеджер', title: 'Вводите только латинские или кириллические буквы' },
+    { id: v1(), label: 'Адрес', value: '', required: false, placeholder: 'ул. Красноармейская, дом 4', title: 'Вводите только буквы, цифры, пробелы, точки, дефисы, слэши или "№".' },
+    { id: v1(), label: 'Описание', value: '', required: false, placeholder: 'Описание', title: 'Максимальная длина 200 символов' },
   ],
   phones: [
-    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
-    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99' },
+    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99', title: '+7 999 999 99 99' },
+    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99', title: '+7 999 999 99 99' },
   ],
   emails: [
-    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
-    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru' },
+    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru', title: 'ivanov@mail.ru' },
+    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru', title: 'ivanov@mail.ru' },
   ],
   websites: [
-    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru' },
-    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru' },
+    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru', title: 'https://some.ru' },
+    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru', title: 'https://some.ru' },
   ],
   socialsIcons: [
     { id: 1, icon_link: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAdVBMVEU7V53///85VZzP1eVMZabv8feHlsEyUZo2U5siRpXn6/Npe7Dm6fN6irnz9PhSbKpugLIpS5fHz+MoSpdYcKza3uq2v9ilsM+apsnFy97Y3uxMZqc+W6BVbqx9j72+xtxgd7CQoMekr8+xudSFlcB0hrcVP5IUgLSUAAADZklEQVR4nO3c4XKiMBSGYfaAJkULIliosqC13fu/xGW3MzvTnZEGMJ5zMt/7vw7PEEGS0ChCCCGEEEIIIYQQQgghhBBCCCElEZG19Bn3sdw5MqYoTZQkeVXleX5KkqQlU5bFkDHG6gbbAfeza677w+Gw/dfhT/G+f7k2l253zqOy1Kmkoswv/SrLftwu+9sqTtQRh+9ce37bjti+QnPLfcTTIttW66MrT6HQRps6neBTJzRV7Tw8NQrJNFPGpz5hkb9O9qkSFt3UAapLSNSM3fz0CympZ/nUCCl5mQnUIrTXuUAdQireZgN1CItmPlCF0Oym/U5TJ7RtvACoQRjNvowqEdpuFbaQTnN+jKoSruf9WFMjpNOiy4wCoe0WAqULifahC6ulQOnCctm9UL6QzMILqXih2S0GChfeYZAKF9KShwoNQrtZ/jWULTSXacJse4z3/9efBK89Fb2zLe3XlXkqy8/V0S8JBhIdHH3xpS2NYMmtbOU2yZ02rUbekPlwupSmneSBOJpZuzzdZ+9KT+CQcVqpqLkPc0GFy0T38Sz4dvddhcsMTW3VjtHhWuogTDvDfZjzo8hBeKwUD9KodZjBeG25j3JJicM0W694kEbkIqwL7sNckIswa0I/h9kldOEqfOEaQslBCKH8IIRQfhBCKD8IIZQfhBDKD0IIhUT2ZsZF+F7c/oDPmIHJZne75++X8bO382Y85sU3+3FcjfQtcDiJ2/HSPe+kuHm+w6an8cIX1ryXogcImSfFHyD8CF7IvG/vAcKWdyODf2HKvAruXxgHfw5fotCFDfN+Iv/CdfDCHfOzhX/hJnRhyr0pzLswzkP/Hvbc/wbLu/DKvbHPu7BhBvoXsk/F+RZmz9xTbb6FKfcN37vweObe5u5buOe+HXoX9gkz0Lvwyvx06F/IPFnqXyhgj7Rn4Yr/hRrPwi377dC3UMB7bZ6FMf9r3J6Fr+w3izuskGYjf55d2S80A7F8ul3ksI7f/Rr5AOnvRAWyF2MkCCGUH4QQyg9CCOUHIYTygxBC+UEIofwghFB+EEIoPwghlB+EEMoPQgjlByGE8oMQQvlBCKH8IIRQfhBCKD8IIZQfhBDKD0II5QchhPKDEEL5QQih/CCEUH4QQig/CCGUH4QQyg9CCOUHIYTye6DwNyCOWdL4wqRQAAAAAElFTkSuQmCC', name: 'facebook'},

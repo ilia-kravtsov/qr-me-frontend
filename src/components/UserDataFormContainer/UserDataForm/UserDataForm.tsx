@@ -1,14 +1,13 @@
-import { ChangeEvent, Component, FormEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, Component, FormEvent } from 'react';
 import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
+  ArrayFieldType,
   Field, FieldType, socialsIcons, socialsLinks,
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
 import InputMask from 'react-input-mask';
-import { AddField } from '../AddField/AddField';
-import { log } from 'node:util';
 import { Loader } from '../../Loader/Loader';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
@@ -22,43 +21,36 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       emails: this.props.emails,
       websites: this.props.websites,
       socialsIcons: this.props.socialsIcons,
-      socialsLinks: [],
-      newFieldLabel: '',
+      socialsLinks: [{ id: 1, social_url: '' }],
       fieldsErrors: {},
     };
   }
 
-  handleAddField = () => {
-    const { newFieldLabel } = this.state;
-
-    if (newFieldLabel.trim() === '') return;
-    const newField: Field = {
+  addField = (fieldType: ArrayFieldType) => {
+    const newField = {
       id: v1(),
-      label: newFieldLabel,
+      label: fieldType === 'phones' ? 'Phone' : fieldType === 'emails' ? 'Email' : 'Website',
+      type: fieldType === 'phones' ? 'tel' : fieldType === 'emails' ? 'email' : 'url',
       value: '',
-      required: true,
-      placeholder: 'ваша ссылка'
-    }
+      required: false,
+      placeholder:
+        fieldType === 'phones'
+          ? '+7 999 999 99 99'
+          : fieldType === 'emails'
+            ? 'ivanov@mail.ru'
+            : 'https://some.ru',
+    };
 
     this.setState((prevState) => ({
-      websites: [
-        ...prevState.websites,
-        newField,
-      ],
-      newFieldLabel: '',
+      ...prevState,
+      [fieldType]: [newField, ...prevState[fieldType]],
     }));
   };
 
-  handleKeyDownAddField = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      this.handleAddField();
-    }
-  };
-
-  handleRemoveField = (id: string) => {
+  handleRemoveField = (id: string, fieldType: ArrayFieldType) => {
     this.setState((prevState) => ({
-      websites: prevState.websites.filter((field) => field.id !== id),
+      ...prevState,
+      [fieldType]: prevState[fieldType].filter((field) => field.id !== id),
     }));
   };
 
@@ -89,47 +81,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     });
   }
 
-  checkForDuplicateValues = (allFields: Record<string, Field[] | socialsLinks[]>) => {
-    const valueMap: Record<string, string[]> = {};
-    let hasDuplicates = false;
-
-    Object.entries(allFields).forEach(([key, fields]) => {
-      fields.forEach((field) => {
-        let value: string | undefined;
-        if ('value' in field) {
-          value = field.value?.trim();
-        } else if ('social_url' in field) {
-          value = field.social_url?.trim();
-        }
-        if (value) {
-          if (!valueMap[value]) {
-            valueMap[value] = [];
-          }
-          valueMap[value].push(key);
-        }
-      });
-    });
-
-    const duplicateErrors: Record<string, string> = {};
-    Object.entries(valueMap).forEach(([value, keys]) => {
-      if (keys.length > 1) {
-        hasDuplicates = true;
-        keys.forEach((key) => {
-          duplicateErrors[key] = `Значение "${value}" не уникально`;
-        });
-      }
-    });
-    console.log(this.state.fieldsErrors);
-    this.setState((prevState) => ({
-      fieldsErrors: {
-        ...prevState.fieldsErrors,
-        ...duplicateErrors,
-      },
-    }));
-
-    return hasDuplicates;
-  };
-
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -154,14 +105,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       websites: this.props.websites,
       socialsIcons: this.props.socialsIcons,
       socialsLinks: [],
-      newFieldLabel: '',
       fieldsErrors: {},
     });
   };
-
-  handleAdditionalFieldLabelCreator = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newFieldLabel: e.target.value })
-  }
 
   handleSocialIconClick = (socialId: number) => {
     this.setState((prevState) => {
@@ -179,15 +125,15 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     });
   }
 
-  handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string, socialId?: number) => {
+  handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
     const input = e.target as HTMLInputElement;
     const fieldId = input.id;
     let errorMessage = '';
     let processedValue = input.value;
 
     switch (label) {
-      case 'Имя':
-      case 'Фамилия':
+      case 'Имя *':
+      case 'Фамилия *':
       case 'Отчество':
       case 'Должность': {
         const textPattern = /[^A-Za-zА-Яа-яЁё\-]/g;
@@ -288,43 +234,26 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }));
   };
 
-  handleBlurValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string, socialId?: number) => {
+  handleBlurValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
     const input = e.target as HTMLInputElement;
     let errorMessage = '';
     let processedValue = input.value;
 
     switch (label) {
-      case 'Электронная почта': {
+      case 'Email': {
         if (processedValue.length) {
           if (processedValue.includes('@')) {
             const atIndex = processedValue.indexOf('@');
             const afterAt = processedValue.slice(atIndex + 1);
+            const domainPattern = /^[a-zA-Z0-9-]{2,}\.[a-zA-Z]{2,}$/;
 
-            if (afterAt.length < 3 || !afterAt.includes('.')) {
-              errorMessage = 'После "@" должно быть хотя бы 2 символа и точка.';
+            if (!domainPattern.test(afterAt)) {
+              errorMessage = 'После "@" должен быть домен с точкой и хотя бы двумя символами после точки, например "domain.com".';
             }
           } else {
             errorMessage = 'Введите корректный email с символом "@"';
           }
-          break;
         }
-        break;
-      }
-
-      case 'Telegram': {
-        const telegramPattern = /^@([A-Za-z0-9_]{5,})$/;
-        if (processedValue.length) {
-          if (
-            processedValue.startsWith('http://') ||
-            processedValue.startsWith('https://') ||
-            telegramPattern.test(processedValue)
-          ) {
-            errorMessage = '';
-          } else {
-            errorMessage = 'Формат ссылки: http://, https:// или @ivanov';
-          }
-          break;
-          }
         break;
       }
 
@@ -343,16 +272,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
-      case 'Email': {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (processedValue.length && !processedValue.includes('@')) {
-          if (!emailPattern.test(processedValue)) {
-            errorMessage = 'Формат почты example@mail.ru.';
-          }
-        }
-        break;
-      }
-
       case 'Адрес': {
         const addressPattern = /\d/;
         if (processedValue.length) {
@@ -360,6 +279,17 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
             errorMessage = 'Адрес должен содержать хотя бы одну цифру.';
           }
           break;
+        }
+        break;
+      }
+
+      case 'Phone': {
+        const phonePattern = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
+
+        if (processedValue.length) {
+          if (!phonePattern.test(processedValue)) {
+            errorMessage = 'Формат: +7 (999) 999-99-99.';
+          }
         }
         break;
       }
@@ -421,99 +351,142 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }));
   };
 
-  renderFields = (fields: Field[], fieldType: FieldType) =>
-    fields.map(({ id,
-                  label,
-                  type = 'text',
-                  value,
-                  required = false,
-                  placeholder = '',
-                  minLength = 2,
-                  pattern,
-                  title }) => {
-      if (!fields || fields.length === 0) {
-        return null;
-      }
-      const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
+  renderFields = (fields: Field[], fieldType: FieldType) => {
+    if (!fields || fields.length === 0) return null;
 
-      return (
-        <div key={id} className={s.field}>
-          <label htmlFor={id}>{label}:</label>
-          {label === 'Описание' ? (
-            <textarea
-              id={id}
-              value={value}
-              placeholder={placeholder}
-              required={required}
-              minLength={minLength}
-              maxLength={200}
-              title={title}
-              onBlur={(e) => this.handleBlurValidation(e, label)}
-              onInput={(e) => this.handleValidation(e, label)}
-              onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
-              className={inputClassName}
-            />
-          ) : type === 'tel' ? (
-            <InputMask
-              mask="+7 (999) 999-99-99"
-              value={value}
-              onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
-            >
-              {(inputProps) => (
+    return (
+      <div className={s.renderFieldsContainer}>
+        {['websites', 'emails', 'phones'].includes(fieldType) && (
+          <button
+            onClick={() => this.addField(fieldType as ArrayFieldType)}
+            className={s.addFieldButton}
+            type={'button'}
+          >
+            +
+          </button>
+        )}
+        {fields.map(
+          ({
+             id,
+             label,
+             type = 'text',
+             value,
+             required = false,
+             placeholder = '',
+             minLength = 2,
+             pattern,
+             title,
+           }) => {
+            const inputClassName = `${s.input} ${
+              this.state.fieldsErrors[id] ? s.inputError : ''
+            }`;
+            const maxLength = 200;
+            const handleInputChange = (
+              e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => this.handleChangeFieldValue(fieldType, id, e.target.value);
+
+            const renderInput = () => {
+              if (label === 'Описание') {
+                return (
+                  <textarea
+                    id={id}
+                    value={value}
+                    placeholder={placeholder}
+                    required={required}
+                    minLength={minLength}
+                    maxLength={maxLength}
+                    title={title}
+                    onBlur={(e) => this.handleBlurValidation(e, label)}
+                    onInput={(e) => this.handleValidation(e, label)}
+                    onChange={handleInputChange}
+                    className={`${inputClassName} ${s.description}`}
+                  />
+                );
+              }
+
+              if (type === 'tel') {
+                return (
+                  <InputMask
+                    mask="+7 (999) 999-99-99"
+                    value={value}
+                    onBlur={(e) => this.handleBlurValidation(e, label)}
+                    onInput={(e) => this.handleValidation(e, label)}
+                    onChange={handleInputChange}
+                  >
+                    {(inputProps) => (
+                      <input
+                        {...inputProps}
+                        id={id}
+                        type="tel"
+                        placeholder={placeholder}
+                        required={required}
+                        className={s.input}
+                      />
+                    )}
+                  </InputMask>
+                );
+              }
+
+              return (
                 <input
-                  {...inputProps}
                   id={id}
-                  type="tel"
+                  type={type}
+                  value={value}
                   placeholder={placeholder}
                   required={required}
-                  className={s.input}
+                  minLength={minLength}
+                  maxLength={maxLength}
+                  pattern={pattern}
+                  title={title}
+                  onBlur={(e) => this.handleBlurValidation(e, label)}
+                  onInput={(e) => this.handleValidation(e, label)}
+                  onChange={handleInputChange}
+                  className={inputClassName}
                 />
-              )}
-            </InputMask>
-          ) : (
-            <input
-              id={id}
-              type={type}
-              value={value}
-              placeholder={placeholder}
-              required={required}
-              minLength={minLength}
-              pattern={pattern}
-              title={title}
-              onBlur={(e) => this.handleBlurValidation(e, label)}
-              onInput={(e) => this.handleValidation(e, label)}
-              onChange={(e) => this.handleChangeFieldValue(fieldType, id, e.target.value)}
-              className={inputClassName}
-            />
-          )}
-          {this.state.fieldsErrors[id] && (
-            <div className={s.errorMessage}>{this.state.fieldsErrors[id]}</div>
-          )}
-          {fieldType === 'websites' && (
-            <button
-              type="button"
-              className={s.removeButton}
-              onClick={() => this.handleRemoveField(id)}
-            >
-              Удалить
-            </button>
-          )}
-        </div>
-      )
-      }
-    )
+              );
+            };
+
+            return (
+              <div key={id} className={s.field}>
+                <label htmlFor={id} className={s.fieldLabel}>
+                  {label}
+                </label>
+                {renderInput()}
+                {this.state.fieldsErrors[id] && (
+                  <div className={s.errorMessage}>
+                    {this.state.fieldsErrors[id]}
+                  </div>
+                )}
+                {['websites', 'emails', 'phones'].includes(fieldType) && (
+                  <button
+                    type="button"
+                    className={s.removeFieldButton}
+                    onClick={() => this.handleRemoveField(id, fieldType as ArrayFieldType)}
+                  >
+                    -
+                  </button>
+                )}
+              </div>
+            );
+          }
+        )}
+      </div>
+    );
+  };
 
   renderSocialsIcons = (fields: socialsIcons[]) => {
-    return fields.map(({ id, name, icon_link }) => (
+    const { socialsLinks } = this.state;
+
+    return fields.map(({ id, name, icon_link }) => {
+      const isHighlighted = socialsLinks.some((link) => link.id === id);
+      const iconClassName = `${s.socialIcon} ${isHighlighted ? s.highlighted : ''}`;
+      return (
         <li key={id}>
-          <img src={icon_link}
-               alt={name}
-               style={{width: '60px', borderRadius: '10px', cursor: 'pointer'}}
-               onClick={() => this.handleSocialIconClick(id)}
-          />
+          <img src={icon_link} alt={name} onClick={() => this.handleSocialIconClick(id)} className={iconClassName} />
         </li>
-    ))
-  }
+      );
+    });
+  };
 
   renderSocialsFields = (socialsLinks: socialsLinks[]) => {
     const { fieldsErrors } = this.state;
@@ -546,16 +519,14 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
   };
 
   render() {
-    const { predefinedFields, phones, emails, websites, socialsIcons, newFieldLabel, socialsLinks } = this.state;
+    const { predefinedFields, phones, emails, websites, socialsIcons, socialsLinks } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
-        <fieldset className={s.predefinedFields}>
-          {this.renderFields(predefinedFields, 'predefinedFields')}
-        </fieldset>
+        <fieldset className={s.predefinedFields}>{this.renderFields(predefinedFields, 'predefinedFields')}</fieldset>
 
         <fieldset className={s.predefinedFields}>
-          <legend>Телефон:</legend>
+          <legend>Телефоны:</legend>
           {this.renderFields(phones, 'phones')}
         </fieldset>
 
@@ -566,36 +537,24 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
         <fieldset className={s.predefinedFields}>
           <legend>Сайты:</legend>
-          <AddField handleAddField={this.handleAddField}
-                    handleAdditionalFieldLabelCreator={this.handleAdditionalFieldLabelCreator}
-                    handleKeyDownAddField={this.handleKeyDownAddField}
-                    newFieldLabel={newFieldLabel}
-          />
           {this.renderFields(websites, 'websites')}
         </fieldset>
 
         <fieldset className={s.additionalFields}>
           <legend>Социальные сети</legend>
-          <div>
-            <ul className={s.socials}>
-              {this.renderSocialsIcons(socialsIcons)}
-            </ul>
-            <ul>
-              {this.renderSocialsFields(socialsLinks)}
-            </ul>
+          <div className={s.socialsContainer}>
+            <ul className={s.socialsIcons}>{this.renderSocialsIcons(socialsIcons)}</ul>
+            <ul className={s.sodcialsFields}>{this.renderSocialsFields(socialsLinks)}</ul>
           </div>
         </fieldset>
 
         <button type="submit" disabled={!this.isFormValid()} className={s.submitButton}>
-          {this.props.submitStatus === 'loading' ? <Loader/> : 'Получить QR код и ссылку'}
+          {this.props.submitStatus === 'loading' ? <Loader /> : 'Получить QR код и ссылку'}
         </button>
 
         {Object.values(this.state.fieldsErrors).some((error) => error.includes('не уникально')) && (
-          <div className={s.formError}>
-            Пожалуйста, убедитесь, что все значения уникальны.
-          </div>
+          <div className={s.formError}>Пожалуйста, убедитесь, что все значения уникальны.</div>
         )}
-
       </form>
     );
   }

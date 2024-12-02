@@ -33,10 +33,10 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 
 		data.predefinedFields.forEach((field) => {
 			switch (field.label) {
-				case 'Имя':
+				case 'Имя *':
 					prepareDataToServer.first_name = field.value;
 					break;
-				case 'Фамилия':
+				case 'Фамилия *':
 					prepareDataToServer.last_name = field.value;
 					break;
 				case 'Отчество':

@@ -28,7 +28,7 @@ export class QR extends Component<QRProps> {
     const { value } = this.props;
     const canvas = this.canvasRef.current;
     if (canvas) {
-      const logoImage = `${process.env.PUBLIC_URL}/favicon.ico`; // Динамическое определение пути
+      const logoImage = `${process.env.PUBLIC_URL}/logo_misis_2.svg`;
       const config: AwesomeQRConfig = {
         text: value,
         size: 256,

@@ -3,6 +3,7 @@ import { ServerDataType } from '../../../redux/actions/formActions/formActionsTy
 export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'websites';
 export type LoadingStatus = 'idle' | 'loading' | 'success' | 'error'
+export type ArrayFieldType = 'phones' | 'emails' | 'websites'
 
 type fieldError = {
 	[key: string]: string
@@ -15,7 +16,6 @@ export type UserDataFormState = {
 	websites: Field[]
 	socialsIcons: socialsIcons[]
 	socialsLinks: socialsLinks[]
-	newFieldLabel: string
 	fieldsErrors: fieldError
 }
 
