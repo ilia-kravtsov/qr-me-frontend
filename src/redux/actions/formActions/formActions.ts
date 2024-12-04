@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import {
 	GetFormDataAttempt, GetFormDataSuccess,
 	ServerDataType,
-	SubmitFormErrorAction,
+	SubmitFormErrorAction, SubmitFormIdleAction,
 	SubmitFormStartAction,
 	SubmitFormSuccessAction,
 } from './formActionsTypes';
@@ -13,6 +13,7 @@ export enum FormActionTypes {
   SUBMIT_FORM = 'SUBMIT_FORM',
   SUBMIT_FORM_SUCCESS = 'SUBMIT_FORM_SUCCESS',
   SUBMIT_FORM_ERROR = 'SUBMIT_FORM_ERROR',
+  SUBMIT_FORM_IDLE = 'SUBMIT_FORM_IDLE',
 }
 
 export enum SocialsActionTypes {
@@ -25,6 +26,10 @@ export const submitFormAttempt = (): SubmitFormStartAction => ({
   type: FormActionTypes.SUBMIT_FORM,
 });
 
+export const submitFormIdle = (): SubmitFormIdleAction => ({
+	type: FormActionTypes.SUBMIT_FORM_IDLE,
+});
+
 export const submitFormSuccess = (): SubmitFormSuccessAction => ({
   type: FormActionTypes.SUBMIT_FORM_SUCCESS,
 });
@@ -34,13 +39,31 @@ export const submitFormError = (errorMessage: string): SubmitFormErrorAction => 
   payload: errorMessage,
 });
 
+// export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
+// 	dispatch(submitFormAttempt());
+// 	try {
+// 		const response = await sendFormData(formData);
+// 		dispatch(submitFormSuccess());
+// 		console.log('Form submitted successfully:', response);
+// 	} catch (error: unknown) {
+// 		if (axios.isAxiosError(error)) {
+// 			toast.error(error.message);
+// 			dispatch(submitFormError(error.response?.data?.message || 'Failed to submit form data'));
+// 			console.error('Failed to submit form:', error.message);
+// 		} else {
+// 			toast.error('An unexpected error occurred');
+// 			dispatch(submitFormError('An unexpected error occurred'));
+// 			console.error('Failed to submit form:', error);
+// 		}
+// 	}
+// };
+
 // Имитирую запрос на сервер
 export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
 	dispatch(submitFormAttempt());
 	try {
 		await new Promise((resolve) =>
 			setTimeout(() => {
-				console.log('Mock request - success');
 				resolve('Success');
 			}, 1000)
 		);
@@ -51,18 +74,6 @@ export const submitFormData = (formData: ServerDataType) => async (dispatch: Dis
 		console.error('Failed to submit form:', error);
 	}
 };
-
-// export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
-//   dispatch(submitFormAttempt());
-//   try {
-//     const response = await sendFormData(formData);
-//     dispatch(submitFormSuccess());
-//     console.log('Form submitted successfully:', response);
-//   } catch (error: any) {
-//     dispatch(submitFormError(error.message));
-//     console.error('Failed to submit form:', error);
-//   }
-// };
 
 const getFormData = ():GetFormDataAttempt => ({
   type: SocialsActionTypes.GET_FORM_DATA

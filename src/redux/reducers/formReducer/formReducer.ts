@@ -17,14 +17,11 @@ const initialState: FormReducerType = {
   ],
   phones: [
     { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99', title: '+7 999 999 99 99' },
-    { id: v1(), label: 'Phone', type: 'tel', value: '', required: false, placeholder: '+7 999 999 99 99', title: '+7 999 999 99 99' },
   ],
   emails: [
     { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru', title: 'ivanov@mail.ru' },
-    { id: v1(), label: 'Email', type: 'email', value: '', required: false, placeholder: 'ivanov@mail.ru', title: 'ivanov@mail.ru' },
   ],
   websites: [
-    { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru', title: 'https://some.ru' },
     { id: v1(), label: 'Website', type: 'url', value: '', required: false, placeholder: 'https://some.ru', title: 'https://some.ru' },
   ],
   socialsIcons: [
@@ -45,6 +42,8 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
       return { ...state, submitStatus: 'success' };
     case FormActionTypes.SUBMIT_FORM_ERROR:
       return { ...state, submitStatus: 'error', submitError: action.payload };
+    case FormActionTypes.SUBMIT_FORM_IDLE:
+      return { ...state, submitStatus: 'idle' };
     case SocialsActionTypes.GET_FORM_DATA:
       return { ...state, socialsStatus: 'loading', getDataError: null };
     case SocialsActionTypes.GET_FORM_DATA_SUCCESS:

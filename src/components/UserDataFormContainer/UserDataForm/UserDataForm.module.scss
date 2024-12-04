@@ -28,12 +28,20 @@
         outline: none;
       }
 
-      .errorMessage {
+      .errorPredefined {
         color: brown;
         font-size: 12px;
         position: absolute;
         top: 24px;
         right: 0;
+      }
+
+      .errorContact {
+        color: brown;
+        font-size: 12px;
+        position: absolute;
+        top: 50px;
+        left: 178px;
       }
 
       .inputError {
@@ -92,23 +100,28 @@
       gap: 60px;
     }
 
-    .socialsIcons {
-      display: flex;
-      gap: 20px;
-      padding: 20px 0 0 0;
+    .socialListItem {
       position: relative;
 
-      .errorMessage {
+      .errorSocial{
+        inline-size: 400px;
         color: brown;
         font-size: 12px;
         position: absolute;
-        top: 45px;
-        right: 0;
+        top: 28px;
+        left: -2px;
       }
 
       .inputError {
         outline: 3px solid brown;
       }
+    }
+
+    .socialsIcons {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0 0 0;
+      position: relative;
     }
 
     .sodcialsFields {
@@ -143,4 +156,10 @@
     cursor: not-allowed;
   }
 }
+
+.toastError {
+  // класс для стилизации всплывающего уведомления toast
+}
+
+
 

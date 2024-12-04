@@ -17,6 +17,7 @@ export type UserDataFormState = {
 	socialsIcons: socialsIcons[]
 	socialsLinks: socialsLinks[]
 	fieldsErrors: fieldError
+	isQrGenerated: boolean
 }
 
 export type socialsIcons = {
@@ -74,6 +75,7 @@ export type FormStatus = {
 	getDataError?: null | string
 }
 
-
-
-
+export type ServerError = {
+	status: "error"
+	message: string
+}

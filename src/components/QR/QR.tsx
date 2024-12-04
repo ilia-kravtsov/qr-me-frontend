@@ -90,7 +90,7 @@ export class QR extends Component<QRProps> {
 
   render() {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', paddingTop: '60px' }}>
         <canvas
           ref={this.canvasRef}
           width="256"

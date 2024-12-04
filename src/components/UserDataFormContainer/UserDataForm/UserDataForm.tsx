@@ -1,4 +1,4 @@
-import { ChangeEvent, Component, FormEvent } from 'react';
+import React, { ChangeEvent, Component, FormEvent } from 'react';
 import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
@@ -9,6 +9,11 @@ import {
 } from './UserDataFormTypes';
 import InputMask from 'react-input-mask';
 import { Loader } from '../../Loader/Loader';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toastPositionConfig } from '../../../utils/utils';
+import { QR } from '../../QR/QR';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
@@ -23,7 +28,21 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       socialsIcons: this.props.socialsIcons,
       socialsLinks: [{ id: 1, social_url: '' }],
       fieldsErrors: {},
+      isQrGenerated: false,
     };
+  }
+
+  componentDidUpdate(prevProps: UserDataFormProps) {
+    if (this.props.submitStatus === 'success' && prevProps.submitStatus !== 'success') {
+      toast.success('Form submitted successfully', toastPositionConfig);
+      this.setState({ isQrGenerated: true });
+    }
+    if (this.props.submitStatus === 'idle' && prevProps.submitStatus !== 'idle') {
+      this.setState({ isQrGenerated: false });
+    }
+    if (this.props.submitStatus === 'error' && prevProps.submitStatus !== 'error') {
+      toast.error(this.props.submitError || 'An unexpected error occurred', toastPositionConfig);
+    }
   }
 
   addField = (fieldType: ArrayFieldType) => {
@@ -92,7 +111,45 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       socials: this.state.socialsLinks,
     };
 
+    const hasDuplicateValues = () => {
+      const combinedFields = [
+        ...this.state.predefinedFields,
+        ...this.state.phones,
+        ...this.state.emails,
+        ...this.state.websites,
+      ];
+
+      const values = combinedFields.map(field => field.value);
+      const socialUrls = this.state.socialsLinks.map(social => social.social_url);
+      const allValues = [...values, ...socialUrls];
+
+      const filteredValues = allValues.filter(value => value && value.trim() !== '');
+      const uniqueValues = new Set(filteredValues);
+      if (filteredValues.length !== uniqueValues.size) {
+        const duplicates = filteredValues.filter((value, index, arr) => arr.indexOf(value) !== index);
+
+        if (duplicates.length > 0) {
+          const updatedDuplicates = Array.from(new Set(duplicates)).map(value => `\n${value}`);
+
+          toast.error(`Дублирующиеся значения: ${updatedDuplicates}`, {
+            position: 'bottom-left',
+            autoClose: 5000,
+            className: `${s.toastError}`
+          });
+        }
+
+        return true;
+      }
+
+      return false;
+    };
+
     if (!this.isFormValid()) {
+      return;
+    }
+
+    if (hasDuplicateValues()) {
+      console.error('В полях формы найдены дублирующиеся значения!');
       return;
     }
 
@@ -420,7 +477,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                         type="tel"
                         placeholder={placeholder}
                         required={required}
-                        className={s.input}
                       />
                     )}
                   </InputMask>
@@ -453,7 +509,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                 </label>
                 {renderInput()}
                 {this.state.fieldsErrors[id] && (
-                  <div className={s.errorMessage}>
+                  <div className={fieldType === 'predefinedFields' ? s.errorPredefined : s.errorContact}>
                     {this.state.fieldsErrors[id]}
                   </div>
                 )}
@@ -496,16 +552,16 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       const errorMessage = fieldsErrors[errorKey];
 
       return (
-        <li key={id}>
+        <li key={id} className={s.socialListItem}>
           <input
             type="url"
             onChange={(e) => this.handleChangeSocialsFields(id, e)}
             onBlur={(e) => this.handleBlurValidationSocials(e, id)}
             onInput={(e) => this.handleValidationSocials(e, id)}
             placeholder="https://some.ru"
-            className={`${s.input} ${errorMessage ? s.inputError : ''}`}
+            className={`${errorMessage ? s.inputError : ''}`}
           />
-          {errorMessage && <div className={s.errorMessage}>{errorMessage}</div>}
+          {errorMessage && <div className={s.errorSocial}>{errorMessage}</div>}
         </li>
       );
     });
@@ -519,7 +575,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
   };
 
   render() {
-    const { predefinedFields, phones, emails, websites, socialsIcons, socialsLinks } = this.state;
+    const { predefinedFields, phones, emails, websites, socialsIcons, socialsLinks, isQrGenerated } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
@@ -549,12 +605,19 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         </fieldset>
 
         <button type="submit" disabled={!this.isFormValid()} className={s.submitButton}>
-          {this.props.submitStatus === 'loading' ? <Loader /> : 'Получить QR код и ссылку'}
+          {this.props.submitStatus === 'loading' ? <Loader /> : 'Получить QR код'}
         </button>
 
         {Object.values(this.state.fieldsErrors).some((error) => error.includes('не уникально')) && (
           <div className={s.formError}>Пожалуйста, убедитесь, что все значения уникальны.</div>
         )}
+
+
+        {isQrGenerated && (
+          <QR value={'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'} />
+        )}
+
+        <ToastContainer/>
       </form>
     );
   }

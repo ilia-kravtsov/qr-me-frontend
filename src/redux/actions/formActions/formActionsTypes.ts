@@ -1,10 +1,11 @@
-import { FormActionTypes, SocialsActionTypes } from './formActions';
+import { FormActionTypes, SocialsActionTypes, submitFormIdle } from './formActions';
 import { socialsIcons } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 
 export type FormActions =
 	| SubmitFormStartAction
 	| SubmitFormSuccessAction
 	| SubmitFormErrorAction
+	| SubmitFormIdleAction
 	| GetFormDataSuccess
 	| GetFormDataAttempt
 	| GetFormDataError
@@ -20,6 +21,10 @@ export type SubmitFormErrorAction = {
 
 export type SubmitFormSuccessAction = {
 	type: FormActionTypes.SUBMIT_FORM_SUCCESS;
+}
+
+export type SubmitFormIdleAction = {
+	type: FormActionTypes.SUBMIT_FORM_IDLE;
 }
 
 export type SocialsServer = {
