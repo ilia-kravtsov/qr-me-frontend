@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { ServerDataType } from '../redux/actions/formActions/formActionsTypes';
-import { FormServerData, socialsIcons } from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
+import { ServerDataForPUTRequest, ServerDataType } from '../redux/actions/formActions/formActionsTypes';
+import { ServerResponse, socialsIcons } from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 
 const api = axios.create({
   baseURL: 'https://example.com/api',
 });
 
-export const sendFormData = async (formData: ServerDataType) => {
-  const response = await api.post('/users', formData);
+export const sendFormData = async (formData: ServerDataType): Promise<ServerResponse> => {
+  const response = await api.post<ServerResponse>('/users', formData);
   return response.data;
 };
 
@@ -21,12 +21,12 @@ export const getUserData = async (userId: string) => {
   return response.data;
 };
 
-export const checkEditCode = async (editCode: string): Promise<boolean> => {
-  const response = await api.post('/users/edit-check', { edit_code: editCode });
+export const checkEditCode = async (userId: string, editCode: string): Promise<{ success: boolean }> => {
+  const response = await api.post('/users/edit-check', { user_id: userId, edit_code: editCode });
   return response.data;
 };
 
-export const updateUserData = async (userId: number, updatedData: Partial<FormServerData>) => {
+export const updateUserData = async (userId: number, updatedData: ServerDataForPUTRequest) => {
   const response = await api.put(`/users/${userId}`, updatedData);
   return response.data;
 };

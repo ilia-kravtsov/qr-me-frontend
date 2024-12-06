@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import { Link } from "react-router-dom";
-import s from './ErrorPage.module.scss'
+import { Link } from 'react-router-dom';
+import s from './ErrorPage.module.scss';
 
 export class ErrorPage extends Component {
   render() {
@@ -9,9 +9,9 @@ export class ErrorPage extends Component {
         <h1>404</h1>
         <h2>Упс! Что-то пошло не так, этой страницы не существует.</h2>
         <Link to={'/'}>
-        <button className={s.returnButton}>на главную</button>
+          <button className={s.returnButton}>на главную</button>
         </Link>
       </div>
-    )
+    );
   }
 }

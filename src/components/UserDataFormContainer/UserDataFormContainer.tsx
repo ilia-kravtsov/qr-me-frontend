@@ -1,71 +1,101 @@
-import React, { Component } from 'react';
+import React, { Component, ComponentType } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../redux/store';
 import {
-  FormServerData,
   FormMethods,
   FormReducerType,
-  FormState,
+  FormServerData,
   UserDataFormContainerProps,
 } from './UserDataForm/UserDataFormTypes';
 import UserDataForm from './UserDataForm/UserDataForm';
-import { getSocials, submitFormData } from '../../redux/actions/formActions/formActions';
-import { QR } from '../QR/QR';
-import s from './UserDataFormContainer.module.scss';
-import { ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
-import { getSocialsData } from '../../api/api';
+import { ServerDataForPUTRequest, ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
+import { useLocation } from 'react-router-dom';
+import {
+  getSocials,
+  setUserDataForPutRequestTC,
+  putSubmitFormData,
+  submitFormData,
+} from '../../redux/thunks/formThunks/formThunks';
+import { predefinedFieldsToObjectConverter } from '../../utils/utils';
+
+const withLocation = (WrappedComponent: ComponentType<any>) => {
+  return (props: any) => {
+    const location = useLocation();
+    const { state } = location;
+    return <WrappedComponent {...props} locationState={state} />;
+  };
+};
 
 class UserDataFormContainer extends Component<UserDataFormContainerProps> {
   componentDidMount() {
-    this.props.getSocialsData();
+    const { locationState, getSocialsData } = this.props;
+
+    if (locationState?.data) {
+      console.log('Received data from location:', locationState.data);
+      setUserDataForPutRequestTC(locationState.data);
+    }
+
+    getSocialsData();
   }
 
   handleSubmit = (data: FormServerData) => {
-    const prepareDataToServer: ServerDataType = {
-      first_name: '',
-      last_name: '',
-      phones: data.phones.length > 0 ? data.phones.map((field) => field.value) : null,
-      emails: data.emails.length > 0 ? data.emails.map((field) => field.value) : null,
-      websites: data.websites.length > 0 ? data.websites.map((field) => field.value) : null,
-      socials:
-        data.socials.length > 0
-          ? data.socials.map((field) => ({
-              social_id: field.id,
-              social_url: field.social_url,
-            }))
-          : null,
-    };
+    if (this.props.setDataForPutStatus === 'success') {
+      const prepareDataToPUTRequest: ServerDataForPUTRequest = {
+        edit_code: this.props.userEditCode,
+        first_name: '',
+        last_name: '',
+        phones: [],
+        emails: [],
+        websites: [],
+        socials: [],
+      };
 
-    data.predefinedFields.forEach((field) => {
-      switch (field.label) {
-        case 'Имя *':
-          prepareDataToServer.first_name = field.value;
-          break;
-        case 'Фамилия *':
-          prepareDataToServer.last_name = field.value;
-          break;
-        case 'Отчество':
-          prepareDataToServer.middle_name = field.value;
-          break;
-        case 'Компания':
-          prepareDataToServer.company = field.value;
-          break;
-        case 'Должность':
-          prepareDataToServer.position = field.value;
-          break;
-        case 'Адрес':
-          prepareDataToServer.address = field.value;
-          break;
-        case 'Описание':
-          prepareDataToServer.about = field.value;
-          break;
-        default:
-          break;
-      }
-    });
-    console.log('Prepared data for server:', prepareDataToServer);
-    this.props.submitFormData(prepareDataToServer);
+      predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest);
+
+      prepareDataToPUTRequest.phones = data.phones.map((phone) => ({
+        phone_id: Number(phone.id),
+        number: phone.value,
+      }));
+
+      prepareDataToPUTRequest.emails = data.emails.map((email) => ({
+        email_id: Number(email.id),
+        email_address: email.value,
+      }));
+
+      prepareDataToPUTRequest.websites = data.websites.map((website) => ({
+        website_id: Number(website.id),
+        website_address: website.value,
+      }));
+
+      prepareDataToPUTRequest.socials = data.socials.map((social) => ({
+        social_id: social.id,
+        social_url: social.social_url,
+        social_row_id: social.social_row_id,
+      }));
+
+      console.log('Prepared data for PUT request:', prepareDataToPUTRequest);
+      this.props.submitFormDataForPUT(prepareDataToPUTRequest, this.props.userId);
+    } else {
+      const prepareDataToPOSTRequest: ServerDataType = {
+        first_name: '',
+        last_name: '',
+        phones: data.phones.length > 0 ? data.phones.map((field) => field.value) : null,
+        emails: data.emails.length > 0 ? data.emails.map((field) => field.value) : null,
+        websites: data.websites.length > 0 ? data.websites.map((field) => field.value) : null,
+        socials:
+          data.socials.length > 0
+            ? data.socials.map((field) => ({
+                social_id: field.id,
+                social_url: field.social_url,
+              }))
+            : null,
+      };
+
+      predefinedFieldsToObjectConverter(data, prepareDataToPOSTRequest);
+      console.log('Prepared data for server:', prepareDataToPOSTRequest);
+      this.props.submitFormData(prepareDataToPOSTRequest);
+    }
   };
 
   render() {
@@ -77,7 +107,9 @@ const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
   submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
+  submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) =>
+    putSubmitFormData(data, userId)(dispatch),
   getSocialsData: () => getSocials()(dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserDataFormContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(withLocation(UserDataFormContainer));

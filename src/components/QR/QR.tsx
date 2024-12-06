@@ -1,8 +1,12 @@
 import React, { Component, createRef } from 'react';
 import { AwesomeQR } from 'awesome-qr';
+import s from './QR.module.scss';
+import { toast } from 'react-toastify';
+import { toastPositionConfig } from '../../utils/utils';
 
 type QRProps = {
   value: string;
+  edit_code: string;
 };
 
 type AwesomeQRConfig = {
@@ -78,76 +82,62 @@ export class QR extends Component<QRProps> {
 
   handleCopyToClipboard = () => {
     const { value } = this.props;
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        alert('Ссылка скопирована в буфер обмена!');
-      })
-      .catch((error) => {
-        console.error('Не удалось скопировать ссылку:', error);
-      });
+
+    if (value) {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          toast.success('Ссылка скопирована в буфер обмена!', toastPositionConfig);
+        })
+        .catch((error) => {
+          console.error('Не удалось скопировать ссылку:', error);
+          toast.error('Ошибка при копировании ссылки.', toastPositionConfig);
+        });
+    } else {
+      toast.error('Ссылка отсутствует.', toastPositionConfig);
+    }
+  };
+
+  handleCopyEditCodeToClipboard = () => {
+    const { edit_code } = this.props;
+    if (edit_code) {
+      navigator.clipboard
+        .writeText(edit_code)
+        .then(() => {
+          toast.success('Код успешно скопирован!', toastPositionConfig);
+        })
+        .catch((err) => {
+          console.error('Ошибка при копировании:', err);
+          toast.error('Не удалось скопировать код.', toastPositionConfig);
+        });
+    }
   };
 
   render() {
+    const edit_code = this.props.edit_code;
+
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '60px', paddingTop: '60px' }}>
-        <canvas
-          ref={this.canvasRef}
-          width="256"
-          height="256"
-          style={{
-            boxShadow: '0 0 40px #61dafb',
-            borderRadius: '10px',
-          }}
-        />
-        <button
-          onClick={this.handleDownload}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Скачать QR-код
-        </button>
-        <a ref={this.downloadLinkRef} style={{ display: 'none' }}>
-          Скачать
-        </a>
-        <button
-          onClick={this.handleCopyToClipboard}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Скопировать ссылку
-        </button>
-        <a
-          href={this.props.value}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#000',
-            color: '#fff',
-            textDecoration: 'none',
-            borderRadius: '5px',
-            textAlign: 'center',
-            display: 'block',
-          }}
-        >
-          Перейти по ссылке
-        </a>
+      <div className={s.container}>
+        {/*Это элемент в который будет вставлен QR*/}
+        <canvas ref={this.canvasRef} width="256" height="256" className={s.canvas} />
+
+        <div className={s.buttonsContainer}>
+          <button onClick={this.handleDownload} className={s.downloadButton}>
+            Скачать QR-код
+          </button>
+          <a ref={this.downloadLinkRef} className={s.downloadLink}>
+            Скачать
+          </a>
+          <button onClick={this.handleCopyToClipboard} className={s.downloadButton}>
+            Скопировать ссылку
+          </button>
+          <a href={this.props.value} target="_blank" rel="noopener noreferrer" className={s.pageLink}>
+            Перейти по ссылке
+          </a>
+          <div className={s.editCode} onClick={this.handleCopyEditCodeToClipboard}>
+            {edit_code ? edit_code : 'edit-code не получен'}
+          </div>
+        </div>
       </div>
     );
   }

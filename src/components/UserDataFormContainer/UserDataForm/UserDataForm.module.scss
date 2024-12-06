@@ -16,7 +16,6 @@
       position: relative;
 
       .fieldLabel {
-
       }
 
       .description {
@@ -60,8 +59,8 @@
       inline-size: 50px;
       block-size: 50px;
       border-radius: 50%;
-      color: #38AB9E;
-      outline: 3px solid #38AB9E;
+      color: #38ab9e;
+      outline: 3px solid #38ab9e;
       background: transparent;
       cursor: pointer;
       margin-top: 20px;
@@ -75,8 +74,8 @@
       inline-size: 50px;
       block-size: 50px;
       border-radius: 50%;
-      color: #38AB9E;
-      outline: 3px solid #38AB9E;
+      color: #38ab9e;
+      outline: 3px solid #38ab9e;
       background: transparent;
       cursor: pointer;
       margin-top: 20px;
@@ -103,7 +102,7 @@
     .socialListItem {
       position: relative;
 
-      .errorSocial{
+      .errorSocial {
         inline-size: 400px;
         color: brown;
         font-size: 12px;
@@ -137,7 +136,7 @@
     }
 
     .highlighted {
-      outline: 3px solid #38AB9E;
+      outline: 3px solid #38ab9e;
     }
 
     .removeButton {
@@ -160,6 +159,3 @@
 .toastError {
   // класс для стилизации всплывающего уведомления toast
 }
-
-
-
