@@ -1,31 +1,31 @@
-import { Component } from 'react';
-import s from './PersonalPage.module.scss';
-import { PersonalPageProps } from './PersonalPageTypes';
-
-export class PersonalPage extends Component<PersonalPageProps> {
-	render() {
-		const {
-			photo,
-			first_name,
-			last_name,
-			middle_name,
-			about,
-			company,
-			position,
-			address,
-			phones,
-			emails,
-			websites,
-			socials
-		} = this.props; // Извлекаю данные из объекта props деструктуризацией
-
-		return (
-			<div className={s.container}>
-
-			</div>
-		);
-	}
-}
+// import { Component } from 'react';
+// import s from './PersonalPage.module.scss';
+// import { PersonalPageProps } from './PersonalPageTypes';
+//
+// export class PersonalPage extends Component<PersonalPageProps> {
+// 	render() {
+// 		const {
+// 			photo,
+// 			first_name,
+// 			last_name,
+// 			middle_name,
+// 			about,
+// 			company,
+// 			position,
+// 			address,
+// 			phones,
+// 			emails,
+// 			websites,
+// 			socials
+// 		} = this.props; // Извлекаю данные из объекта props деструктуризацией
+//
+// 		return (
+// 			<div className={s.container}>
+//
+// 			</div>
+// 		);
+// 	}
+// }
 
 /*
 <div className={s.container}>

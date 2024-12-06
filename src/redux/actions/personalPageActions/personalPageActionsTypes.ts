@@ -1,6 +1,5 @@
-import { ServerDataType } from '../formActions/formActionsTypes';
-import { UserActionTypes } from './personalPageActions';
-import { RootState } from '../../store';
+import { CheckUserEditCodeTypes, UserActionTypes } from './personalPageActions';
+import { ServerPageDataType } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 export type GetUserDataAttemptAction = {
   type: UserActionTypes.GET_USER_DATA;
@@ -8,7 +7,7 @@ export type GetUserDataAttemptAction = {
 
 export type GetUserDataSuccessAction = {
   type: UserActionTypes.GET_USER_DATA_SUCCESS;
-  payload: ServerDataType;
+  payload: ServerPageDataType;
 }
 
 export type GetUserDataErrorAction = {
@@ -21,3 +20,20 @@ export type GetUserDataActions =
   | GetUserDataSuccessAction
   | GetUserDataErrorAction;
 
+export type CheckUserEditCode= {
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE
+}
+
+export type CheckUserEditCodeSuccess = {
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS
+}
+
+export type CheckUserEditCodeError = {
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR,
+  payload: string,
+}
+
+export type CheckUserEditCodeGeneral =
+  | CheckUserEditCode
+  | CheckUserEditCodeSuccess
+  | CheckUserEditCodeError;

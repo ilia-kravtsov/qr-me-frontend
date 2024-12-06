@@ -1,6 +1,6 @@
 import { ServerDataType } from '../../../redux/actions/formActions/formActionsTypes';
+import { ServerPageData } from '../../PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
-export type InputsType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'websites';
 export type LoadingStatus = 'idle' | 'loading' | 'success' | 'error'
 export type ArrayFieldType = 'phones' | 'emails' | 'websites'
@@ -18,6 +18,7 @@ export type UserDataFormState = {
 	socialsLinks: socialsLinks[]
 	fieldsErrors: fieldError
 	isQrGenerated: boolean
+	setDataForPutStatus: LoadingStatus
 }
 
 export type socialsIcons = {
@@ -35,7 +36,7 @@ export type Field = {
 	id: string
 	label: string
 	value: string
-	type?: InputsType
+	type?: string
 	required?: boolean
 	placeholder?: string
 	minLength?: number
@@ -49,6 +50,7 @@ export type FormState = {
 	emails: Field[]
 	websites: Field[]
 	socialsIcons: socialsIcons[]
+	socialsLinks?: socialsLinks[]
 }
 
 export type FormServerData = Omit<FormState, 'socialsIcons'> & {
@@ -56,26 +58,50 @@ export type FormServerData = Omit<FormState, 'socialsIcons'> & {
 };
 
 export type UserDataFormProps = FormState & FormStatus & {
-	onSubmit: (data: FormServerData) => void;
+	onSubmit: (data: FormServerData, setDataForPutStatus: LoadingStatus) => void;
 }
 
 export type FormMethods = {
-	submitFormData: (data: ServerDataType) => void;
+	submitFormData: (data: ServerDataType) => void
+	submitFormDataForPUT: (data: ServerDataType) => void
 	getSocialsData: () => void
 };
 
-export type UserDataFormContainerProps = FormMethods & FormState & FormStatus
+export type UserDataFormContainerProps = FormMethods & FormState & FormStatus & LocationState
 
 export type FormReducerType = FormStatus & FormState
 
 export type FormStatus = {
-	submitStatus: LoadingStatus
-	submitError?: null | string
+	submitSuccessData?: ServerPOSTSuccessData
+	setDataForPutStatus: LoadingStatus
 	socialsStatus: LoadingStatus
+	submitStatus: LoadingStatus
 	getDataError?: null | string
+	submitError?: null | string
 }
 
-export type ServerError = {
+export type ServerPOSTSuccessData = {
+	user_id: string;
+	page_url: string;
+	edit_code: string;
+};
+
+export type ServerErrorResponse = {
 	status: "error"
 	message: string
 }
+
+export type ServerSuccessResponse = {
+	success: true;
+	message: string;
+	data: ServerPOSTSuccessData
+}
+
+export type ServerResponse = ServerSuccessResponse | ServerErrorResponse
+
+type LocationState = {
+	locationState?: {
+		data: ServerPageData
+	}
+}
+

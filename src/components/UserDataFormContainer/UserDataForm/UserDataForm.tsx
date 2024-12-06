@@ -26,9 +26,10 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       emails: this.props.emails,
       websites: this.props.websites,
       socialsIcons: this.props.socialsIcons,
-      socialsLinks: [{ id: 1, social_url: '' }],
+      socialsLinks: this.props.socialsLinks ? this.props.socialsLinks : [],
       fieldsErrors: {},
       isQrGenerated: false,
+      setDataForPutStatus: this.props.setDataForPutStatus,
     };
   }
 
@@ -99,72 +100,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       return { socialsLinks: updatedSocialsLinks };
     });
   }
-
-  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const allFields = {
-      predefinedFields: this.state.predefinedFields,
-      phones: this.state.phones,
-      emails: this.state.emails,
-      websites: this.state.websites,
-      socials: this.state.socialsLinks,
-    };
-
-    const hasDuplicateValues = () => {
-      const combinedFields = [
-        ...this.state.predefinedFields,
-        ...this.state.phones,
-        ...this.state.emails,
-        ...this.state.websites,
-      ];
-
-      const values = combinedFields.map(field => field.value);
-      const socialUrls = this.state.socialsLinks.map(social => social.social_url);
-      const allValues = [...values, ...socialUrls];
-
-      const filteredValues = allValues.filter(value => value && value.trim() !== '');
-      const uniqueValues = new Set(filteredValues);
-      if (filteredValues.length !== uniqueValues.size) {
-        const duplicates = filteredValues.filter((value, index, arr) => arr.indexOf(value) !== index);
-
-        if (duplicates.length > 0) {
-          const updatedDuplicates = Array.from(new Set(duplicates)).map(value => `\n${value}`);
-
-          toast.error(`Дублирующиеся значения: ${updatedDuplicates}`, {
-            position: 'bottom-left',
-            autoClose: 5000,
-            className: `${s.toastError}`
-          });
-        }
-
-        return true;
-      }
-
-      return false;
-    };
-
-    if (!this.isFormValid()) {
-      return;
-    }
-
-    if (hasDuplicateValues()) {
-      console.error('В полях формы найдены дублирующиеся значения!');
-      return;
-    }
-
-    this.props.onSubmit(allFields);
-
-    this.setState({
-      predefinedFields: this.props.predefinedFields,
-      phones: this.props.phones,
-      emails: this.props.emails,
-      websites: this.props.websites,
-      socialsIcons: this.props.socialsIcons,
-      socialsLinks: [],
-      fieldsErrors: {},
-    });
-  };
 
   handleSocialIconClick = (socialId: number) => {
     this.setState((prevState) => {
@@ -329,17 +264,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
-      case 'Адрес': {
-        const addressPattern = /\d/;
-        if (processedValue.length) {
-          if (!addressPattern.test(processedValue)) {
-            errorMessage = 'Адрес должен содержать хотя бы одну цифру.';
-          }
-          break;
-        }
-        break;
-      }
-
       case 'Phone': {
         const phonePattern = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
 
@@ -443,7 +367,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
             ) => this.handleChangeFieldValue(fieldType, id, e.target.value);
 
             const renderInput = () => {
-              if (label === 'Описание') {
+              if (label === 'Описание' || label === 'Адрес') {
                 return (
                   <textarea
                     id={id}
@@ -574,8 +498,103 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     return hasNoErrors && hasNoEmptyRequiredFields;
   };
 
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const allFields = {
+      predefinedFields: this.state.predefinedFields,
+      phones: this.state.phones,
+      emails: this.state.emails,
+      websites: this.state.websites,
+      socials: this.state.socialsLinks,
+    };
+
+    const hasDuplicateValues = () => {
+      const combinedFields = [
+        ...this.state.predefinedFields,
+        ...this.state.phones,
+        ...this.state.emails,
+        ...this.state.websites,
+      ];
+
+      const values = combinedFields.map(field => field.value);
+      const socialUrls = this.state.socialsLinks.map(social => social.social_url);
+      const allValues = [...values, ...socialUrls];
+
+      const filteredValues = allValues.filter(value => value && value.trim() !== '');
+      const uniqueValues = new Set(filteredValues);
+      if (filteredValues.length !== uniqueValues.size) {
+        const duplicates = filteredValues.filter((value, index, arr) => arr.indexOf(value) !== index);
+
+        if (duplicates.length > 0) {
+          const updatedDuplicates = Array.from(new Set(duplicates)).map(value => `\n${value}`);
+
+          toast.error(`Дублирующиеся значения: ${updatedDuplicates}`, {
+            position: 'bottom-left',
+            autoClose: 5000,
+            className: `${s.toastError}`
+          });
+        }
+
+        return true;
+      }
+
+      return false;
+    };
+
+    if (!this.isFormValid()) {
+      return;
+    }
+
+    if (hasDuplicateValues()) {
+      console.error('В полях формы найдены дублирующиеся значения!');
+      return;
+    }
+
+    this.props.onSubmit(allFields, this.state.setDataForPutStatus);
+
+    this.setState({
+      predefinedFields: this.props.predefinedFields,
+      phones: this.props.phones,
+      emails: this.props.emails,
+      websites: this.props.websites,
+      socialsIcons: this.props.socialsIcons,
+      socialsLinks: [],
+      fieldsErrors: {},
+    });
+  };
+
+  renderSubmitButton() {
+    const { setDataForPutStatus } = this.state;
+
+    return (
+      <button
+        type="submit"
+        disabled={!this.isFormValid()}
+        className={s.submitButton}
+      >
+        {setDataForPutStatus === 'success'
+          ? 'Обновить данные'
+          : this.props.submitStatus === 'loading'
+            ? <Loader />
+            : 'Получить QR код'}
+      </button>
+    );
+  }
+
   render() {
     const { predefinedFields, phones, emails, websites, socialsIcons, socialsLinks, isQrGenerated } = this.state;
+    const { submitSuccessData } = this.props;
+    let page_url: string;
+    let edit_code: string;
+
+    if (submitSuccessData) {
+      page_url = submitSuccessData.page_url
+      edit_code = submitSuccessData.edit_code
+    } else {
+      page_url = 'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'
+      edit_code = ''
+    }
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
@@ -604,18 +623,13 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           </div>
         </fieldset>
 
-        <button type="submit" disabled={!this.isFormValid()} className={s.submitButton}>
-          {this.props.submitStatus === 'loading' ? <Loader /> : 'Получить QR код'}
-        </button>
+        {this.renderSubmitButton()}
 
         {Object.values(this.state.fieldsErrors).some((error) => error.includes('не уникально')) && (
           <div className={s.formError}>Пожалуйста, убедитесь, что все значения уникальны.</div>
         )}
 
-
-        {isQrGenerated && (
-          <QR value={'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'} />
-        )}
+        {isQrGenerated && <QR value={page_url} edit_code={edit_code}/>}
 
         <ToastContainer/>
       </form>

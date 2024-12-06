@@ -1,5 +1,9 @@
-import { FormActionTypes, SocialsActionTypes, submitFormIdle } from './formActions';
-import { socialsIcons } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
+import { FormActionTypes, SetUserDataTypes, SocialsActionTypes } from './formActions';
+import {
+	ServerPOSTSuccessData,
+	socialsIcons,
+} from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
+import { ServerPageData } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 export type FormActions =
 	| SubmitFormStartAction
@@ -9,6 +13,7 @@ export type FormActions =
 	| GetFormDataSuccess
 	| GetFormDataAttempt
 	| GetFormDataError
+  | SetUserDataForPutRequest
 
 export type SubmitFormStartAction = {
 	type: FormActionTypes.SUBMIT_FORM;
@@ -21,6 +26,7 @@ export type SubmitFormErrorAction = {
 
 export type SubmitFormSuccessAction = {
 	type: FormActionTypes.SUBMIT_FORM_SUCCESS;
+	payload: ServerPOSTSuccessData
 }
 
 export type SubmitFormIdleAction = {
@@ -59,4 +65,33 @@ export type GetFormDataAttempt = {
 export type GetFormDataError = {
 	type: SocialsActionTypes.GET_FORM_DATA_ERROR;
 	payload: string
+}
+
+export type SetUserId = {
+	type: SetUserDataTypes.SET_USER_ID,
+	payload: {
+		userId: string
+		editCode: string
+	}
+}
+
+export type SetUserDataForPutRequest = {
+	type: SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST,
+	payload: ServerPageData
+}
+
+export type SetUserDataForPutRequestIdle = {
+	type: SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST_IDLE,
+}
+
+export type ServerDataForPUTRequest = {
+	edit_code: string
+	photo?: string
+	last_name: string
+	first_name: string
+	middle_name?: string
+	about?: string | null
+	company?: string | null
+	position?: string | null
+	address?: string | null
 }

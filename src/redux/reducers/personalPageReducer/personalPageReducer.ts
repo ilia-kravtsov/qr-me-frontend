@@ -1,64 +1,68 @@
-import { GetUserDataActions } from '../../actions/personalPageActions/personalPageActionsTypes';
+import {
+  CheckUserEditCodeGeneral,
+  GetUserDataActions,
+} from '../../actions/personalPageActions/personalPageActionsTypes';
 import { PersonalPageReducer } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
-import { UserActionTypes } from '../../actions/personalPageActions/personalPageActions';
+import { CheckUserEditCodeTypes, UserActionTypes } from '../../actions/personalPageActions/personalPageActions';
+import { SetUserId } from '../../actions/formActions/formActionsTypes';
 
-type Actions = GetUserDataActions;
+type Actions = GetUserDataActions | SetUserId | CheckUserEditCodeGeneral
 
 const initialState: PersonalPageReducer = {
-  photo: null,
-  first_name: '',
-  last_name: '',
-  middle_name: '',
-  about: null,
-  company: null,
-  position: null,
-  address: null,
-  phones: [],
-  emails: [],
-  websites: [],
-  socials: [],
+  success: false,
+  data: {
+    first_name: 'Иван',
+    last_name: 'Иванов',
+    middle_name: 'Иванов',
+    about: 'I am good',
+    address: 'Lenina street 14',
+    position: 'teamlead',
+    company: 'ООО Гугл',
+    websites: [{website_id: 5, website_address: 'https://www.google.com'}],
+    phones: [{phone_id: 1, number: '+78888888888'}],
+    emails: [{email_id: 2, email_address: 'ivanov@mail.com'}],
+    socials: [{social_id: 3, social_row_id: 4, social_url: 'https://www.facebook.com'}],
+  },
   getUserDataStatus: 'idle',
   getUserDataError: null,
+  checkUserEditCodeStatus: 'idle',
+  checkUserEditCodeError: null,
 };
 
 export const personalPageReducer = (state = initialState, action: Actions): PersonalPageReducer => {
   switch (action.type) {
     case UserActionTypes.GET_USER_DATA:
-      return { ...state, getUserDataStatus: 'loading', getUserDataError: null};
+      return { ...state, getUserDataStatus: 'loading', getUserDataError: null };
     case UserActionTypes.GET_USER_DATA_SUCCESS:
-      const {
-        photo,
-        first_name,
-        last_name,
-        middle_name,
-        about,
-        company,
-        position,
-        address,
-        phones,
-        emails,
-        websites,
-        socials
-      } = action.payload;
+      const { success, data } = action.payload;
       return {
         ...state,
-        photo: photo ?? null,
-        first_name: first_name ?? '',
-        last_name: last_name ?? '',
-        middle_name: middle_name ?? '',
-        about: about ?? null,
-        company: company ?? null,
-        position: position ?? null,
-        address: address ?? null,
-        phones: phones ?? [],
-        emails: emails ?? [],
-        websites: websites ?? [],
-        socials: socials ?? [],
+        success: success,
+        data: {
+          photo: data.photo,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          middle_name: data.middle_name,
+          about: data.about,
+          address: data.address,
+          company: data.company,
+          position: data.position,
+          phones: data.phones || [],
+          emails: data.emails || [],
+          websites: data.websites || [],
+          socials: data.socials || [],
+        },
         getUserDataStatus: 'success',
-        getUserDataError: null
+        getUserDataError: null,
       };
     case UserActionTypes.GET_USER_DATA_ERROR:
-      return { ...state, getUserDataStatus: 'error', getUserDataError: action.payload, };
+      return { ...state, getUserDataStatus: 'error', getUserDataError: action.payload };
+    case CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE:
+      return { ...state, checkUserEditCodeStatus: 'loading', checkUserEditCodeError: null };
+    case CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS:
+      return { ...state, checkUserEditCodeStatus: 'success', checkUserEditCodeError: null};
+    case CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR:
+      return { ...state, checkUserEditCodeStatus: 'error', checkUserEditCodeError: action.payload };
     default:
       return state;
   }

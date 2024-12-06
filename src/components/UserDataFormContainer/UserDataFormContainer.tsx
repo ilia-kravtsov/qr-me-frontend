@@ -1,27 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, ComponentType } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../redux/store';
 import {
-  FormServerData,
   FormMethods,
   FormReducerType,
-  FormState,
+  FormServerData, LoadingStatus,
   UserDataFormContainerProps,
 } from './UserDataForm/UserDataFormTypes';
 import UserDataForm from './UserDataForm/UserDataForm';
-import { getSocials, submitFormData } from '../../redux/actions/formActions/formActions';
-import { QR } from '../QR/QR';
-import s from './UserDataFormContainer.module.scss';
+import {
+  getSocials,
+  setUserDataForPutRequestTC,
+  submitFormData,
+  submitFormDataForPUT,
+} from '../../redux/actions/formActions/formActions';
 import { ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
-import { getSocialsData } from '../../api/api';
+import { useLocation } from 'react-router-dom';
+
+const withLocation = (WrappedComponent: ComponentType<any>) => {
+  return (props: any) => {
+    const location = useLocation();
+    const { state } = location;
+    return <WrappedComponent {...props} locationState={state} />;
+  };
+};
 
 class UserDataFormContainer extends Component<UserDataFormContainerProps> {
   componentDidMount() {
-    this.props.getSocialsData();
+    const { locationState, getSocialsData } = this.props;
+
+    if (locationState?.data) {
+      console.log('Received data from location:', locationState.data);
+      setUserDataForPutRequestTC(locationState.data);
+    }
+
+    getSocialsData();
   }
 
-  handleSubmit = (data: FormServerData) => {
+  handleSubmit = (data: FormServerData, setDataForPutStatus: LoadingStatus) => {
     const prepareDataToServer: ServerDataType = {
       first_name: '',
       last_name: '',
@@ -65,7 +82,11 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
       }
     });
     console.log('Prepared data for server:', prepareDataToServer);
-    this.props.submitFormData(prepareDataToServer);
+    if (setDataForPutStatus !== 'success') {
+      this.props.submitFormData(prepareDataToServer);
+    } else {
+      this.props.submitFormDataForPUT
+    }
   };
 
   render() {
@@ -77,7 +98,8 @@ const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
   submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
+  submitFormDataForPUT: (data: ServerDataType) => submitFormDataForPUT(data)(dispatch),
   getSocialsData: () => getSocials()(dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserDataFormContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(withLocation(UserDataFormContainer));
