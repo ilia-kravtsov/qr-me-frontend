@@ -20,17 +20,23 @@ export type GetUserDataActions =
   | GetUserDataSuccessAction
   | GetUserDataErrorAction;
 
-export type CheckUserEditCode= {
+export type CheckUserEditCode = {
   type: CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE
 }
 
 export type CheckUserEditCodeSuccess = {
   type: CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS
+  payload: {
+    userId: string
+    editCode: string
+  }
 }
 
 export type CheckUserEditCodeError = {
   type: CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR,
-  payload: string,
+  payload: {
+    errorMessage: string
+  }
 }
 
 export type CheckUserEditCodeGeneral =

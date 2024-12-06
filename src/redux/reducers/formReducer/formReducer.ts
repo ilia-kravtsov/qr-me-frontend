@@ -2,6 +2,7 @@ import { FormReducerType } from '../../../components/UserDataFormContainer/UserD
 import { v1 } from 'uuid';
 import { FormActionTypes, SetUserDataTypes, SocialsActionTypes } from '../../actions/formActions/formActions';
 import { FormActions } from '../../actions/formActions/formActionsTypes';
+import { CheckUserEditCodeTypes } from '../../actions/personalPageActions/personalPageActions';
 
 type ActionsType = FormActions;
 
@@ -109,7 +110,7 @@ const initialState: FormReducerType = {
       name: 'instagram',
     },
   ],
-  socialsLinks: [{ id: 1, social_url: '' }],
+  socialsLinks: [],
   submitSuccessData: {
     edit_code: '',
     page_url: '',
@@ -118,8 +119,12 @@ const initialState: FormReducerType = {
   submitStatus: 'idle',
   socialsStatus: 'idle',
   setDataForPutStatus: 'idle',
+  submitPutStatus: 'idle',
   submitError: null,
+  submitPutError: null,
   getDataError: null,
+  userEditCode: null,
+  userId: null,
 };
 
 export const formReducer = (state = initialState, action: ActionsType): FormReducerType => {
@@ -154,7 +159,7 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
         phones,
         emails,
         websites,
-        socials
+        socials,
       } = action.payload;
 
       const updatedPredefinedFields = state.predefinedFields.map((field) => {
@@ -177,37 +182,42 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
             return field;
         }
       });
-      const updatedPhones = phones?.map((phone) => ({
-        id: phone.phone_id.toString(),
-        label: 'Phone',
-        type: 'tel',
-        value: phone.number.toString(),
-        required: false,
-        placeholder: '+7 999 999 99 99',
-        title: '+7 999 999 99 99',
-      })) || [];
-      const updatedEmails = emails?.map((email) => ({
-        id: email.email_id.toString(),
-        label: 'Email',
-        type: 'email',
-        value: email.email_address.toString(),
-        required: false,
-        placeholder: 'ivanov@mail.ru',
-        title: 'ivanov@mail.ru',
-      })) || [];
-      const updatedWebsites = websites?.map((website) => ({
-        id: website.website_id.toString(),
-        label: 'Website',
-        type: 'url',
-        value: website.website_address.toString(),
-        required: false,
-        placeholder: 'https://some.ru',
-        title: 'https://some.ru',
-      })) || [];
-      const updatedSocialsLinks = socials?.map((social) => ({
-        id: social.social_id,
-        social_url: social.social_url,
-      })) || [];
+      const updatedPhones =
+        phones?.map((phone) => ({
+          id: phone.phone_id.toString(),
+          label: 'Phone',
+          type: 'tel',
+          value: phone.number.toString(),
+          required: false,
+          placeholder: '+7 999 999 99 99',
+          title: '+7 999 999 99 99',
+        })) || [];
+      const updatedEmails =
+        emails?.map((email) => ({
+          id: email.email_id.toString(),
+          label: 'Email',
+          type: 'email',
+          value: email.email_address.toString(),
+          required: false,
+          placeholder: 'ivanov@mail.ru',
+          title: 'ivanov@mail.ru',
+        })) || [];
+      const updatedWebsites =
+        websites?.map((website) => ({
+          id: website.website_id.toString(),
+          label: 'Website',
+          type: 'url',
+          value: website.website_address.toString(),
+          required: false,
+          placeholder: 'https://some.ru',
+          title: 'https://some.ru',
+        })) || [];
+      const updatedSocialsLinks =
+        socials?.map((social) => ({
+          id: social.social_id,
+          social_url: social.social_url,
+          social_row_id: social.social_row_id,
+        })) || [];
 
       return {
         ...state,
@@ -216,8 +226,18 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
         emails: updatedEmails,
         websites: updatedWebsites,
         socialsLinks: updatedSocialsLinks,
-        setDataForPutStatus: 'success'
+        setDataForPutStatus: 'success',
       };
+    case CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS:
+      return { ...state, userEditCode: action.payload.editCode, userId: action.payload.userId };
+    case SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST_IDLE:
+      return { ...state, setDataForPutStatus: 'idle' };
+    case FormActionTypes.SUBMIT_FORM_PUT:
+      return { ...state, submitPutStatus: 'loading' };
+    case FormActionTypes.SUBMIT_FORM_PUT_SUCCESS:
+      return { ...state, submitPutStatus: 'success' };
+    case FormActionTypes.SUBMIT_FORM_PUT_ERROR:
+      return { ...state, submitPutStatus: 'error', submitPutError: action.payload};
     default:
       return state;
   }

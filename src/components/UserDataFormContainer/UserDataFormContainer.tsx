@@ -5,18 +5,19 @@ import { RootState } from '../../redux/store';
 import {
   FormMethods,
   FormReducerType,
-  FormServerData, LoadingStatus,
+  FormServerData,
   UserDataFormContainerProps,
 } from './UserDataForm/UserDataFormTypes';
 import UserDataForm from './UserDataForm/UserDataForm';
+import { ServerDataForPUTRequest, ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
+import { useLocation } from 'react-router-dom';
 import {
   getSocials,
   setUserDataForPutRequestTC,
+  putSubmitFormData,
   submitFormData,
-  submitFormDataForPUT,
-} from '../../redux/actions/formActions/formActions';
-import { ServerDataType } from '../../redux/actions/formActions/formActionsTypes';
-import { useLocation } from 'react-router-dom';
+} from '../../redux/thunks/formThunks/formThunks';
+import { predefinedFieldsToObjectConverter } from '../../utils/utils';
 
 const withLocation = (WrappedComponent: ComponentType<any>) => {
   return (props: any) => {
@@ -38,54 +39,69 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
     getSocialsData();
   }
 
-  handleSubmit = (data: FormServerData, setDataForPutStatus: LoadingStatus) => {
-    const prepareDataToServer: ServerDataType = {
-      first_name: '',
-      last_name: '',
-      phones: data.phones.length > 0 ? data.phones.map((field) => field.value) : null,
-      emails: data.emails.length > 0 ? data.emails.map((field) => field.value) : null,
-      websites: data.websites.length > 0 ? data.websites.map((field) => field.value) : null,
-      socials:
-        data.socials.length > 0
-          ? data.socials.map((field) => ({
+  handleSubmit = (data: FormServerData) => {
+
+    if (this.props.setDataForPutStatus === 'success') {
+
+      const prepareDataToPUTRequest: ServerDataForPUTRequest = {
+        edit_code: this.props.userEditCode,
+        first_name: '',
+        last_name: '',
+        phones: [],
+        emails: [],
+        websites: [],
+        socials: [],
+      }
+
+      predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest)
+
+      prepareDataToPUTRequest.phones =
+        data.phones.map((phone) => ({
+          phone_id: Number(phone.id),
+          number: phone.value,
+        }));
+
+      prepareDataToPUTRequest.emails =
+        data.emails.map((email) => ({
+          email_id: Number(email.id),
+          email_address: email.value,
+        }));
+
+      prepareDataToPUTRequest.websites =
+        data.websites.map((website) => ({
+          website_id: Number(website.id),
+          website_address: website.value,
+        }));
+
+      prepareDataToPUTRequest.socials =
+        data.socials.map((social) => ({
+          social_id: social.id,
+          social_url: social.social_url,
+          social_row_id: social.social_row_id,
+        }));
+
+      console.log('Prepared data for PUT request:', prepareDataToPUTRequest);
+      this.props.submitFormDataForPUT(prepareDataToPUTRequest, this.props.userId);
+
+    } else {
+      const prepareDataToPOSTRequest: ServerDataType = {
+        first_name: '',
+        last_name: '',
+        phones: data.phones.length > 0 ? data.phones.map((field) => field.value) : null,
+        emails: data.emails.length > 0 ? data.emails.map((field) => field.value) : null,
+        websites: data.websites.length > 0 ? data.websites.map((field) => field.value) : null,
+        socials:
+          data.socials.length > 0
+            ? data.socials.map((field) => ({
               social_id: field.id,
               social_url: field.social_url,
             }))
-          : null,
-    };
+            : null,
+      };
 
-    data.predefinedFields.forEach((field) => {
-      switch (field.label) {
-        case 'Имя *':
-          prepareDataToServer.first_name = field.value;
-          break;
-        case 'Фамилия *':
-          prepareDataToServer.last_name = field.value;
-          break;
-        case 'Отчество':
-          prepareDataToServer.middle_name = field.value;
-          break;
-        case 'Компания':
-          prepareDataToServer.company = field.value;
-          break;
-        case 'Должность':
-          prepareDataToServer.position = field.value;
-          break;
-        case 'Адрес':
-          prepareDataToServer.address = field.value;
-          break;
-        case 'Описание':
-          prepareDataToServer.about = field.value;
-          break;
-        default:
-          break;
-      }
-    });
-    console.log('Prepared data for server:', prepareDataToServer);
-    if (setDataForPutStatus !== 'success') {
-      this.props.submitFormData(prepareDataToServer);
-    } else {
-      this.props.submitFormDataForPUT
+      predefinedFieldsToObjectConverter(data, prepareDataToPOSTRequest)
+      console.log('Prepared data for server:', prepareDataToPOSTRequest);
+      this.props.submitFormData(prepareDataToPOSTRequest);
     }
   };
 
@@ -98,7 +114,7 @@ const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
   submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
-  submitFormDataForPUT: (data: ServerDataType) => submitFormDataForPUT(data)(dispatch),
+  submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) => putSubmitFormData(data, userId)(dispatch),
   getSocialsData: () => getSocials()(dispatch),
 });
 

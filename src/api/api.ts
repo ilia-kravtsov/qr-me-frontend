@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { ServerDataType } from '../redux/actions/formActions/formActionsTypes';
+import { ServerDataForPUTRequest, ServerDataType } from '../redux/actions/formActions/formActionsTypes';
 import {
-  FormServerData,
   ServerResponse,
   socialsIcons,
 } from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
@@ -30,7 +29,7 @@ export const checkEditCode = async (userId: string, editCode: string): Promise<{
   return response.data;
 };
 
-export const updateUserData = async (userId: number, updatedData: Partial<FormServerData>) => {
+export const updateUserData = async (userId: number, updatedData: ServerDataForPUTRequest) => {
   const response = await api.put(`/users/${userId}`, updatedData);
   return response.data;
 };

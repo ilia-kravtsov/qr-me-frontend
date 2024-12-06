@@ -30,11 +30,13 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       fieldsErrors: {},
       isQrGenerated: false,
       setDataForPutStatus: this.props.setDataForPutStatus,
+      updatedUserLink: ''
     };
   }
 
   componentDidUpdate(prevProps: UserDataFormProps) {
     if (this.props.submitStatus === 'success' && prevProps.submitStatus !== 'success') {
+      toast.dismiss();
       toast.success('Form submitted successfully', toastPositionConfig);
       this.setState({ isQrGenerated: true });
     }
@@ -43,6 +45,17 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     }
     if (this.props.submitStatus === 'error' && prevProps.submitStatus !== 'error') {
       toast.error(this.props.submitError || 'An unexpected error occurred', toastPositionConfig);
+    }
+    if (prevProps.submitPutStatus !== this.props.submitPutStatus) {
+      if (this.props.submitPutStatus === 'success') {
+        toast.dismiss();
+        toast.success('Данные успешно обновлены!', toastPositionConfig);
+        if (this.props.userId) {
+          this.setState({
+            updatedUserLink: `https://qrme.ru/users/${this.props.userId}`,
+          });
+        }
+      }
     }
   }
 
@@ -471,7 +484,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
   renderSocialsFields = (socialsLinks: socialsLinks[]) => {
     const { fieldsErrors } = this.state;
 
-    return socialsLinks.map(({ id }) => {
+    return socialsLinks.map(({ id, social_url }) => {
       const errorKey = `social_${id}`;
       const errorMessage = fieldsErrors[errorKey];
 
@@ -482,6 +495,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
             onChange={(e) => this.handleChangeSocialsFields(id, e)}
             onBlur={(e) => this.handleBlurValidationSocials(e, id)}
             onInput={(e) => this.handleValidationSocials(e, id)}
+            value={social_url ? social_url : ''}
             placeholder="https://some.ru"
             className={`${errorMessage ? s.inputError : ''}`}
           />
@@ -551,7 +565,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       return;
     }
 
-    this.props.onSubmit(allFields, this.state.setDataForPutStatus);
+    this.props.onSubmit(allFields);
 
     this.setState({
       predefinedFields: this.props.predefinedFields,
@@ -566,6 +580,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
   renderSubmitButton() {
     const { setDataForPutStatus } = this.state;
+    const { submitPutStatus, submitStatus } = this.props;
 
     return (
       <button
@@ -573,13 +588,35 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         disabled={!this.isFormValid()}
         className={s.submitButton}
       >
-        {setDataForPutStatus === 'success'
-          ? 'Обновить данные'
-          : this.props.submitStatus === 'loading'
-            ? <Loader />
-            : 'Получить QR код'}
+        {setDataForPutStatus === 'success' ? (
+          submitPutStatus === 'loading' ? (
+            <Loader />
+          ) : (
+            'Обновить данные'
+          )
+        ) : submitStatus === 'loading' ? (
+          <Loader />
+        ) : (
+          'Получить QR код'
+        )}
       </button>
     );
+  }
+
+  renderUserLinkAfterPutRequest() {
+    const { updatedUserLink } = this.state;
+
+    if (updatedUserLink) {
+      return (
+        <div className={s.successMessage}>
+          <a href={updatedUserLink} target="_blank" rel="noopener noreferrer">
+            Перейти на обновлённую страницу
+          </a>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -630,6 +667,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         )}
 
         {isQrGenerated && <QR value={page_url} edit_code={edit_code}/>}
+        {this.renderUserLinkAfterPutRequest()}
 
         <ToastContainer/>
       </form>

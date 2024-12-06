@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { checkEditCodeTC, getUserDataTC } from '../../redux/actions/personalPageActions/personalPageActions';
 import { RootState } from '../../redux/store';
 import { PersonalPageMethods, PersonalPageProps, RouteParams } from './PersonalPage/PersonalPageTypes';
 import { Dispatch } from 'redux';
 import { PersonalSite } from './PersonalPage/PersonalSite';
 import { useParams } from 'react-router-dom';
+import { checkEditCodeTC, getUserDataTC } from '../../redux/thunks/personalPageThunks/personalPageThunks';
 
 class PersonalPageContainer extends Component<PersonalPageProps> {
   componentDidMount() {

@@ -4,6 +4,7 @@ import {
 	socialsIcons,
 } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 import { ServerPageData } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
+import { CheckUserEditCodeSuccess } from '../personalPageActions/personalPageActionsTypes';
 
 export type FormActions =
 	| SubmitFormStartAction
@@ -14,6 +15,11 @@ export type FormActions =
 	| GetFormDataAttempt
 	| GetFormDataError
   | SetUserDataForPutRequest
+  | CheckUserEditCodeSuccess
+	| SubmitFormPut
+	| SubmitFormPutSuccess
+	| SubmitFormPutError
+	| SetUserDataForPutRequestIdle
 
 export type SubmitFormStartAction = {
 	type: FormActionTypes.SUBMIT_FORM;
@@ -31,6 +37,24 @@ export type SubmitFormSuccessAction = {
 
 export type SubmitFormIdleAction = {
 	type: FormActionTypes.SUBMIT_FORM_IDLE;
+}
+
+export type SubmitFormPut = {
+	type: FormActionTypes.SUBMIT_FORM_PUT;
+}
+
+export type SubmitFormPutSuccess = {
+	type: FormActionTypes.SUBMIT_FORM_PUT_SUCCESS;
+	payload: { success: boolean };
+}
+
+export type SubmitFormPutError = {
+	type: FormActionTypes.SUBMIT_FORM_PUT_ERROR;
+	payload: string;
+}
+
+export type SubmitFormPutResponseStatus = {
+	success: boolean
 }
 
 export type SocialsServer = {
@@ -85,13 +109,17 @@ export type SetUserDataForPutRequestIdle = {
 }
 
 export type ServerDataForPUTRequest = {
-	edit_code: string
+	edit_code?: string | null
 	photo?: string
-	last_name: string
 	first_name: string
+	last_name: string
 	middle_name?: string
 	about?: string | null
 	company?: string | null
 	position?: string | null
 	address?: string | null
+	phones?: { phone_id: number, number: string }[]
+	emails?: { email_id: number; email_address: string }[]
+	websites?: { website_id: number; website_address: string }[]
+	socials?: { social_id: number; social_url: string, social_row_id?: number }[]
 }

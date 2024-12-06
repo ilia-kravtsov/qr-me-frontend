@@ -1,4 +1,4 @@
-import { ServerDataType } from '../../../redux/actions/formActions/formActionsTypes';
+import { ServerDataForPUTRequest, ServerDataType } from '../../../redux/actions/formActions/formActionsTypes';
 import { ServerPageData } from '../../PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'websites';
@@ -19,6 +19,7 @@ export type UserDataFormState = {
 	fieldsErrors: fieldError
 	isQrGenerated: boolean
 	setDataForPutStatus: LoadingStatus
+	updatedUserLink: string
 }
 
 export type socialsIcons = {
@@ -30,6 +31,7 @@ export type socialsIcons = {
 export type socialsLinks = {
 	id: number
 	social_url: string
+	social_row_id?: number
 }
 
 export type Field = {
@@ -58,12 +60,12 @@ export type FormServerData = Omit<FormState, 'socialsIcons'> & {
 };
 
 export type UserDataFormProps = FormState & FormStatus & {
-	onSubmit: (data: FormServerData, setDataForPutStatus: LoadingStatus) => void;
+	onSubmit: (data: FormServerData) => void;
 }
 
 export type FormMethods = {
 	submitFormData: (data: ServerDataType) => void
-	submitFormDataForPUT: (data: ServerDataType) => void
+	submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) => void
 	getSocialsData: () => void
 };
 
@@ -76,8 +78,12 @@ export type FormStatus = {
 	setDataForPutStatus: LoadingStatus
 	socialsStatus: LoadingStatus
 	submitStatus: LoadingStatus
+	submitPutStatus: LoadingStatus
 	getDataError?: null | string
 	submitError?: null | string
+	submitPutError?: null | string
+	userEditCode?: null | string
+	userId?: null | string
 }
 
 export type ServerPOSTSuccessData = {
