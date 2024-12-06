@@ -7,7 +7,10 @@ export const toastPositionConfig: ToastOptions = {
   autoClose: 5000,
 };
 
-export function predefinedFieldsToObjectConverter (data: FormServerData, object: ServerDataForPUTRequest | ServerDataType) {
+export function predefinedFieldsToObjectConverter(
+  data: FormServerData,
+  object: ServerDataForPUTRequest | ServerDataType,
+) {
   data.predefinedFields.forEach((field) => {
     switch (field.label) {
       case 'Имя *':
@@ -36,4 +39,3 @@ export function predefinedFieldsToObjectConverter (data: FormServerData, object:
     }
   });
 }
-

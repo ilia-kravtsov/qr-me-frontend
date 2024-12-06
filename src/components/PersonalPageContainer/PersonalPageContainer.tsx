@@ -20,17 +20,12 @@ class PersonalPageContainer extends Component<PersonalPageProps> {
 
   checkEditCode = (editCode: string) => {
     checkEditCodeTC(this.props.user_id, editCode);
-  }
+  };
 
-  removePageCB = () => {
-
-  }
+  removePageCB = () => {};
 
   render() {
-    return <PersonalSite {...this.props}
-                         checkEditCode={this.checkEditCode}
-                         removePageCB={this.removePageCB}
-    />;
+    return <PersonalSite {...this.props} checkEditCode={this.checkEditCode} removePageCB={this.removePageCB} />;
   }
 }
 
@@ -38,7 +33,7 @@ const mapStateToProps = ({ personalPage }: RootState) => ({ ...personalPage });
 
 const mapDispatchToProps = (dispatch: Dispatch): PersonalPageMethods => ({
   getUserDataTC: (userId: string) => getUserDataTC(userId)(dispatch),
-  checkEditCodeTC: (userId: string, editCode: string) => checkEditCodeTC(userId, editCode)(dispatch)
+  checkEditCodeTC: (userId: string, editCode: string) => checkEditCodeTC(userId, editCode)(dispatch),
 });
 
 const ConnectedPersonalPageContainer = connect(mapStateToProps, mapDispatchToProps)(PersonalPageContainer);

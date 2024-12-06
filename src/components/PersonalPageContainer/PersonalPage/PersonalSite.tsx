@@ -4,19 +4,18 @@ import { PersonalPageProps, PersonalSiteType } from './PersonalPageTypes';
 import { Navigate } from 'react-router-dom';
 
 type PersonalSiteMethods = {
-  checkEditCode: (editCode: string) => void
-  removePageCB: () => void
-}
+  checkEditCode: (editCode: string) => void;
+  removePageCB: () => void;
+};
 
 export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMethods, PersonalSiteType> {
-
   constructor(props: PersonalPageProps & PersonalSiteMethods) {
     super(props);
 
     this.state = {
       isEnterCodeOpen: false,
       editCodeFromUser: '',
-    }
+    };
   }
 
   handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,25 +27,17 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
     this.props.checkEditCode(this.state.editCodeFromUser);
   };
 
-  removePage = () => {
-
-  }
+  removePage = () => {};
 
   editPage = () => {
     this.setState({ isEnterCodeOpen: true });
-  }
+  };
 
   render() {
     const { data, checkUserEditCodeStatus } = this.props;
 
     if (checkUserEditCodeStatus === 'success') {
-      return (
-        <Navigate
-          to="/form"
-          state={{ data }}
-          replace
-        />
-      );
+      return <Navigate to="/form" state={{ data }} replace />;
     }
 
     const { isEnterCodeOpen, editCodeFromUser } = this.state;
@@ -119,19 +110,20 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
         )}
 
         <div>
-          <button type={'button'} onClick={this.removePage}>Удалить страницу</button>
-          <button type={'button'} onClick={this.editPage}>Редактировать страницу</button>
+          <button type={'button'} onClick={this.removePage}>
+            Удалить страницу
+          </button>
+          <button type={'button'} onClick={this.editPage}>
+            Редактировать страницу
+          </button>
         </div>
 
         {isEnterCodeOpen && (
           <div className={s.editModeContainer}>
-            <input
-              type="number"
-              value={editCodeFromUser}
-              onChange={this.handleInputChange}
-              placeholder="Введите код"
-            />
-            <button type="button" onClick={this.confirmEdit}>Подтвердить</button>
+            <input type="number" value={editCodeFromUser} onChange={this.handleInputChange} placeholder="Введите код" />
+            <button type="button" onClick={this.confirmEdit}>
+              Подтвердить
+            </button>
           </div>
         )}
       </div>

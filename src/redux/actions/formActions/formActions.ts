@@ -2,10 +2,18 @@ import { getSocialsData, sendFormData, updateUserData } from '../../../api/api';
 import { Dispatch } from 'redux';
 import {
   GetFormDataAttempt,
-  GetFormDataSuccess, ServerDataForPUTRequest,
-  ServerDataType, SetUserDataForPutRequest, SetUserDataForPutRequestIdle, SetUserId,
+  GetFormDataSuccess,
+  ServerDataForPUTRequest,
+  ServerDataType,
+  SetUserDataForPutRequest,
+  SetUserDataForPutRequestIdle,
+  SetUserId,
   SubmitFormErrorAction,
-  SubmitFormIdleAction, SubmitFormPut, SubmitFormPutError, SubmitFormPutResponseStatus, SubmitFormPutSuccess,
+  SubmitFormIdleAction,
+  SubmitFormPut,
+  SubmitFormPutError,
+  SubmitFormPutResponseStatus,
+  SubmitFormPutSuccess,
   SubmitFormStartAction,
   SubmitFormSuccessAction,
 } from './formActionsTypes';
@@ -40,11 +48,11 @@ export enum FormActionTypes {
   SUBMIT_FORM_PUT_ERROR = 'SUBMIT_FORM_PUT_ERROR',
 }
 
-export const setUserId = (userId: string, editCode: string):SetUserId => ({
+export const setUserId = (userId: string, editCode: string): SetUserId => ({
   type: SetUserDataTypes.SET_USER_ID,
   payload: {
     userId,
-    editCode
+    editCode,
   },
 });
 
@@ -86,10 +94,8 @@ export const submitFormPutError = (errorMessage: string): SubmitFormPutError => 
 
 export const setUserDataForPutRequestIdle = (): SetUserDataForPutRequestIdle => ({
   type: SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST_IDLE,
-})
+});
 export const setUserDataForPutRequest = (data: ServerPageData): SetUserDataForPutRequest => ({
   type: SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST,
-  payload: data
-})
-
-
+  payload: data,
+});

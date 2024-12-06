@@ -2,16 +2,16 @@ import { LoadingStatus } from '../../UserDataFormContainer/UserDataForm/UserData
 
 export type PersonalPageMethods = {
   getUserDataTC: (userId: string) => void;
-  checkEditCodeTC: (userId: string, editCode: string) => void
+  checkEditCodeTC: (userId: string, editCode: string) => void;
 };
 
-export type PersonalPageProps = ServerPageDataType & PersonalPageMethods & RouteParams & StatusType
+export type PersonalPageProps = ServerPageDataType & PersonalPageMethods & RouteParams & StatusType;
 
-export type PersonalPageReducer = ServerPageDataType & StatusType
+export type PersonalPageReducer = ServerPageDataType & StatusType;
 
 export type ServerPageDataType = {
   success: boolean;
-  data: ServerPageData
+  data: ServerPageData;
 };
 
 export type ServerPageData = {
@@ -31,16 +31,16 @@ export type ServerPageData = {
 
 export type PersonalSiteType = {
   isEnterCodeOpen: boolean;
-  editCodeFromUser: string
-}
+  editCodeFromUser: string;
+};
 
 export type RouteParams = {
   user_id: string;
-}
+};
 
 export type StatusType = {
-  getUserDataStatus?: LoadingStatus
-  getUserDataError: string | null
-  checkUserEditCodeStatus: LoadingStatus
-  checkUserEditCodeError: string | null
-}
+  getUserDataStatus?: LoadingStatus;
+  getUserDataError: string | null;
+  checkUserEditCodeStatus: LoadingStatus;
+  checkUserEditCodeError: string | null;
+};

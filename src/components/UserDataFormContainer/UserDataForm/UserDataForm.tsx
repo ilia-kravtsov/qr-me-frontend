@@ -3,7 +3,10 @@ import s from './UserDataForm.module.scss';
 import { v1 } from 'uuid';
 import {
   ArrayFieldType,
-  Field, FieldType, socialsIcons, socialsLinks,
+  Field,
+  FieldType,
+  socialsIcons,
+  socialsLinks,
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
@@ -16,7 +19,6 @@ import { toastPositionConfig } from '../../../utils/utils';
 import { QR } from '../../QR/QR';
 
 class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
-
   constructor(props: UserDataFormProps) {
     super(props);
 
@@ -30,7 +32,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       fieldsErrors: {},
       isQrGenerated: false,
       setDataForPutStatus: this.props.setDataForPutStatus,
-      updatedUserLink: ''
+      updatedUserLink: '',
     };
   }
 
@@ -67,11 +69,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       value: '',
       required: false,
       placeholder:
-        fieldType === 'phones'
-          ? '+7 999 999 99 99'
-          : fieldType === 'emails'
-            ? 'ivanov@mail.ru'
-            : 'https://some.ru',
+        fieldType === 'phones' ? '+7 999 999 99 99' : fieldType === 'emails' ? 'ivanov@mail.ru' : 'https://some.ru',
     };
 
     this.setState((prevState) => ({
@@ -91,9 +89,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     this.setState((prevState) => {
       const fields = prevState[fieldType] as Field[];
 
-      const updatedFields = fields.map((field) =>
-        field.id === id ? { ...field, value } : field
-      );
+      const updatedFields = fields.map((field) => (field.id === id ? { ...field, value } : field));
 
       return { ...prevState, [fieldType]: updatedFields };
     });
@@ -103,7 +99,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     const { value } = e.target;
 
     this.setState((prevState) => {
-      const updatedSocialsLinks = prevState.socialsLinks.map(link => {
+      const updatedSocialsLinks = prevState.socialsLinks.map((link) => {
         if (link.id === socialId) {
           return { ...link, social_url: value };
         }
@@ -112,23 +108,23 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
       return { socialsLinks: updatedSocialsLinks };
     });
-  }
+  };
 
   handleSocialIconClick = (socialId: number) => {
     this.setState((prevState) => {
-      const isSocialExists = prevState.socialsLinks.some(link => link.id === socialId);
+      const isSocialExists = prevState.socialsLinks.some((link) => link.id === socialId);
 
       if (isSocialExists) {
         return {
-          socialsLinks: prevState.socialsLinks.filter(link => link.id !== socialId)
+          socialsLinks: prevState.socialsLinks.filter((link) => link.id !== socialId),
         };
       } else {
         return {
-          socialsLinks: [...prevState.socialsLinks, { id: socialId, social_url: '' }]
+          socialsLinks: [...prevState.socialsLinks, { id: socialId, social_url: '' }],
         };
       }
     });
-  }
+  };
 
   handleValidation = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, label: string) => {
     const input = e.target as HTMLInputElement;
@@ -211,15 +207,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       case 'Website': {
         const urlPattern = /^(https?:\/\/)/;
 
-        if (
-          processedValue.startsWith('http://') ||
-          processedValue.startsWith('https://')
-        ) {
+        if (processedValue.startsWith('http://') || processedValue.startsWith('https://')) {
           errorMessage = '';
-        } else if (
-          processedValue.length > 7 &&
-          !urlPattern.test(processedValue)
-        ) {
+        } else if (processedValue.length > 7 && !urlPattern.test(processedValue)) {
           errorMessage = 'Формат URL: http://, https://';
         }
         break;
@@ -253,7 +243,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
             const domainPattern = /^[a-zA-Z0-9-]{2,}\.[a-zA-Z]{2,}$/;
 
             if (!domainPattern.test(afterAt)) {
-              errorMessage = 'После "@" должен быть домен с точкой и хотя бы двумя символами после точки, например "domain.com".';
+              errorMessage =
+                'После "@" должен быть домен с точкой и хотя бы двумя символами после точки, например "domain.com".';
             }
           } else {
             errorMessage = 'Введите корректный email с символом "@"';
@@ -264,10 +255,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
       case 'Website': {
         if (processedValue.length) {
-          if (
-            processedValue.startsWith('http://') ||
-            processedValue.startsWith('https://')
-          ) {
+          if (processedValue.startsWith('http://') || processedValue.startsWith('https://')) {
             errorMessage = '';
           } else {
             errorMessage = 'Формат ссылки: http://, https://';
@@ -360,24 +348,11 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           </button>
         )}
         {fields.map(
-          ({
-             id,
-             label,
-             type = 'text',
-             value,
-             required = false,
-             placeholder = '',
-             minLength = 2,
-             pattern,
-             title,
-           }) => {
-            const inputClassName = `${s.input} ${
-              this.state.fieldsErrors[id] ? s.inputError : ''
-            }`;
+          ({ id, label, type = 'text', value, required = false, placeholder = '', minLength = 2, pattern, title }) => {
+            const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
             const maxLength = 200;
-            const handleInputChange = (
-              e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => this.handleChangeFieldValue(fieldType, id, e.target.value);
+            const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+              this.handleChangeFieldValue(fieldType, id, e.target.value);
 
             const renderInput = () => {
               if (label === 'Описание' || label === 'Адрес') {
@@ -408,13 +383,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                     onChange={handleInputChange}
                   >
                     {(inputProps) => (
-                      <input
-                        {...inputProps}
-                        id={id}
-                        type="tel"
-                        placeholder={placeholder}
-                        required={required}
-                      />
+                      <input {...inputProps} id={id} type="tel" placeholder={placeholder} required={required} />
                     )}
                   </InputMask>
                 );
@@ -461,7 +430,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                 )}
               </div>
             );
-          }
+          },
         )}
       </div>
     );
@@ -507,8 +476,10 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
   isFormValid = () => {
     const { fieldsErrors } = this.state;
-    const hasNoErrors = Object.values(fieldsErrors).every(error => error === '');
-    const hasNoEmptyRequiredFields = this.state.predefinedFields.every(field => !field.required || field.value?.trim());
+    const hasNoErrors = Object.values(fieldsErrors).every((error) => error === '');
+    const hasNoEmptyRequiredFields = this.state.predefinedFields.every(
+      (field) => !field.required || field.value?.trim(),
+    );
     return hasNoErrors && hasNoEmptyRequiredFields;
   };
 
@@ -531,22 +502,22 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         ...this.state.websites,
       ];
 
-      const values = combinedFields.map(field => field.value);
-      const socialUrls = this.state.socialsLinks.map(social => social.social_url);
+      const values = combinedFields.map((field) => field.value);
+      const socialUrls = this.state.socialsLinks.map((social) => social.social_url);
       const allValues = [...values, ...socialUrls];
 
-      const filteredValues = allValues.filter(value => value && value.trim() !== '');
+      const filteredValues = allValues.filter((value) => value && value.trim() !== '');
       const uniqueValues = new Set(filteredValues);
       if (filteredValues.length !== uniqueValues.size) {
         const duplicates = filteredValues.filter((value, index, arr) => arr.indexOf(value) !== index);
 
         if (duplicates.length > 0) {
-          const updatedDuplicates = Array.from(new Set(duplicates)).map(value => `\n${value}`);
+          const updatedDuplicates = Array.from(new Set(duplicates)).map((value) => `\n${value}`);
 
           toast.error(`Дублирующиеся значения: ${updatedDuplicates}`, {
             position: 'bottom-left',
             autoClose: 5000,
-            className: `${s.toastError}`
+            className: `${s.toastError}`,
           });
         }
 
@@ -583,11 +554,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     const { submitPutStatus, submitStatus } = this.props;
 
     return (
-      <button
-        type="submit"
-        disabled={!this.isFormValid()}
-        className={s.submitButton}
-      >
+      <button type="submit" disabled={!this.isFormValid()} className={s.submitButton}>
         {setDataForPutStatus === 'success' ? (
           submitPutStatus === 'loading' ? (
             <Loader />
@@ -626,11 +593,11 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     let edit_code: string;
 
     if (submitSuccessData) {
-      page_url = submitSuccessData.page_url
-      edit_code = submitSuccessData.edit_code
+      page_url = submitSuccessData.page_url;
+      edit_code = submitSuccessData.edit_code;
     } else {
-      page_url = 'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611'
-      edit_code = ''
+      page_url = 'https://trello.com/b/4h2Ekh1t/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0-4-sprint-1-1311-2611';
+      edit_code = '';
     }
 
     return (
@@ -666,10 +633,10 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
           <div className={s.formError}>Пожалуйста, убедитесь, что все значения уникальны.</div>
         )}
 
-        {isQrGenerated && <QR value={page_url} edit_code={edit_code}/>}
+        {isQrGenerated && <QR value={page_url} edit_code={edit_code} />}
         {this.renderUserLinkAfterPutRequest()}
 
-        <ToastContainer/>
+        <ToastContainer />
       </form>
     );
   }

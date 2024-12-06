@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { ServerDataForPUTRequest, ServerDataType } from '../redux/actions/formActions/formActionsTypes';
-import {
-  ServerResponse,
-  socialsIcons,
-} from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
+import { ServerResponse, socialsIcons } from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 
 const api = axios.create({
   baseURL: 'https://example.com/api',
@@ -24,7 +21,7 @@ export const getUserData = async (userId: string) => {
   return response.data;
 };
 
-export const checkEditCode = async (userId: string, editCode: string): Promise<{success: boolean}> => {
+export const checkEditCode = async (userId: string, editCode: string): Promise<{ success: boolean }> => {
   const response = await api.post('/users/edit-check', { user_id: userId, edit_code: editCode });
   return response.data;
 };

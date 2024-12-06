@@ -6,7 +6,7 @@ import { PersonalPageReducer } from '../../../components/PersonalPageContainer/P
 import { CheckUserEditCodeTypes, UserActionTypes } from '../../actions/personalPageActions/personalPageActions';
 import { SetUserId } from '../../actions/formActions/formActionsTypes';
 
-type Actions = GetUserDataActions | SetUserId | CheckUserEditCodeGeneral
+type Actions = GetUserDataActions | SetUserId | CheckUserEditCodeGeneral;
 
 const initialState: PersonalPageReducer = {
   success: false,
@@ -18,10 +18,10 @@ const initialState: PersonalPageReducer = {
     address: 'Lenina street 14',
     position: 'teamlead',
     company: 'ООО Гугл',
-    websites: [{website_id: 5, website_address: 'https://www.google.com'}],
-    phones: [{phone_id: 1, number: '+78888888888'}],
-    emails: [{email_id: 2, email_address: 'ivanov@mail.com'}],
-    socials: [{social_id: 3, social_row_id: 4, social_url: 'https://www.facebook.com'}],
+    websites: [{ website_id: 5, website_address: 'https://www.google.com' }],
+    phones: [{ phone_id: 1, number: '+78888888888' }],
+    emails: [{ email_id: 2, email_address: 'ivanov@mail.com' }],
+    socials: [{ social_id: 3, social_row_id: 4, social_url: 'https://www.facebook.com' }],
   },
   getUserDataStatus: 'idle',
   getUserDataError: null,
@@ -60,7 +60,7 @@ export const personalPageReducer = (state = initialState, action: Actions): Pers
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE:
       return { ...state, checkUserEditCodeStatus: 'loading', checkUserEditCodeError: null };
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS:
-      return { ...state, checkUserEditCodeStatus: 'success', checkUserEditCodeError: null};
+      return { ...state, checkUserEditCodeStatus: 'success', checkUserEditCodeError: null };
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR:
       return { ...state, checkUserEditCodeStatus: 'error', checkUserEditCodeError: action.payload.errorMessage };
     default:

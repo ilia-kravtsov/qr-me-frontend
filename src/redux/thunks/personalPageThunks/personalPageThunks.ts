@@ -3,7 +3,10 @@ import { checkEditCode, getUserData } from '../../../api/api';
 import {
   checkUserEditCode,
   checkUserEditCodeError,
-  checkUserEditCodeSuccess, getUserDataAttempt, getUserDataError, getUserDataSuccess,
+  checkUserEditCodeSuccess,
+  getUserDataAttempt,
+  getUserDataError,
+  getUserDataSuccess,
 } from '../../actions/personalPageActions/personalPageActions';
 import { ServerPageDataType } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
@@ -14,13 +17,13 @@ export const checkEditCodeTC = (userId: string, editCode: string) => async (disp
     if (checkStatus.success) {
       dispatch(checkUserEditCodeSuccess(userId, editCode));
     } else {
-      dispatch(checkUserEditCodeError('Не верный код'))
+      dispatch(checkUserEditCodeError('Не верный код'));
     }
   } catch (error: any) {
     dispatch(checkUserEditCodeError(error.message));
-    console.error("Ошибка при получении данных пользователя:", error);
+    console.error('Ошибка при получении данных пользователя:', error);
   }
-}
+};
 
 export const getUserDataTC = (userId: string) => async (dispatch: Dispatch) => {
   dispatch(getUserDataAttempt());
@@ -29,6 +32,6 @@ export const getUserDataTC = (userId: string) => async (dispatch: Dispatch) => {
     dispatch(getUserDataSuccess(userData));
   } catch (error: any) {
     dispatch(getUserDataError(error.message));
-    console.error("Ошибка при получении данных пользователя:", error);
+    console.error('Ошибка при получении данных пользователя:', error);
   }
 };

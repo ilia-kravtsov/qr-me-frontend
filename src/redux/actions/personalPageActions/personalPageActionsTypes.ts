@@ -3,43 +3,37 @@ import { ServerPageDataType } from '../../../components/PersonalPageContainer/Pe
 
 export type GetUserDataAttemptAction = {
   type: UserActionTypes.GET_USER_DATA;
-}
+};
 
 export type GetUserDataSuccessAction = {
   type: UserActionTypes.GET_USER_DATA_SUCCESS;
   payload: ServerPageDataType;
-}
+};
 
 export type GetUserDataErrorAction = {
   type: UserActionTypes.GET_USER_DATA_ERROR;
   payload: string;
-}
+};
 
-export type GetUserDataActions =
-  | GetUserDataAttemptAction
-  | GetUserDataSuccessAction
-  | GetUserDataErrorAction;
+export type GetUserDataActions = GetUserDataAttemptAction | GetUserDataSuccessAction | GetUserDataErrorAction;
 
 export type CheckUserEditCode = {
-  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE
-}
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE;
+};
 
 export type CheckUserEditCodeSuccess = {
-  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS;
   payload: {
-    userId: string
-    editCode: string
-  }
-}
+    userId: string;
+    editCode: string;
+  };
+};
 
 export type CheckUserEditCodeError = {
-  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR,
+  type: CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR;
   payload: {
-    errorMessage: string
-  }
-}
+    errorMessage: string;
+  };
+};
 
-export type CheckUserEditCodeGeneral =
-  | CheckUserEditCode
-  | CheckUserEditCodeSuccess
-  | CheckUserEditCodeError;
+export type CheckUserEditCodeGeneral = CheckUserEditCode | CheckUserEditCodeSuccess | CheckUserEditCodeError;

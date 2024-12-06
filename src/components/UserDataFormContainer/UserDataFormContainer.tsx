@@ -40,9 +40,7 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
   }
 
   handleSubmit = (data: FormServerData) => {
-
     if (this.props.setDataForPutStatus === 'success') {
-
       const prepareDataToPUTRequest: ServerDataForPUTRequest = {
         edit_code: this.props.userEditCode,
         first_name: '',
@@ -51,38 +49,33 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
         emails: [],
         websites: [],
         socials: [],
-      }
+      };
 
-      predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest)
+      predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest);
 
-      prepareDataToPUTRequest.phones =
-        data.phones.map((phone) => ({
-          phone_id: Number(phone.id),
-          number: phone.value,
-        }));
+      prepareDataToPUTRequest.phones = data.phones.map((phone) => ({
+        phone_id: Number(phone.id),
+        number: phone.value,
+      }));
 
-      prepareDataToPUTRequest.emails =
-        data.emails.map((email) => ({
-          email_id: Number(email.id),
-          email_address: email.value,
-        }));
+      prepareDataToPUTRequest.emails = data.emails.map((email) => ({
+        email_id: Number(email.id),
+        email_address: email.value,
+      }));
 
-      prepareDataToPUTRequest.websites =
-        data.websites.map((website) => ({
-          website_id: Number(website.id),
-          website_address: website.value,
-        }));
+      prepareDataToPUTRequest.websites = data.websites.map((website) => ({
+        website_id: Number(website.id),
+        website_address: website.value,
+      }));
 
-      prepareDataToPUTRequest.socials =
-        data.socials.map((social) => ({
-          social_id: social.id,
-          social_url: social.social_url,
-          social_row_id: social.social_row_id,
-        }));
+      prepareDataToPUTRequest.socials = data.socials.map((social) => ({
+        social_id: social.id,
+        social_url: social.social_url,
+        social_row_id: social.social_row_id,
+      }));
 
       console.log('Prepared data for PUT request:', prepareDataToPUTRequest);
       this.props.submitFormDataForPUT(prepareDataToPUTRequest, this.props.userId);
-
     } else {
       const prepareDataToPOSTRequest: ServerDataType = {
         first_name: '',
@@ -93,13 +86,13 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
         socials:
           data.socials.length > 0
             ? data.socials.map((field) => ({
-              social_id: field.id,
-              social_url: field.social_url,
-            }))
+                social_id: field.id,
+                social_url: field.social_url,
+              }))
             : null,
       };
 
-      predefinedFieldsToObjectConverter(data, prepareDataToPOSTRequest)
+      predefinedFieldsToObjectConverter(data, prepareDataToPOSTRequest);
       console.log('Prepared data for server:', prepareDataToPOSTRequest);
       this.props.submitFormData(prepareDataToPOSTRequest);
     }
@@ -114,7 +107,8 @@ const mapStateToProps = ({ form }: RootState): FormReducerType => ({ ...form });
 
 const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
   submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
-  submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) => putSubmitFormData(data, userId)(dispatch),
+  submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) =>
+    putSubmitFormData(data, userId)(dispatch),
   getSocialsData: () => getSocials()(dispatch),
 });
 

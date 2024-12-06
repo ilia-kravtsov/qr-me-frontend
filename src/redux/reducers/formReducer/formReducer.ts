@@ -237,7 +237,7 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
     case FormActionTypes.SUBMIT_FORM_PUT_SUCCESS:
       return { ...state, submitPutStatus: 'success' };
     case FormActionTypes.SUBMIT_FORM_PUT_ERROR:
-      return { ...state, submitPutStatus: 'error', submitPutError: action.payload};
+      return { ...state, submitPutStatus: 'error', submitPutError: action.payload };
     default:
       return state;
   }
