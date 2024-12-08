@@ -118,8 +118,8 @@ export type ServerDataForPUTRequest = {
   company?: string | null;
   position?: string | null;
   address?: string | null;
-  phones?: { phone_id: number; number: string }[];
-  emails?: { email_id: number; email_address: string }[];
-  websites?: { website_id: number; website_address: string }[];
-  socials?: { social_id: number; social_url: string; social_row_id?: number }[];
+  phones?: { phone_id: number; number: string }[] | null;
+  emails?: { email_id: number; email_address: string }[] | null;
+  websites?: { website_id: number; website_address: string }[] | null;
+  socials?: { social_id: number; social_url: string; social_row_id?: number }[] | null;
 };
