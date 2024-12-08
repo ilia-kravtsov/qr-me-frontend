@@ -1,15 +1,10 @@
-import { getSocialsData, sendFormData, updateUserData } from '../../../api/api';
-import { Dispatch } from 'redux';
 import {
   GetFormDataAttempt,
   GetFormDataSuccess,
-  ServerDataForPUTRequest,
-  ServerDataType,
   SetUserDataForPutRequest,
   SetUserDataForPutRequestIdle,
   SetUserId,
   SubmitFormErrorAction,
-  SubmitFormIdleAction,
   SubmitFormPut,
   SubmitFormPutError,
   SubmitFormPutResponseStatus,
@@ -19,11 +14,8 @@ import {
 } from './formActionsTypes';
 import {
   ServerPOSTSuccessData,
-  ServerResponse,
   socialsIcons,
 } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
-import { handleError, handleUnknownError } from '../utils/utils';
-import { RootState } from '../../store';
 import { ServerPageData } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 export enum FormActionTypes {
