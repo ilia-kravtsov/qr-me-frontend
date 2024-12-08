@@ -53,26 +53,34 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 
       predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest);
 
-      prepareDataToPUTRequest.phones = data.phones.map((phone) => ({
-        phone_id: Number(phone.id),
-        number: phone.value,
-      }));
+      prepareDataToPUTRequest.phones = data.phones.length > 0
+        ? data.phones.map((phone) => ({
+          phone_id: Number(phone.id),
+          number: phone.value,
+        }))
+        : null;
 
-      prepareDataToPUTRequest.emails = data.emails.map((email) => ({
-        email_id: Number(email.id),
-        email_address: email.value,
-      }));
+      prepareDataToPUTRequest.emails = data.emails.length > 0
+        ? data.emails.map((email) => ({
+          email_id: Number(email.id),
+          email_address: email.value,
+        }))
+        : null;
 
-      prepareDataToPUTRequest.websites = data.websites.map((website) => ({
-        website_id: Number(website.id),
-        website_address: website.value,
-      }));
+      prepareDataToPUTRequest.websites = data.websites.length > 0
+        ? data.websites.map((website) => ({
+          website_id: Number(website.id),
+          website_address: website.value,
+        }))
+        : null;
 
-      prepareDataToPUTRequest.socials = data.socials.map((social) => ({
-        social_id: social.id,
-        social_url: social.social_url,
-        social_row_id: social.social_row_id,
-      }));
+      prepareDataToPUTRequest.socials = data.socials.length > 0
+        ? data.socials.map((social) => ({
+          social_id: social.id,
+          social_url: social.social_url,
+          social_row_id: social.social_row_id,
+        }))
+        : null;
 
       console.log('Prepared data for PUT request:', prepareDataToPUTRequest);
       this.props.submitFormDataForPUT(prepareDataToPUTRequest, this.props.userId);
