@@ -134,6 +134,7 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
     case FormActionTypes.SUBMIT_FORM_SUCCESS:
       return {
         ...state,
+        submitError: null,
         submitStatus: 'success',
         submitSuccessData: { ...state.submitSuccessData, ...action.payload },
       };
