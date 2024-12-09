@@ -166,11 +166,22 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         break;
       }
 
-      case 'Телефон': {
-        const phonePattern = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
-        if (!phonePattern.test(processedValue)) {
-          errorMessage = 'Формат: +7 (999) 999-99-99.';
+      case 'Phone': {
+        const textPattern = /[A-Za-zА-Яа-яЁё]/g;
+        const phonePattern = /^(?:\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
+        const invalidCharacters = processedValue.match(textPattern);
+        processedValue = processedValue.replace(textPattern, '');
+
+        if (processedValue === '') {
+          errorMessage = '';
+        } else if (invalidCharacters) {
+          errorMessage = 'Вводите только цифры';
+        } else if (!phonePattern.test(processedValue) && processedValue.length === 18) {
+          errorMessage = 'Формат: +7 (999) 999-99-99 или 8 (999) 999-99-99.';
+        } else {
+          errorMessage = '';
         }
+
         break;
       }
 
@@ -266,13 +277,21 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
       }
 
       case 'Phone': {
-        const phonePattern = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
+        const textPattern = /[A-Za-zА-Яа-яЁё]/g;
+        const phonePattern = /^(?:\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
+        const invalidCharacters = processedValue.match(textPattern);
+        processedValue = processedValue.replace(textPattern, '');
 
-        if (processedValue.length) {
-          if (!phonePattern.test(processedValue)) {
-            errorMessage = 'Формат: +7 (999) 999-99-99.';
-          }
+        if (processedValue === '') {
+          errorMessage = '';
+        } else if (invalidCharacters) {
+          errorMessage = 'Вводите только цифры и символы +, (, ), -, пробел.';
+        } else if (!phonePattern.test(processedValue)) {
+          errorMessage = 'Формат: +7 (999) 999-99-99 или 8 (999) 999-99-99.';
+        } else {
+          errorMessage = '';
         }
+
         break;
       }
 
