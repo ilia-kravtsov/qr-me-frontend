@@ -10,7 +10,7 @@ import {
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
-import ReactInputMask from 'react-input-mask';
+import  ReactInputMask from 'react-input-mask';
 import { Loader } from '../../Loader/Loader';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
@@ -133,8 +133,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     let processedValue = input.value;
 
     switch (label) {
-      case 'Имя *':
-      case 'Фамилия *':
+      case 'Имя':
+      case 'Фамилия':
       case 'Отчество':
       case 'Должность': {
         const textPattern = /[^A-Za-zА-Яа-яЁё\-]/g;
@@ -623,20 +623,23 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
     return (
       <form onSubmit={this.handleSubmit} className={s.userDataForm} noValidate>
-        <fieldset className={s.predefinedFields}>{this.renderFields(predefinedFields, 'predefinedFields')}</fieldset>
-
         <fieldset className={s.predefinedFields}>
+          <legend>Основная информация</legend>
+          {this.renderFields(predefinedFields, 'predefinedFields')}
+        </fieldset>
+
+        <fieldset className={s.shortAdditionalFields}>
           <legend>Телефоны:</legend>
           {this.renderFields(phones, 'phones')}
         </fieldset>
 
-        <fieldset className={s.predefinedFields}>
-          <legend>Электронная почта:</legend>
+        <fieldset className={s.shortAdditionalFields}>
+          <legend>Электронные почты</legend>
           {this.renderFields(emails, 'emails')}
         </fieldset>
 
-        <fieldset className={s.predefinedFields}>
-          <legend>Сайты:</legend>
+        <fieldset className={s.shortAdditionalFields}>
+          <legend>Веб-сайт</legend>
           {this.renderFields(websites, 'websites')}
         </fieldset>
 

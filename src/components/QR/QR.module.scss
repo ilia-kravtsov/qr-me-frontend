@@ -6,11 +6,21 @@
   padding-top: 60px;
 
   .canvas {
-    box-shadow: 0 0 40px #61dafb;
-    border-radius: 10px;
+    border-radius: 38px;
   }
 
   .buttonsContainer {
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: bold;
+    font-family: var(--primary-font-family);
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 180px;
+    position: relative;
+    right: -380px;
+    top: -315px;
   }
 
   .downloadLink {
@@ -20,17 +30,19 @@
   .downloadButton {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #000;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: bold;
+    font-family: var(--primary-font-family);
   }
 
   .pageLink {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #000;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -40,4 +52,41 @@
 }
 
 .editCode {
+}
+
+.buttonEditCode{
+  cursor: pointer;
+  font-family: var(--primary-font-family);
+  width: 380px;
+  height: 80px;
+  border: 5px solid var(--accent-color);
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: var(--primary-font-color);
+  background: none;
+  position: relative;
+  top: -300px;
+  right: 10px;
+}
+.imgQRs{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+}
+
+.imgQRs1{
+  top: -5px;
+  left: -60px;
+}
+
+.imgQRs2{
+  top: 92px;
+  left: -60px;
+}
+
+.imgQRs3{
+  bottom: 2px;
+  left: -60px;
 }
