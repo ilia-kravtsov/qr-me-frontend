@@ -30,7 +30,7 @@
       }
 
       .errorPredefined {
-        color: brown;
+        color: red;
         font-size: 12px;
         position: absolute;
         top: 24px;
@@ -38,7 +38,7 @@
       }
 
       .errorContact {
-        color: brown;
+        color: red;
         font-size: 12px;
         position: absolute;
         top: 50px;
@@ -46,7 +46,7 @@
       }
 
       .inputError {
-        outline: 3px solid brown;
+        border: 3px solid red;
       }
     }
 
@@ -99,16 +99,15 @@
       position: relative;
 
       .errorSocial {
-        inline-size: 400px;
-        color: brown;
-        font-size: 14px;
+        color: red;
+        font-size: 16px;
         position: absolute;
-        top: 28px;
-        left: -2px;
+        top: 70px;
+        left: 150px;
       }
 
       .inputError {
-        outline: 3px solid brown;
+        border: 3px solid red;
       }
     }
 
@@ -124,6 +123,7 @@
       flex-direction: column;
       gap: 20px;
 
+
       input {
         background-color: transparent;
         color: var(--primary-font-color);
@@ -134,6 +134,7 @@
         height: 36px;
         padding: 10px;
         margin-left: 140px;
+        margin-bottom: 30px;
       }
     }
 
@@ -209,6 +210,7 @@ legend{
     .fieldLabel {
       font-size: 32px;
       width: 480px;
+      margin-bottom: 25px;
     }
 
     .description {
@@ -221,7 +223,7 @@ legend{
     }
 
     .errorPredefined {
-      color: brown;
+      color: red;
       font-size: 12px;
       position: absolute;
       top: 24px;
@@ -229,15 +231,15 @@ legend{
     }
 
     .errorContact {
-      color: brown;
-      font-size: 12px;
+      color: red;
+      font-size: 16px;
       position: absolute;
-      top: 50px;
-      left: 178px;
+      top: 70px;
+      left: 500px;
     }
 
     .inputError {
-      outline: 3px solid brown;
+      border: 3px solid red;
     }
   }
 
@@ -291,5 +293,6 @@ legend{
     height: 36px;
     padding: 10px;
     margin-left: -140px;
+    margin-bottom: 30px;
   }
 }
