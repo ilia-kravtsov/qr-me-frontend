@@ -10,7 +10,7 @@ import {
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
-/// import  ReactInputMask from 'react-input-mask';
+import  ReactInputMask from 'react-input-mask';
 import { Loader } from '../../Loader/Loader';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
@@ -392,23 +392,23 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                 );
               }
 
-              // if (type === 'tel') {
-              //   const InputMaskComponent = ReactInputMask as unknown as React.FC<any>;
+              if (type === 'tel') {
+                const InputMaskComponent = ReactInputMask as unknown as React.FC<any>;
 
-              //   return (
-              //     <InputMaskComponent
-              //       mask="+7 (999) 999-99-99"
-              //       value={value}
-              //       onBlur={(e: FormEvent<HTMLInputElement>) => this.handleBlurValidation(e, label)}
-              //       onInput={(e: FormEvent<HTMLInputElement>) => this.handleValidation(e, label)}
-              //       onChange={handleInputChange}
-              //     >
-              //       {(inputProps: any) => (
-              //         <input {...inputProps} id={id} type="tel" placeholder={placeholder} required={required} />
-              //       )}
-              //     </InputMaskComponent>
-              //   );
-              // }
+                return (
+                  <InputMaskComponent
+                    mask="+7 (999) 999-99-99"
+                    value={value}
+                    onBlur={(e: FormEvent<HTMLInputElement>) => this.handleBlurValidation(e, label)}
+                    onInput={(e: FormEvent<HTMLInputElement>) => this.handleValidation(e, label)}
+                    onChange={handleInputChange}
+                  >
+                    {(inputProps: any) => (
+                      <input {...inputProps} id={id} type="tel" placeholder={placeholder} required={required} />
+                    )}
+                  </InputMaskComponent>
+                );
+              }
 
               return (
                 <input
