@@ -22,6 +22,7 @@ import { handleError, handleUnknownError } from '../../actions/utils/utils';
 export const setUserDataForPutRequestTC = (data: ServerPageData) => (dispatch: Dispatch) => {
   dispatch(setUserDataForPutRequest(data));
 };
+
 export const getSocials = () => async (dispatch: Dispatch) => {
   dispatch(getFormData());
   try {
@@ -32,6 +33,7 @@ export const getSocials = () => async (dispatch: Dispatch) => {
     console.error('Failed to fetch socials data:', error);
   }
 };
+
 export const putSubmitFormData =
   (data: ServerDataForPUTRequest, userId: string | null | undefined) => async (dispatch: Dispatch) => {
     dispatch(submitFormPut());
@@ -49,6 +51,7 @@ export const putSubmitFormData =
       console.log('There is no userId: ', userId);
     }
   };
+
 // export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
 //   dispatch(submitFormAttempt());
 //

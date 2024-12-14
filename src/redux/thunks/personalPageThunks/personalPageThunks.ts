@@ -11,6 +11,7 @@ import {
 import { ServerPageDataType } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 export const checkEditCodeTC = (userId: string, editCode: string) => async (dispatch: Dispatch) => {
+  debugger
   dispatch(checkUserEditCode());
   try {
     const checkStatus = await checkEditCode(userId, editCode);
@@ -26,6 +27,7 @@ export const checkEditCodeTC = (userId: string, editCode: string) => async (disp
 };
 
 export const getUserDataTC = (userId: string) => async (dispatch: Dispatch) => {
+  debugger
   dispatch(getUserDataAttempt());
   try {
     const userData: ServerPageDataType = await getUserData(userId);

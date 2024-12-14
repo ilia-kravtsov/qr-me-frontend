@@ -2,6 +2,9 @@ import { ChangeEvent, Component } from 'react';
 import s from './PersonalPage.module.scss';
 import { PersonalPageProps, PersonalSiteType } from './PersonalPageTypes';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { toastPositionConfig } from '../../../utils/utils';
+import { Loader } from '../../Loader/Loader';
 
 type PersonalSiteMethods = {
   checkEditCode: (editCode: string) => void;
@@ -23,15 +26,32 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
   };
 
   confirmEdit = () => {
-    this.setState({ isEnterCodeOpen: false });
     this.props.checkEditCode(this.state.editCodeFromUser);
+    this.setState({ editCodeFromUser: '' });
   };
-
-  removePage = () => {};
 
   editPage = () => {
     this.setState({ isEnterCodeOpen: true });
   };
+
+  componentDidUpdate(prevProps: PersonalPageProps) {
+    const { checkUserEditCodeStatus, checkUserEditCodeError } = this.props;
+
+    if (prevProps.checkUserEditCodeStatus !== 'error' && checkUserEditCodeStatus === 'error') {
+      toast.error(checkUserEditCodeError || 'Ошибка при проверке кода. Попробуйте снова.', toastPositionConfig);
+    }
+
+    if (prevProps.checkUserEditCodeStatus !== 'success' && checkUserEditCodeStatus === 'success') {
+      toast.success('Код успешно проверен. Страница доступна для редактирования.', toastPositionConfig);
+    }
+
+    if (
+      prevProps.checkUserEditCodeStatus === 'loading' &&
+      (checkUserEditCodeStatus === 'success' || checkUserEditCodeStatus === 'error')
+    ) {
+      this.setState({ isEnterCodeOpen: false, editCodeFromUser: '' });
+    }
+  }
 
   render() {
     const { data, checkUserEditCodeStatus } = this.props;
@@ -110,9 +130,6 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
         )}
 
         <div>
-          <button type={'button'} onClick={this.removePage}>
-            Удалить страницу
-          </button>
           <button type={'button'} onClick={this.editPage}>
             Редактировать страницу
           </button>
@@ -120,10 +137,21 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
 
         {isEnterCodeOpen && (
           <div className={s.editModeContainer}>
-            <input type="number" value={editCodeFromUser} onChange={this.handleInputChange} placeholder="Введите код" />
-            <button type="button" onClick={this.confirmEdit}>
-              Подтвердить
-            </button>
+            {checkUserEditCodeStatus === 'loading' ? (
+              <Loader />
+            ) : (
+              <div>
+                <input
+                  type="number"
+                  value={editCodeFromUser}
+                  onChange={this.handleInputChange}
+                  placeholder="Введите код"
+                />
+                <button type="button" onClick={this.confirmEdit}>
+                  Подтвердить
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

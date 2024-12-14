@@ -1,5 +1,6 @@
 import { ServerDataForPUTRequest, ServerDataType } from '../../../redux/actions/formActions/formActionsTypes';
 import { ServerPageData } from '../../PersonalPageContainer/PersonalPage/PersonalPageTypes';
+import { setUserDataForPutRequestTC } from '../../../redux/thunks/formThunks/formThunks';
 
 export type FieldType = 'predefinedFields' | 'phones' | 'emails' | 'websites';
 export type LoadingStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -67,6 +68,7 @@ export type UserDataFormProps = FormState &
 export type FormMethods = {
   submitFormData: (data: ServerDataType) => void;
   submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) => void;
+  setUserDataForPutRequestTC: (data: ServerPageData) => void;
   getSocialsData: () => void;
 };
 
