@@ -19,7 +19,7 @@ class PersonalPageContainer extends Component<PersonalPageProps> {
   }
 
   checkEditCode = (editCode: string) => {
-    checkEditCodeTC(this.props.user_id, editCode);
+    this.props.checkEditCodeTC(this.props.user_id, editCode);
   };
 
   removePageCB = () => {};

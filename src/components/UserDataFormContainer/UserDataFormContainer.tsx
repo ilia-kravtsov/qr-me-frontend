@@ -18,6 +18,7 @@ import {
   submitFormData,
 } from '../../redux/thunks/formThunks/formThunks';
 import { predefinedFieldsToObjectConverter } from '../../utils/utils';
+import { ServerPageData } from '../PersonalPageContainer/PersonalPage/PersonalPageTypes';
 
 const withLocation = (WrappedComponent: ComponentType<any>) => {
   return (props: any) => {
@@ -33,7 +34,7 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
 
     if (locationState?.data) {
       console.log('Received data from location:', locationState.data);
-      setUserDataForPutRequestTC(locationState.data);
+      this.props.setUserDataForPutRequestTC(locationState.data);
     }
 
     getSocialsData();
@@ -117,6 +118,7 @@ const mapDispatchToProps = (dispatch: Dispatch): FormMethods => ({
   submitFormData: (data: ServerDataType) => submitFormData(data)(dispatch),
   submitFormDataForPUT: (data: ServerDataForPUTRequest, userId: string | null | undefined) =>
     putSubmitFormData(data, userId)(dispatch),
+  setUserDataForPutRequestTC: (data: ServerPageData) => setUserDataForPutRequestTC(data)(dispatch),
   getSocialsData: () => getSocials()(dispatch),
 });
 

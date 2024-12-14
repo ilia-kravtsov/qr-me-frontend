@@ -133,8 +133,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     let processedValue = input.value;
 
     switch (label) {
-      case 'Имя':
-      case 'Фамилия':
+      case 'Имя *':
+      case 'Фамилия *':
       case 'Отчество':
       case 'Должность': {
         const textPattern = /[^A-Za-zА-Яа-яЁё\-]/g;
