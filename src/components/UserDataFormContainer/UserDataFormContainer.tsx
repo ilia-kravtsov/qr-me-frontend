@@ -19,6 +19,7 @@ import {
 } from '../../redux/thunks/formThunks/formThunks';
 import { predefinedFieldsToObjectConverter } from '../../utils/utils';
 import { ServerPageData } from '../PersonalPageContainer/PersonalPage/PersonalPageTypes';
+import { Loader } from '../Loader/Loader';
 
 const withLocation = (WrappedComponent: ComponentType<any>) => {
   return (props: any) => {
@@ -51,7 +52,6 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
         websites: [],
         socials: [],
       };
-
       predefinedFieldsToObjectConverter(data, prepareDataToPUTRequest);
 
       prepareDataToPUTRequest.phones = data.phones.length > 0
@@ -84,6 +84,7 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
         : null;
 
       console.log('Prepared data for PUT request:', prepareDataToPUTRequest);
+      console.log('this.props.userId ', this.props.userId);
       this.props.submitFormDataForPUT(prepareDataToPUTRequest, this.props.userId);
     } else {
       const prepareDataToPOSTRequest: ServerDataType = {
@@ -108,6 +109,12 @@ class UserDataFormContainer extends Component<UserDataFormContainerProps> {
   };
 
   render() {
+    const { socialsStatus } = this.props;
+    console.log('Render, userId:', this.props.userId);
+    if (socialsStatus === 'loading') {
+      return <Loader/>;
+    }
+
     return <UserDataForm {...this.props} onSubmit={this.handleSubmit} />;
   }
 }

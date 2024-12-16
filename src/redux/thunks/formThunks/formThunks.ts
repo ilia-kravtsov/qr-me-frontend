@@ -39,7 +39,7 @@ export const putSubmitFormData =
     dispatch(submitFormPut());
     if (userId) {
       try {
-        const response = await updateUserData(+userId, data);
+        const response = await updateUserData(userId, data);
         dispatch(submitFormPutSuccess(response));
         dispatch(setUserDataForPutRequestIdle());
         console.log('Data successfully updated:', response);
@@ -52,39 +52,39 @@ export const putSubmitFormData =
     }
   };
 
-// export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
-//   dispatch(submitFormAttempt());
-//
-//   try {
-//     const response: ServerResponse = await sendFormData(formData);
-//
-//     if ('success' in response && response.success) {
-//       const { data } = response;
-//       dispatch(submitFormSuccess(data));
-//       if (data) {
-//         dispatch(setUserId(data.user_id, data.edit_code));
-//       }
-//     } else {
-//       handleError(response.message || 'Unknown server response', dispatch);
-//     }
-//   } catch (error: unknown) {
-//     handleUnknownError(error, dispatch);
-//   }
-// };
-
-// Имитирую запрос на сервер
 export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
   dispatch(submitFormAttempt());
+
   try {
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        resolve('Success');
-      }, 1000),
-    );
-    dispatch(submitFormSuccess({ edit_code: '', page_url: '', user_id: '' }));
-    console.log('Form submitted successfully:', formData);
-  } catch (error: any) {
-    dispatch(submitFormError(error.message));
-    console.error('Failed to submit form:', error);
+    const response: ServerResponse = await sendFormData(formData);
+
+    if ('success' in response && response.success) {
+      const { data } = response;
+      dispatch(submitFormSuccess(data));
+      if (data) {
+        dispatch(setUserId(data.user_id, data.edit_code));
+      }
+    } else {
+      handleError(response.message || 'Unknown server response', dispatch);
+    }
+  } catch (error: unknown) {
+    handleUnknownError(error, dispatch);
   }
 };
+
+// Имитирую запрос на сервер
+// export const submitFormData = (formData: ServerDataType) => async (dispatch: Dispatch) => {
+//   dispatch(submitFormAttempt());
+//   try {
+//     await new Promise((resolve) =>
+//       setTimeout(() => {
+//         resolve('Success');
+//       }, 1000),
+//     );
+//     dispatch(submitFormSuccess({ edit_code: '', page_url: '', user_id: '' }));
+//     console.log('Form submitted successfully:', formData);
+//   } catch (error: any) {
+//     dispatch(submitFormError(error.message));
+//     console.error('Failed to submit form:', error);
+//   }
+// };

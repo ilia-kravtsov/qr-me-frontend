@@ -12,7 +12,6 @@
     .field {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       position: relative;
 
       .fieldLabel {
@@ -119,6 +118,7 @@
     .socialsIcons {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
+      align-self: start;
       gap: 20px;
       position: relative;
     }

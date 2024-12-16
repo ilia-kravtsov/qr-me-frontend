@@ -54,7 +54,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         toast.success('Данные успешно обновлены!', toastPositionConfig);
         if (this.props.userId) {
           this.setState({
-            updatedUserLink: `https://qrme.ru/users/${this.props.userId}`,
+            updatedUserLink: `http://localhost:3000/${this.props.userId}`,
           });
         }
       }
@@ -187,7 +187,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
       case 'Email': {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (processedValue.length && processedValue.length > 6 && !processedValue.includes('@')) {
+        if (processedValue.length && processedValue.length > 8 && !processedValue.includes('@')) {
           if (!emailPattern.test(processedValue)) {
             errorMessage = 'Формат почты example@mail.ru.';
           }
@@ -459,7 +459,6 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
   renderSocialsIcons = (fields: socialsIcons[]) => {
     const { socialsLinks } = this.state;
-
     if (fields.length === 0) {
       return (
         <li className={s.placeholder}>
@@ -569,9 +568,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
     this.setState({
       predefinedFields: this.props.predefinedFields,
-      phones: this.props.phones,
-      emails: this.props.emails,
-      websites: this.props.websites,
+      phones: [],
+      emails: [],
+      websites: [],
       socialsIcons: this.props.socialsIcons,
       socialsLinks: [],
       fieldsErrors: {},

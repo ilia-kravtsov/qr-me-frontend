@@ -219,6 +219,7 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
         setDataForPutStatus: 'success',
       };
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS:
+      console.log(action.payload);
       return { ...state, userEditCode: action.payload.editCode, userId: action.payload.userId };
     case SetUserDataTypes.SET_USER_DATA_FOR_PUT_REQUEST_IDLE:
       return { ...state, setDataForPutStatus: 'idle' };

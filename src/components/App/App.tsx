@@ -15,7 +15,7 @@ class App extends Component {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/form" element={<UserDataFormContainer />} />
-          <Route path="/users/:user_id" element={<PersonalPageContainerWithParams />} />
+          <Route path="/:user_id" element={<PersonalPageContainerWithParams />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>

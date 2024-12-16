@@ -37,7 +37,7 @@ export class PersonalPage extends Component<PersonalPageProps & PersonalSiteMeth
   componentDidUpdate(prevProps: PersonalPageProps) {
     const { checkUserEditCodeStatus, checkUserEditCodeError } = this.props;
     if (prevProps.checkUserEditCodeStatus !== 'error' && checkUserEditCodeStatus === 'error') {
-      toast.error(checkUserEditCodeError || 'Ошибка при проверке кода. Попробуйте снова.', toastPositionConfig);
+      toast.error('Введен не верный код. Попробуйте снова.', toastPositionConfig);
     }
 
     if (prevProps.checkUserEditCodeStatus !== 'success' && checkUserEditCodeStatus === 'success') {
