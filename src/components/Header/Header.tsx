@@ -6,7 +6,7 @@ export class Header extends Component {
   render() {
     return (
       <header className={s.header}>
-        <Navigation />
+        {/*<Navigation />*/}
       </header>
     );
   }
