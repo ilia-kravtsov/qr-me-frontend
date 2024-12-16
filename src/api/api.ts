@@ -4,6 +4,7 @@ import { ServerResponse, socialsIcons } from '../components/UserDataFormContaine
 
 const api = axios.create({
   baseURL: 'http://localhost:8081/',
+  withCredentials: true,
 });
 
 export const sendFormData = async (formData: ServerDataType): Promise<ServerResponse> => {

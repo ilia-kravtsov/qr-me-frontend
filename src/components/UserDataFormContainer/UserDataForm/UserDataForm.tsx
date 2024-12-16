@@ -460,6 +460,14 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
   renderSocialsIcons = (fields: socialsIcons[]) => {
     const { socialsLinks } = this.state;
 
+    if (fields.length === 0) {
+      return (
+        <li className={s.placeholder}>
+          <span>Социальные сети не добавлены</span>
+        </li>
+      );
+    }
+
     return fields.map(({ id, name, icon_link }) => {
       const isHighlighted = socialsLinks.some((link) => link.id === id);
       const iconClassName = `${s.socialIcon} ${isHighlighted ? s.highlighted : ''}`;

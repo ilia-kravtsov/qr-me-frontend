@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { PersonalPageMethods, PersonalPageProps, RouteParams } from './PersonalPage/PersonalPageTypes';
 import { Dispatch } from 'redux';
-import { PersonalSite } from './PersonalPage/PersonalSite';
+import { PersonalPage } from './PersonalPage/PersonalPage';
 import { useParams } from 'react-router-dom';
 import { checkEditCodeTC, getUserDataTC } from '../../redux/thunks/personalPageThunks/personalPageThunks';
 
@@ -25,7 +25,7 @@ class PersonalPageContainer extends Component<PersonalPageProps> {
   removePageCB = () => {};
 
   render() {
-    return <PersonalSite {...this.props} checkEditCode={this.checkEditCode} removePageCB={this.removePageCB} />;
+    return <PersonalPage {...this.props} checkEditCode={this.checkEditCode} removePageCB={this.removePageCB} />;
   }
 }
 

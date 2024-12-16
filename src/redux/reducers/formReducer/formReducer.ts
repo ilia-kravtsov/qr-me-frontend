@@ -98,88 +98,7 @@ const initialState: FormReducerType = {
       title: 'https://some.ru',
     },
   ],
-  socialsIcons: [
-    {
-      id: 1,
-      icon_link: 'socials/behance.svg',
-      name: 'behance',
-    },
-    {
-      id: 2,
-      icon_link: 'socials/classmates.svg',
-      name: 'classmates',
-    },
-    {
-      id: 3,
-      icon_link: 'socials/facebook.svg',
-      name: 'facebook',
-    },
-    {
-      id: 4,
-      icon_link: 'socials/github.svg',
-      name: 'github',
-    },
-    {
-      id: 5,
-      icon_link: 'socials/instagram.svg',
-      name: 'instagram',
-    },
-    {
-      id: 6,
-      icon_link: 'socials/patreon.svg',
-      name: 'patreon',
-    },
-    {
-      id: 7,
-      icon_link: 'socials/pinterest.svg',
-      name: 'pinterest',
-    },
-    {
-      id: 8,
-      icon_link: 'socials/skype.svg',
-      name: 'skype',
-    },
-    {
-      id: 9,
-      icon_link: 'socials/telegram.svg',
-      name: 'telegram',
-    },
-    {
-      id: 10,
-      icon_link: 'socials/tiktok.svg',
-      name: 'tiktok',
-    },
-    {
-      id: 11,
-      icon_link: 'socials/twitch.svg',
-      name: 'twitch',
-    },
-    {
-      id: 12,
-      icon_link: 'socials/twitter.svg',
-      name: 'twitter',
-    },
-    {
-      id: 13,
-      icon_link: 'socials/viber.svg',
-      name: 'viber',
-    },
-    {
-      id: 14,
-      icon_link: 'socials/vk.svg',
-      name: 'vk',
-    },
-    {
-      id: 15,
-      icon_link: 'socials/whatsapp.svg',
-      name: 'whatsapp',
-    },
-    {
-      id: 16,
-      icon_link: 'socials/youtube.svg',
-      name: 'youtube',
-    },
-  ],
+  socialsIcons: [],
   socialsLinks: [],
   submitSuccessData: {
     edit_code: '',
@@ -313,3 +232,87 @@ export const formReducer = (state = initialState, action: ActionsType): FormRedu
       return state;
   }
 };
+
+
+/*
+    {
+      id: 1,
+      icon_link: 'socials/behance.svg',
+      name: 'behance',
+    },
+    {
+      id: 2,
+      icon_link: 'socials/classmates.svg',
+      name: 'classmates',
+    },
+    {
+      id: 3,
+      icon_link: 'socials/facebook.svg',
+      name: 'facebook',
+    },
+    {
+      id: 4,
+      icon_link: 'socials/github.svg',
+      name: 'github',
+    },
+    {
+      id: 5,
+      icon_link: 'socials/instagram.svg',
+      name: 'instagram',
+    },
+    {
+      id: 6,
+      icon_link: 'socials/patreon.svg',
+      name: 'patreon',
+    },
+    {
+      id: 7,
+      icon_link: 'socials/pinterest.svg',
+      name: 'pinterest',
+    },
+    {
+      id: 8,
+      icon_link: 'socials/skype.svg',
+      name: 'skype',
+    },
+    {
+      id: 9,
+      icon_link: 'socials/telegram.svg',
+      name: 'telegram',
+    },
+    {
+      id: 10,
+      icon_link: 'socials/tiktok.svg',
+      name: 'tiktok',
+    },
+    {
+      id: 11,
+      icon_link: 'socials/twitch.svg',
+      name: 'twitch',
+    },
+    {
+      id: 12,
+      icon_link: 'socials/twitter.svg',
+      name: 'twitter',
+    },
+    {
+      id: 13,
+      icon_link: 'socials/viber.svg',
+      name: 'viber',
+    },
+    {
+      id: 14,
+      icon_link: 'socials/vk.svg',
+      name: 'vk',
+    },
+    {
+      id: 15,
+      icon_link: 'socials/whatsapp.svg',
+      name: 'whatsapp',
+    },
+    {
+      id: 16,
+      icon_link: 'socials/youtube.svg',
+      name: 'youtube',
+    },
+*/
