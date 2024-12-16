@@ -1,0 +1,160 @@
+.container{
+
+   .main{
+      outline: 5px solid var(--accent-color);
+      border-radius: 75px;
+      width: 1200px;
+   }
+
+   .fio{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+      padding-top: 60px;
+      margin-bottom: 40px;
+   }
+
+   .position{
+      display: flex;
+      justify-content: center;
+      gap: 180px;
+   }
+
+   .contacts{
+      margin: 60px 0;
+   }
+
+   .descriptionWidth{
+      max-width: 600px;
+   }
+
+   .contactsData img{
+      position: relative;
+      margin-right: 50px;
+      margin-left: 60px;
+      top: 4px;
+   }
+
+   .label{
+      margin: 0 0 40px 40px;
+   }
+
+   .contactsData{
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+   }
+
+   .communication{
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      font-size: 28px;
+   }
+
+   .phoneImage{
+      margin-right: 50px;
+      position: relative;
+      top: 4px;
+   }
+
+   .phoneMargin{
+      margin-left: 40px;
+   }
+
+   .mailMargin{
+      margin-left: 40px;
+   }
+
+   .mailImage{
+      margin-right: 50px;
+      position: relative;
+      top: 5px;
+   }
+
+   .gridLinks{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+   }
+
+   .gridContacts{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+   }
+
+   .websiteLinks{
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 40px;
+   }
+
+   .websiteLinks img{
+      margin-left: 60px;
+      margin-right: 50px;
+      position: relative;
+      top: 3px;
+   }
+
+
+   .websiteLinks a{
+      text-decoration:none;
+      font-size: 28px;
+      color: var(--primary-font-color);
+   }
+
+   .socialLinks{
+      display: flex;
+      flex-wrap: wrap;
+      margin: 50px;
+   }
+
+   .socialLinks li{
+      margin: 0 50px 50px 0;
+   }
+   
+   h2{
+      font-size: 40px;
+   }
+
+
+   p{
+      font-size: 28px;
+      font-weight: normal;
+   }
+
+   button{
+      background: none;
+      color: inherit;
+      border: none;
+      padding:0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+   }
+
+   .editCard{
+      display: flex;
+      flex-direction: row;
+      gap: 44px;
+      margin-bottom: 60px;
+   }
+
+   .editCodeInput{
+      background-color: transparent;
+      color: var(--primary-font-color);
+      border: 3px solid #38ab9e;
+      font-size: 32px;
+      border-radius: 20px;
+      width: 280px;
+      text-align: center;
+      margin-right: 44px;
+      margin-left: 230px;
+   }
+
+   .editConfirm{
+      position: absolute;
+      top: 119px
+   }
+
+}

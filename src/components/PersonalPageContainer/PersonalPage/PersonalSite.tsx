@@ -1,5 +1,5 @@
 import { ChangeEvent, Component } from 'react';
-import s from './PersonalPage.module.scss';
+import s from './PersonalSite.module.scss';
 import { PersonalPageProps, PersonalSiteType } from './PersonalPageTypes';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -64,47 +64,98 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
 
     return (
       <div className={s.container}>
-        {data.photo && (
+        <div className={s.editCard}>
+          <h2>Визитная карточка</h2>
+          <button type={'button'} onClick={this.editPage}>
+            <img src="/personalpage/edit.svg" alt="Кнопка редактирования" />
+          </button>
+          {isEnterCodeOpen && (
+          <div className={s.editModeContainer}>
+            {checkUserEditCodeStatus === 'loading' ? (
+              <Loader />
+            ) : (
+              <div>
+                <input
+                  className={s.editCodeInput}
+                  type="number"
+                  value={editCodeFromUser}
+                  onChange={this.handleInputChange}
+                  placeholder="КОД"
+                />
+                <button type="button" onClick={this.confirmEdit}>
+                  <img src="/personalpage/edit-confirm.svg" alt="" className={s.editConfirm} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        </div>
+
+      <div className={s.main}>
+      {data.photo && (
           <div>
             <img src={data.photo} alt={`${data.first_name} ${data.last_name}`} className={s.photo} />
           </div>
         )}
-        <h2>{data.first_name}</h2>
-        <h2>{data.last_name}</h2>
-        {data.middle_name && <h2>{data.middle_name}</h2>}
-        {data.company && <p>{`Company: ${data.company}`}</p>}
-        {data.position && <p>{`Position: ${data.position}`}</p>}
-        {data.address && <p>{`Address: ${data.address}`}</p>}
-        {data.about && <p>{`About: ${data.about}`}</p>}
 
+        <div className={s.fio}>
+          <h2>{data.first_name}</h2>
+          <h2>{data.last_name}</h2>
+          {data.middle_name && <h2>{data.middle_name}</h2>}
+        </div>
+
+        <div className={s.position}>
+          <img src="/personalpage/user.svg" alt="Иконка с человечком" />
+          {data.position && <p >{`${data.position}`}</p>}
+        </div>
+
+        <div className={s.contacts}>
+        <h2 className={s.label}>Контакты</h2>
+
+        <div className={s.gridContacts}>
+
+        <div className={s.contactsData}>
+
+        {data.company && <p><img src="/personalpage/company.svg" alt="" />{`${data.company}`}</p>}
+
+        {data.address && <p><img src="/personalpage/address.svg" alt="" />{`${data.address}`}</p>}
+
+        {data.about && <p className={s.descriptionWidth}><img src="/personalpage/description.svg" alt="" />{`${data.about}`}</p>}
+
+        </div>
+        <div className={s.communication}>
         {data.phones && data.phones.length > 0 && (
-          <div>
-            <h3>Phones</h3>
-            <ul>
+          <div className={s.phoneMargin}>
+            <ul >
               {data.phones.map((phone) => (
-                <li key={phone.phone_id}>{phone.number}</li>
+                <li key={phone.phone_id}><img className={s.phoneImage} src="/personalpage/phone.svg" alt="" />{phone.number}</li>
               ))}
             </ul>
           </div>
         )}
 
         {data.emails && data.emails.length > 0 && (
-          <div>
-            <h3>Emails</h3>
+          <div className={s.mailMargin}>
             <ul>
               {data.emails.map((email) => (
-                <li key={email.email_id}>{email.email_address}</li>
+                <li key={email.email_id}><img className={s.mailImage} src="/personalpage/mail.svg" alt="" />{email.email_address}</li>
               ))}
             </ul>
           </div>
-        )}
+          )}
+        </div>
 
+        </div>
+        </div>
+        
+        <div className={s.gridLinks}>
         {data.websites && data.websites.length > 0 && (
           <div>
-            <h3>Websites</h3>
-            <ul>
+            <h2 className={s.label}>Веб-сайты</h2>
+            <ul className={s.websiteLinks}>
               {data.websites.map((website) => (
                 <li key={website.website_id}>
+                  <img src="/personalpage/website.svg" alt="" />
                   <a href={website.website_address} target="_blank" rel="noopener noreferrer">
                     {website.website_address}
                   </a>
@@ -116,45 +167,22 @@ export class PersonalSite extends Component<PersonalPageProps & PersonalSiteMeth
 
         {data.socials && data.socials.length > 0 && (
           <div>
-            <h3>Socials</h3>
-            <ul>
+            <h2 className={s.label}>Социальные сети</h2>
+            <ul className={s.socialLinks}>
               {data.socials.map((social) => (
                 <li key={social.social_row_id}>
                   <a href={social.social_url} target="_blank" rel="noopener noreferrer">
-                    {social.social_url}
+                    <img src="/personalpage/website.svg" alt="" />
                   </a>
                 </li>
               ))}
             </ul>
           </div>
         )}
-
-        <div>
-          <button type={'button'} onClick={this.editPage}>
-            Редактировать страницу
-          </button>
         </div>
 
-        {isEnterCodeOpen && (
-          <div className={s.editModeContainer}>
-            {checkUserEditCodeStatus === 'loading' ? (
-              <Loader />
-            ) : (
-              <div>
-                <input
-                  type="number"
-                  value={editCodeFromUser}
-                  onChange={this.handleInputChange}
-                  placeholder="Введите код"
-                />
-                <button type="button" onClick={this.confirmEdit}>
-                  Подтвердить
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      </div>  
+    </div>
     );
   }
 }
