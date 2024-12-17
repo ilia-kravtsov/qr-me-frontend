@@ -21,6 +21,11 @@ type AwesomeQRConfig = {
 };
 
 export class QR extends Component<QRProps> {
+
+  state = {
+    isCopied: false, // Состояние для отображения галочки
+  };
+
   private canvasRef = createRef<HTMLCanvasElement>();
   private downloadLinkRef = createRef<HTMLAnchorElement>();
 
@@ -105,6 +110,8 @@ export class QR extends Component<QRProps> {
         .writeText(edit_code)
         .then(() => {
           toast.success('Код успешно скопирован!', toastPositionConfig);
+          this.setState({ isCopied: true });
+          setTimeout(() => this.setState({ isCopied: false }), 2000);
         })
         .catch((err) => {
           console.error('Ошибка при копировании:', err);
@@ -139,7 +146,9 @@ export class QR extends Component<QRProps> {
           </a>
         </div>
         <div className={s.editCode} onClick={this.handleCopyEditCodeToClipboard}>
-          <button className={s.buttonEditCode}>{edit_code ? edit_code : 'edit-code не получен'}</button>
+          <button className={s.buttonEditCode}>
+            {this.state.isCopied ? '✔️' : edit_code ? edit_code : 'edit-code не получен'}
+          </button>
         </div>
       </div>
     );
