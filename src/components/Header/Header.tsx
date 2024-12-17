@@ -4,10 +4,6 @@ import { Navigation } from '../Navigation/Navigation';
 
 export class Header extends Component {
   render() {
-    return (
-      <header className={s.header}>
-        {/*<Navigation />*/}
-      </header>
-    );
+    return <header className={s.header}>{/*<Navigation />*/}</header>;
   }
 }

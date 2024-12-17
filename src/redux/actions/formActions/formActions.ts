@@ -1,5 +1,6 @@
 import {
-  GetFormDataAttempt, GetFormDataError,
+  GetFormDataAttempt,
+  GetFormDataError,
   GetFormDataSuccess,
   SetUserDataForPutRequest,
   SetUserDataForPutRequestIdle,

@@ -60,7 +60,7 @@ export const personalPageReducer = (state = initialState, action: Actions): Pers
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_CODE:
       return { ...state, checkUserEditCodeStatus: 'loading', checkUserEditCodeError: null };
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_SUCCESS:
-      return { ...state, checkUserEditCodeStatus: 'success', checkUserEditCodeError: null,  };
+      return { ...state, checkUserEditCodeStatus: 'success', checkUserEditCodeError: null };
     case CheckUserEditCodeTypes.CHECK_USER_EDIT_ERROR:
       return { ...state, checkUserEditCodeStatus: 'error', checkUserEditCodeError: action.payload.errorMessage };
     default:

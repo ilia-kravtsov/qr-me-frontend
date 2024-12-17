@@ -2,10 +2,16 @@ import { FormActionTypes, SetUserDataTypes, SocialsActionTypes } from '../../act
 import { formReducer } from './formReducer';
 import { FormReducerType } from '../../../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 import {
-  GetFormDataAttempt, GetFormDataError,
-  GetFormDataSuccess, SetUserDataForPutRequest, SetUserDataForPutRequestIdle,
+  GetFormDataAttempt,
+  GetFormDataError,
+  GetFormDataSuccess,
+  SetUserDataForPutRequest,
+  SetUserDataForPutRequestIdle,
   SubmitFormErrorAction,
-  SubmitFormIdleAction, SubmitFormPut, SubmitFormPutError, SubmitFormPutSuccess,
+  SubmitFormIdleAction,
+  SubmitFormPut,
+  SubmitFormPutError,
+  SubmitFormPutSuccess,
   SubmitFormStartAction,
   SubmitFormSuccessAction,
 } from '../../actions/formActions/formActionsTypes';
@@ -251,19 +257,19 @@ describe('formReducer', () => {
       address: 'г. Москва, ул. Пушкина, д. Колотушкина',
       phones: [
         { phone_id: 1, number: '+7 999 123 45 67' },
-        { phone_id: 2, number: '+7 912 345 67 89' }
+        { phone_id: 2, number: '+7 912 345 67 89' },
       ],
       emails: [
         { email_id: 1, email_address: 'example@mail.ru' },
-        { email_id: 2, email_address: 'hello@world.com' }
+        { email_id: 2, email_address: 'hello@world.com' },
       ],
       websites: [
         { website_id: 1, website_address: 'https://example.com' },
-        { website_id: 2, website_address: 'https://mysite.ru' }
+        { website_id: 2, website_address: 'https://mysite.ru' },
       ],
       socials: [
         { social_id: 1, social_url: 'https://vk.com/id123', social_row_id: 101 },
-        { social_id: 2, social_url: 'https://twitter.com/someuser', social_row_id: 102 }
+        { social_id: 2, social_url: 'https://twitter.com/someuser', social_row_id: 102 },
       ],
     };
 
@@ -301,7 +307,7 @@ describe('formReducer', () => {
           required: false,
           placeholder: '+7 999 999 99 99',
           title: '+7 999 999 99 99',
-        }
+        },
       ],
       emails: [
         {
@@ -321,7 +327,7 @@ describe('formReducer', () => {
           required: false,
           placeholder: 'ivanov@mail.ru',
           title: 'ivanov@mail.ru',
-        }
+        },
       ],
       websites: [
         {
@@ -341,11 +347,11 @@ describe('formReducer', () => {
           required: false,
           placeholder: 'https://some.ru',
           title: 'https://some.ru',
-        }
+        },
       ],
       socialsLinks: [
         { id: 1, social_url: 'https://vk.com/id123', social_row_id: 101 },
-        { id: 2, social_url: 'https://twitter.com/someuser', social_row_id: 102 }
+        { id: 2, social_url: 'https://twitter.com/someuser', social_row_id: 102 },
       ],
       setDataForPutStatus: 'success',
     };
@@ -427,8 +433,8 @@ describe('formReducer', () => {
     const action: SubmitFormPutSuccess = {
       type: FormActionTypes.SUBMIT_FORM_PUT_SUCCESS,
       payload: {
-        success: true
-      }
+        success: true,
+      },
     };
 
     const expectedState = {
@@ -443,7 +449,6 @@ describe('formReducer', () => {
   });
 
   test('submitPutStatus должен обновиться на "error" и submitPutError должен содержать payload после действия SUBMIT_FORM_PUT_ERROR', () => {
-
     const errorPayload = 'Произошла ошибка';
 
     const action: SubmitFormPutError = {
@@ -463,5 +468,4 @@ describe('formReducer', () => {
     expect(initialState.submitPutStatus).toBe('idle');
     expect(initialState.submitPutError).toBe(null);
   });
-
 });
