@@ -6,8 +6,8 @@ const api = axios.create({
   baseURL: 'http://localhost:8081/',
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 export const sendFormData = async (formData: ServerDataType): Promise<ServerResponse> => {
@@ -26,11 +26,11 @@ export const getUserData = async (userId: string) => {
 };
 
 export const checkEditCode = async (userId: string, editCode: string): Promise<{ success: boolean }> => {
-  const response = await api.post('users/edit-check', { user_id: userId, edit_code: editCode } );
+  const response = await api.post('users/edit-check', { user_id: userId, edit_code: editCode });
   return response.data;
 };
 
 export const updateUserData = async (userId: string, updatedData: ServerDataForPUTRequest) => {
-  const response = await api.put(`users/${userId}`, updatedData );
+  const response = await api.put(`users/${userId}`, updatedData);
   return response.data;
 };

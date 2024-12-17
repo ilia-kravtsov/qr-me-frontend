@@ -10,7 +10,7 @@ import {
   UserDataFormProps,
   UserDataFormState,
 } from './UserDataFormTypes';
-import  ReactInputMask from 'react-input-mask';
+import ReactInputMask from 'react-input-mask';
 import { Loader } from '../../Loader/Loader';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
@@ -187,7 +187,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
       case 'Email': {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (processedValue.length && processedValue.length > 8 && !processedValue.includes('@')) {
+        if (processedValue.length && processedValue.length > 12 && !processedValue.includes('@')) {
           if (!emailPattern.test(processedValue)) {
             errorMessage = 'Формат почты example@mail.ru.';
           }
@@ -369,7 +369,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
         {fields.map(
           ({ id, label, type = 'text', value, required = false, placeholder = '', minLength = 2, pattern, title }) => {
             const inputClassName = `${s.input} ${this.state.fieldsErrors[id] ? s.inputError : ''}`;
-            const maxLength = 200;
+            const maxLengthForTextarea = 200;
+            const maxLengthForPredefined = 35;
             const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
               this.handleChangeFieldValue(fieldType, id, e.target.value);
 
@@ -382,7 +383,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                     placeholder={placeholder}
                     required={required}
                     minLength={minLength}
-                    maxLength={maxLength}
+                    maxLength={maxLengthForTextarea}
                     title={title}
                     onBlur={(e) => this.handleBlurValidation(e, label)}
                     onInput={(e) => this.handleValidation(e, label)}
@@ -418,7 +419,7 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
                   placeholder={placeholder}
                   required={required}
                   minLength={minLength}
-                  maxLength={maxLength}
+                  maxLength={maxLengthForPredefined}
                   pattern={pattern}
                   title={title}
                   onBlur={(e) => this.handleBlurValidation(e, label)}
@@ -568,9 +569,9 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
 
     this.setState({
       predefinedFields: this.props.predefinedFields,
-      phones: [],
-      emails: [],
-      websites: [],
+      phones: this.props.phones,
+      emails: this.props.emails,
+      websites: this.props.websites,
       socialsIcons: this.props.socialsIcons,
       socialsLinks: [],
       fieldsErrors: {},
@@ -602,13 +603,8 @@ class UserDataForm extends Component<UserDataFormProps, UserDataFormState> {
     const { updatedUserLink } = this.state;
 
     if (updatedUserLink) {
-      return (
-        <div className={s.successMessage}>
-          <a href={updatedUserLink} target="_blank" rel="noopener noreferrer">
-            Перейти на обновлённую страницу
-          </a>
-        </div>
-      );
+      window.location.href = updatedUserLink;
+      return null;
     }
 
     return null;

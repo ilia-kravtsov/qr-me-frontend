@@ -122,26 +122,24 @@ export class QR extends Component<QRProps> {
         <canvas ref={this.canvasRef} width="260" height="260" className={s.canvas} />
 
         <div className={s.buttonsContainer}>
-          <img src="qr/receive-square.svg" alt="" className={`${s.imgQRs} ${s.imgQRs1}`}/>
+          <img src="qr/receive-square.svg" alt="" className={`${s.imgQRs} ${s.imgQRs1}`} />
           <button onClick={this.handleDownload} className={s.downloadButton}>
             Скачать QR
           </button>
           <a ref={this.downloadLinkRef} className={s.downloadLink}>
             Скачать
           </a>
-          <img src="qr/document-copy.svg" alt="" className={`${s.imgQRs} ${s.imgQRs2}`}/>
+          <img src="qr/document-copy.svg" alt="" className={`${s.imgQRs} ${s.imgQRs2}`} />
           <button onClick={this.handleCopyToClipboard} className={s.downloadButton}>
             Копировать ссылку
           </button>
-          <img src="qr/export.svg" alt="" className={`${s.imgQRs} ${s.imgQRs3}`}/>
+          <img src="qr/export.svg" alt="" className={`${s.imgQRs} ${s.imgQRs3}`} />
           <a href={this.props.value} target="_blank" rel="noopener noreferrer" className={s.pageLink}>
             Перейти по ссылке
           </a>
         </div>
         <div className={s.editCode} onClick={this.handleCopyEditCodeToClipboard}>
-            <button className={s.buttonEditCode}>
-            {edit_code ? edit_code : 'edit-code не получен'}
-            </button>
+          <button className={s.buttonEditCode}>{edit_code ? edit_code : 'edit-code не получен'}</button>
         </div>
       </div>
     );
