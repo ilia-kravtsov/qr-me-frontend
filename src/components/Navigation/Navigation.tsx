@@ -9,17 +9,7 @@ export class Navigation extends Component {
         <ul className={s.navigationLinksList}>
           <li>
             <Link to="/" className={s.link}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/form" className={s.link}>
-              Форма
-            </Link>
-          </li>
-          <li>
-            <Link to="/users/123123" className={s.link}>
-              Персональная страница
+              <img src="/logo/web-app-manifest-192x192.png" alt="" className={s.logo} />
             </Link>
           </li>
         </ul>

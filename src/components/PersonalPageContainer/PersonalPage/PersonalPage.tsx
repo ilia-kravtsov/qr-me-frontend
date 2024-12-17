@@ -31,11 +31,11 @@ export class PersonalPage extends Component<PersonalPageProps & PersonalSiteMeth
   };
 
   editPage = () => {
-    this.setState({ isEnterCodeOpen: true });
+    this.setState({ isEnterCodeOpen: !this.state.isEnterCodeOpen });
   };
 
   componentDidUpdate(prevProps: PersonalPageProps) {
-    const { checkUserEditCodeStatus, checkUserEditCodeError } = this.props;
+    const { checkUserEditCodeStatus } = this.props;
     if (prevProps.checkUserEditCodeStatus !== 'error' && checkUserEditCodeStatus === 'error') {
       toast.error('Введен не верный код. Попробуйте снова.', toastPositionConfig);
     }
@@ -71,9 +71,11 @@ export class PersonalPage extends Component<PersonalPageProps & PersonalSiteMeth
           {isEnterCodeOpen && (
             <div className={s.editModeContainer}>
               {checkUserEditCodeStatus === 'loading' ? (
-                <Loader />
+                <div className={s.editCodeBox}>
+                  <Loader />
+                </div>
               ) : (
-                <div>
+                <div className={s.editCodeBox}>
                   <input
                     className={s.editCodeInput}
                     type="number"
@@ -98,8 +100,8 @@ export class PersonalPage extends Component<PersonalPageProps & PersonalSiteMeth
           )}
 
           <div className={s.fio}>
-            <h2>{data.first_name}</h2>
             <h2>{data.last_name}</h2>
+            <h2>{data.first_name}</h2>
             {data.middle_name && <h2>{data.middle_name}</h2>}
           </div>
 
