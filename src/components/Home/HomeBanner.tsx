@@ -16,7 +16,7 @@ export class HomeBanner extends Component {
           </Link>
         </div>
         <div className={s.intro_image}>
-          <img src="home/qr.png" alt="Телефон с визиткой" />
+          <img src="home/qr_3.png" alt="Телефон с визиткой" />
         </div>
       </section>
     );

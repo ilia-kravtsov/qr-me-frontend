@@ -7,7 +7,7 @@ export type PersonalPageMethods = {
 
 export type PersonalPageProps = ServerPageDataType & PersonalPageMethods & RouteParams & StatusType;
 
-export type PersonalPageReducer = ServerPageDataType & StatusType;
+export type Personal = ServerPageDataType & StatusType;
 
 export type ServerPageDataType = {
   success: boolean;

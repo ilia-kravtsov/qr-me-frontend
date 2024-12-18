@@ -1,6 +1,6 @@
 import { UserActionTypes, CheckUserEditCodeTypes } from '../../actions/personalPageActions/personalPageActions';
 import { personalPageReducer } from './personalPageReducer';
-import { PersonalPageReducer } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
+import { Personal } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 import {
   CheckUserEditCode, CheckUserEditCodeError, CheckUserEditCodeSuccess,
   GetUserDataAttemptAction, GetUserDataErrorAction,
@@ -8,7 +8,7 @@ import {
 } from '../../actions/personalPageActions/personalPageActionsTypes';
 
 
-const initialState: PersonalPageReducer = {
+const initialState: Personal = {
   success: false,
   data: {
     first_name: 'Иван',

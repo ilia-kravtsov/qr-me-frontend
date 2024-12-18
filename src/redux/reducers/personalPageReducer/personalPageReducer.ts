@@ -2,13 +2,13 @@ import {
   CheckUserEditCodeGeneral,
   GetUserDataActions,
 } from '../../actions/personalPageActions/personalPageActionsTypes';
-import { PersonalPageReducer } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
+import { Personal } from '../../../components/PersonalPageContainer/PersonalPage/PersonalPageTypes';
 import { CheckUserEditCodeTypes, UserActionTypes } from '../../actions/personalPageActions/personalPageActions';
 import { SetUserId } from '../../actions/formActions/formActionsTypes';
 
 type Actions = GetUserDataActions | SetUserId | CheckUserEditCodeGeneral;
 
-const initialState: PersonalPageReducer = {
+const initialState: Personal = {
   success: false,
   data: {
     first_name: 'Иван',
@@ -29,7 +29,7 @@ const initialState: PersonalPageReducer = {
   checkUserEditCodeError: null,
 };
 
-export const personalPageReducer = (state = initialState, action: Actions): PersonalPageReducer => {
+export const personalPageReducer = (state = initialState, action: Actions): Personal => {
   switch (action.type) {
     case UserActionTypes.GET_USER_DATA:
       return { ...state, getUserDataStatus: 'loading', getUserDataError: null };
