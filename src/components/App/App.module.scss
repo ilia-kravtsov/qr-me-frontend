@@ -1,5 +1,7 @@
 @import '../../styles/global/normalize.module';
 @import '../../styles/global/variables.module';
+@import '../../styles/fonts/stylesheet.module.css';
+@import '../../styles/fonts/stylesheetSecondaryFont.module.css';
 
 .container {
   min-block-size: 100dvh;
@@ -12,6 +14,27 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  overflow-x: hidden;
+  overflow: hidden;
+  padding-bottom: 200px;
 }
 
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+}

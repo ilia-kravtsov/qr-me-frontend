@@ -1,8 +1,8 @@
 .userDataForm {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 25vw;
+  gap: 40px;
+  width: 1200px;
 
   .predefinedFields {
     display: flex;
@@ -12,29 +12,290 @@
     .field {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      position: relative;
+
+      .fieldLabel {
+        font-size: 32px;
+        width: 480px;
+        padding-bottom: 30px;
+      }
+
+      .description {
+        resize: none;
+        font-size: 32px;
+      }
+
+      .description:focus {
+        outline: none;
+      }
+
+      .errorPredefined {
+        color: red;
+        font-size: 16px;
+        position: absolute;
+        top: -25px;
+        right: 0px;
+      }
+    }
+
+    .errorContact {
+      color: red;
+      font-size: 16px;
+      position: absolute;
+      top: 10px;
+      left: 150px;
+    }
+
+    .inputError {
+      border: 3px solid red;
     }
   }
 
-  .additionalFields {
+  .renderFieldsContainer {
     display: flex;
     flex-direction: column;
+    position: relative;
+    gap: 15px;
+    margin-bottom: 50px;
+  }
+  input {
+    background-color: transparent;
+    color: var(--primary-font-color);
+    border: 3px solid #38ab9e;
+    font-size: 32px;
+    border-radius: 20px;
+    width: 680px;
+    height: 36px;
+    padding: 10px;
+    margin-bottom: 30px;
+  }
 
-    .addFieldContainer {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px 0 0 0;
+  textarea {
+    background-color: transparent;
+    color: var(--primary-font-color);
+    border: 3px solid #38ab9e;
+    border-radius: 20px;
+    width: 665px;
+    height: 120px;
+    padding: 12px 16px 12px 21px;
+    margin-bottom: 30px;
+  }
+}
+
+.additionalFields {
+  display: flex;
+  flex-direction: column;
+
+  .addFieldContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0 0 0;
+  }
+
+  .socialsContainer {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+
+  .socialListItem {
+    position: relative;
+
+    .errorSocial {
+      color: red;
+      font-size: 16px;
+      position: absolute;
+      top: 70px;
+      left: 150px;
     }
 
-    .additionalField {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 20px 0 0 0;
+    .inputError {
+      border: 3px solid red;
+    }
+  }
+
+  .socialsIcons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-self: start;
+    gap: 20px;
+    position: relative;
+  }
+
+  .sodcialsFields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    input {
+      background-color: transparent;
+      color: var(--primary-font-color);
+      border: 3px solid #38ab9e;
+      font-size: 32px;
+      border-radius: 20px;
+      width: 680px;
+      height: 36px;
+      padding: 10px;
+      margin-left: 140px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .socialIcon {
+    block-size: 60px;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+
+  .highlighted {
+    outline: 3px solid #38ab9e;
+  }
+
+  .removeButton {
+    width: 80px;
+  }
+}
+
+.submitButton {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 212px;
+  font-family: var(--primary-font-family);
+  width: 780px;
+  height: 80px;
+  border: 5px solid var(--accent-color);
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: var(--primary-font-color);
+  background: none;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  border: 5px solid rgb(157, 157, 157);
+  background-color: rgb(59, 59, 59);
+  opacity: 0.3;
+}
+
+.toastError {
+  // класс для стилизации всплывающего уведомления toast
+}
+
+legend {
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+::placeholder {
+  color: rgb(191, 190, 190);
+}
+
+::-webkit-input-placeholder {
+  color: rgb(191, 190, 190);
+}
+
+// Поля для phone, website, Email
+.shortAdditionalFields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    .fieldLabel {
+      font-size: 32px;
+      width: 480px;
+      margin-bottom: 25px;
     }
 
-    .removeButton {
-      width: 80px;
+    .description {
+      resize: none;
+      font-size: 32px;
     }
+
+    .description:focus {
+      outline: none;
+    }
+
+    .errorPredefined {
+      color: red;
+      font-size: 12px;
+      position: absolute;
+      top: 24px;
+      right: 0;
+    }
+
+    .errorContact {
+      color: red;
+      font-size: 16px;
+      position: absolute;
+      top: 70px;
+      left: 500px;
+    }
+
+    .inputError {
+      border: 3px solid red;
+    }
+  }
+
+  .renderFieldsContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 15px;
+    margin-bottom: 50px;
+  }
+
+  .addFieldButton {
+    inline-size: 60px;
+    block-size: 60px;
+    border-radius: 50%;
+    color: #38ab9e;
+    border: 3px solid #38ab9e;
+    background: transparent;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 30px;
+    align-self: flex-start;
+    position: absolute;
+    top: -2.5px;
+    right: 10px;
+    z-index: 1;
+  }
+
+  .removeFieldButton {
+    inline-size: 60px;
+    block-size: 60px;
+    border-radius: 50%;
+    color: #38ab9e;
+    border: 3px solid #38ab9e;
+    background: transparent;
+    cursor: pointer;
+    margin-top: 2.5px;
+    font-size: 30px;
+    align-self: flex-start;
+    position: relative;
+    right: 100px;
+  }
+
+  input {
+    background-color: transparent;
+    color: var(--primary-font-color);
+    border: 3px solid #38ab9e;
+    font-size: 32px;
+    border-radius: 20px;
+    width: 480px;
+    height: 36px;
+    padding: 10px;
+    margin-left: -140px;
+    margin-bottom: 30px;
   }
 }

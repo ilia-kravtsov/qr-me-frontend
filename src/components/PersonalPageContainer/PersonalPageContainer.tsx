@@ -1,26 +1,65 @@
-import {Component} from "react";
-import {PersonalPage} from "./PersonalPage/PersonalPage";
-import {connect} from "react-redux";
-import {FormState} from "../UserDataFormContainer/UserDataForm/UserDataFormTypes";
-import {getUserDataAC} from "../../redux/actions/personalPageActions/personalPageActions";
-import {RootState} from "../../redux/store";
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { PersonalPageMethods, PersonalPageProps, RouteParams } from './PersonalPage/PersonalPageTypes';
+import { Dispatch } from 'redux';
+import { PersonalPage } from './PersonalPage/PersonalPage';
+import { useParams } from 'react-router-dom';
+import { checkEditCodeTC, getUserDataTC } from '../../redux/thunks/personalPageThunks/personalPageThunks';
 
-class PersonalPageContainer extends Component<FormState> {
-	render() {
-		return (
-			<PersonalPage predefinedFields={this.props.predefinedFields}
-										additionalFields={this.props.additionalFields}/>
-		)
-	}
+class PersonalPageContainer extends Component<PersonalPageProps> {
+  componentDidMount() {
+    const { user_id, getUserDataTC } = this.props;
+
+    if (user_id) {
+      getUserDataTC(user_id);
+    } else {
+      console.error('User ID is not available in Redux state!');
+    }
+  }
+
+  checkEditCode = (editCode: string) => {
+    this.props.checkEditCodeTC(this.props.user_id, editCode);
+  };
+
+  removePageCB = () => {};
+
+  render() {
+    return <PersonalPage {...this.props} checkEditCode={this.checkEditCode} removePageCB={this.removePageCB} />;
+  }
 }
 
-const mapStateToProps = (state: RootState) => ({
-	predefinedFields: state.personalPage.predefinedFields,
-	additionalFields: state.personalPage.additionalFields,
+const mapStateToProps = ({ personalPage }: RootState) => ({ ...personalPage });
+
+const mapDispatchToProps = (dispatch: Dispatch): PersonalPageMethods => ({
+  getUserDataTC: (userId: string) => getUserDataTC(userId)(dispatch),
+  checkEditCodeTC: (userId: string, editCode: string) => checkEditCodeTC(userId, editCode)(dispatch),
 });
 
-const mapDispatchToProps = {
-	getUserData: getUserDataAC,
+const ConnectedPersonalPageContainer = connect(mapStateToProps, mapDispatchToProps)(PersonalPageContainer);
+
+const PersonalPageContainerWithParams = () => {
+  const { user_id } = useParams<RouteParams>();
+  return <ConnectedPersonalPageContainer user_id={user_id || ''} />;
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PersonalPageContainer);
+export default PersonalPageContainerWithParams;
+
+/*
+const mapStateToProps = (state: RootState) => ({
+  photo: state.personalPage.photo,
+  first_name: state.personalPage.first_name,
+  last_name: state.personalPage.last_name,
+  middle_name: state.personalPage.middle_name,
+  about: state.personalPage.about,
+  company: state.personalPage.company,
+  position: state.personalPage.position,
+  address: state.personalPage.address,
+  phones: state.personalPage.phones,
+  emails: state.personalPage.emails,
+  websites: state.personalPage.websites,
+  socials: state.personalPage.socials,
+  getUserDataStatus: state.personalPage.getUserDataStatus,
+  getUserDataError: state.personalPage.getUserDataError
+});
+*/

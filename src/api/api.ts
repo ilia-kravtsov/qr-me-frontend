@@ -1,25 +1,36 @@
 import axios from 'axios';
-import {FormState} from "../components/UserDataFormContainer/UserDataForm/UserDataFormTypes";
+import { ServerDataForPUTRequest, ServerDataType } from '../redux/actions/formActions/formActionsTypes';
+import { ServerResponse, socialsIcons } from '../components/UserDataFormContainer/UserDataForm/UserDataFormTypes';
 
 const api = axios.create({
-	baseURL: 'https://example.com/api',
+  baseURL: 'http://localhost:8081/',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-export const sendFormData = async (formData: FormState) => {
-	try {
-		const response = await api.post('/submit', formData); // Замените `/submit` на ваш реальный endpoint
-		return response.data;
-	} catch (error: any) {
-		throw new Error(error.response?.data?.message || 'Failed to send form data');
-	}
+export const sendFormData = async (formData: ServerDataType): Promise<ServerResponse> => {
+  const response = await api.post<ServerResponse>('users', formData);
+  return response.data;
 };
 
-export const getUserData = async (): Promise<FormState> => {
-	try {
-		const response = await api.get('/user-data'); // Замените '/user-data' на реальный endpoint
-		return response.data;
-	} catch (error: any) {
-		throw new Error(error.response?.data?.message || 'Failed to fetch user data');
-	}
+export const getSocialsData = async (): Promise<socialsIcons[]> => {
+  const response = await api.get<socialsIcons[]>('social');
+  return response.data;
 };
 
+export const getUserData = async (userId: string) => {
+  const response = await api.get(`users/${userId}`);
+  return response.data;
+};
+
+export const checkEditCode = async (userId: string, editCode: string): Promise<{ success: boolean }> => {
+  const response = await api.post('users/edit-check', { user_id: userId, edit_code: editCode });
+  return response.data;
+};
+
+export const updateUserData = async (userId: string, updatedData: ServerDataForPUTRequest) => {
+  const response = await api.put(`users/${userId}`, updatedData);
+  return response.data;
+};

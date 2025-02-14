@@ -1,0 +1,187 @@
+@import '../../styles/global/variables.module';
+
+.container {
+  max-width: 1180px;
+  color: var(--primary-font-color);
+  font-family: var(--primary-font-family);
+}
+
+.section_paragraph {
+  margin: 0;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 36px;
+  color: var(--primary-font-color);
+}
+
+.btn {
+  font-family: var(--primary-font-family);
+  width: 380px;
+  height: 80px;
+  border: 5px solid var(--accent-color);
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: var(--primary-font-color);
+  background: none;
+  margin-top: 60px;
+  cursor: pointer;
+}
+
+.section_title {
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 54px;
+  text-align: center;
+  color: var(--accent-color);
+  margin-bottom: 60px;
+}
+
+// Блок 1
+.intro_section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
+  margin-bottom: 130px;
+
+  .intro_text {
+    margin: 105px 0 60px;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 54px;
+    color: var(--accent-color);
+  }
+
+  .intro_image img {
+    padding-top: 50px;
+  }
+}
+
+// Блок 2
+.advantages {
+  margin-bottom: 160px;
+
+  .advantages_grid {
+    display: grid;
+    grid-template-columns: 6% 41% 5% 41%;
+    grid-template-rows: repeat(2, auto);
+    row-gap: 70px;
+    column-gap: 30px;
+
+    .number {
+      font-weight: 400;
+      font-size: 96px;
+      line-height: 107px;
+      color: #b5dcd8;
+      text-align: center;
+    }
+  }
+}
+
+// Блок 3
+.steps {
+  margin-bottom: 125px;
+
+  .steps_container {
+    display: flex;
+    padding: 0 20px;
+
+    .step {
+      text-align: center;
+      padding: 0 18px;
+
+      .circle {
+        width: 200px;
+        height: 200px;
+        background-color: #b5dcd8;
+        color: var(--background-color);
+        font-weight: 400;
+        font-size: 32px;
+        line-height: 200px;
+        border-radius: 50%;
+        margin: 0 auto 60px;
+      }
+    }
+  }
+
+  .arrow_container {
+    margin: 82px 0;
+
+    .arrow {
+      width: 210px;
+      height: 38px;
+    }
+  }
+}
+
+// Блок 4
+.developers {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 60px;
+  width: 100%;
+  margin-bottom: 160px;
+
+  .developer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .developer_photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .developer_info {
+      display: flex;
+      flex-direction: column;
+      width: 180px;
+      height: 180px;
+
+      .developer_name {
+        margin: 8px 0 28px;
+        font-size: 24px;
+      }
+
+      .developer_role {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .developer_icons {
+        margin-top: 36px;
+
+        a img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+
+  .row_1 {
+    grid-column: span 6;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .row_2 {
+    grid-column: span 6;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    padding: 0 70px;
+
+    .developer {
+      grid-column: span 2;
+
+      &:first-child {
+        grid-column-start: 2;
+      }
+    }
+  }
+}
